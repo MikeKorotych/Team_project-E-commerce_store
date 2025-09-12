@@ -149,6 +149,10 @@
   --shadow-opacity: var(--shadow-opacity);
   --color-shadow-color: var(--shadow-color);
   --color-destructive-foreground: var(--destructive-foreground);
+
+  --breakpoint-sm: 320px;
+  --breakpoint-md: 640px;
+  --breakpoint-lg: 1200px;
 }
 
 .dark {
