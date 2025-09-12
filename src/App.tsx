@@ -14,6 +14,7 @@ function App() {
     <div className="max-w-[100vw] h-[100vh] flex flex-col gap-4 justify-center items-center">
       <ModeToggle />
       <Button className="test">Button</Button>
+      <span className="text-2xl font-bold ">test text</span>
 
       <div className="">
         <Carousel className="w-[600px]">
