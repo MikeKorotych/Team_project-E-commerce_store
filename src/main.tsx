@@ -6,6 +6,7 @@ import { ThemeProvider } from './components/theme-provider.tsx';
 import { createBrowserRouter, RouterProvider } from 'react-router';
 import PhonesPage from './features/phones/PhonesPage.tsx';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { HomePage } from './pages/HomePage.tsx';
 
 // Create client
 const queryClient = new QueryClient();
@@ -14,6 +15,12 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: <App />,
+    children: [
+      {
+        index: true,
+        element: <HomePage />,
+      }
+    ],
   },
   {
     path: '/phones',
