@@ -1,5 +1,9 @@
+import { Link } from 'react-router';
 import { ModeToggle } from './components/mode-toggle';
 import { Button } from './components/ui/button';
+
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const imgFromSupabase = `${supabaseUrl}/storage/v1/object/public/product-images/img/banner-phones.png`;
 
 import {
   Carousel,
@@ -13,14 +17,16 @@ function App() {
   return (
     <div className="max-w-[100vw] h-[100vh] flex flex-col gap-4 justify-center items-center">
       <ModeToggle />
-      <Button className="test">Button</Button>
+      <Button>Button</Button>
       <span className="text-2xl font-bold ">test text</span>
 
-      <div className="">
+      <Link to="/phones">Go to phones page</Link>
+
+      <div>
         <Carousel className="w-[600px]">
           <CarouselContent>
             <CarouselItem>
-              <img src="https://placehold.co/600x400" alt="logo" />
+              <img src={imgFromSupabase} alt="logo" />
             </CarouselItem>
             <CarouselItem>
               <img src="https://placehold.co/600x400" alt="logo" />
