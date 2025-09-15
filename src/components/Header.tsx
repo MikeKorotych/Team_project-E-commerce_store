@@ -5,25 +5,36 @@ import { Heart, ShoppingBag } from 'lucide-react';
 
 export const Header = () => (
   <nav className="inline-flex border-b w-full">
-    <Link to="/" className=" py-4.5 px-6">
-      <img
-        className="w-22.5 h-7 inline object-cover"
-        src="/src/img/header/Nice-Gadgets-with-smile.png"
-        alt=""
-      />
-    </Link>
-    <div className="justify-between inline-flex w-full">
-      <div className="flex items-center ">
-        <Button asChild variant={'ghost'} className="text-xs p-8">
-          <Link to="/home">HOME</Link>
+    <div className="flex justify-between items-center max-sm:w-full">
+      <Link to="/" className="lg:py-4.5 lg:px-6 py-2.5 px-4">
+        <img
+          className="w-22.5 h-7 inline object-contain"
+          src="/src/img/header/Nice-Gadgets-with-smile.png"
+          alt=""
+        />
+      </Link>
+      {/* burger for small screens */}
+      <Button
+        variant="link"
+        className="sm:hidden flex flex-col gap-1 py-3 px-4 h-12 w-12"
+      >
+        <span className="h-0.5 w-4 bg-white"></span>
+        <span className="h-0.5 w-4 bg-white"></span>
+        <span className="h-0.5 w-4 bg-white"></span>
+      </Button>
+    </div>
+    <div className="justify-between hidden sm:inline-flex w-full">
+      <div className="flex items-center">
+        <Button asChild variant={'ghost'} className="text-xs lg:p-8 sm:p-6">
+          <Link to="/">HOME</Link>
         </Button>
-        <Button asChild variant={'ghost'} className="text-xs p-8">
+        <Button asChild variant={'ghost'} className="text-xs lg:p-8 sm:p-6">
           <Link to="/phones">PHONES</Link>
         </Button>
-        <Button asChild variant={'ghost'} className="text-xs p-8">
+        <Button asChild variant={'ghost'} className="text-xs lg:p-8 sm:p-6">
           <Link to="/tables">TABLETS</Link>
         </Button>
-        <Button asChild variant={'ghost'} className="text-xs p-8">
+        <Button asChild variant={'ghost'} className="text-xs lg:p-8 sm:p-6">
           <Link to="/accessories">ACCESSORIES</Link>
         </Button>
       </div>
@@ -32,7 +43,7 @@ export const Header = () => (
         <Button
           asChild
           variant="ghost"
-          className="border-l has-[>svg]:px-6 py-8"
+          className="border-l lg:has-[>svg]:px-6 lg:py-8 sm:has-[svg]:px-4 sm:py-6"
         >
           <Link to="/favorites">
             <Heart className="w-4 h-4" />
@@ -41,7 +52,7 @@ export const Header = () => (
         <Button
           asChild
           variant="ghost"
-          className="border-l has-[>svg]:px-6 py-8"
+          className="border-l lg:has-[>svg]:px-6 lg:py-8 sm:has-[svg]:px-4 sm:py-6"
         >
           <Link to="/cart">
             <ShoppingBag className="w-4 h-4" />

@@ -24,14 +24,14 @@ export const ProductCard: React.FC<Props> = ({ product }) => (
       </div>
       <div className="flex gap-2">
         <h2 className="font-bold">${product.priceRegular}</h2>
-        <h3 className="font-bold line-through card--dark-text">
+        <h3 className="font-bold line-through text-dark">
           ${product.priceDiscount}
         </h3>
       </div>
       <div className="border-t border-[#3B3E4A] my-2" />
       <div className="flex flex-col gap-2 text-xs">
         <div className="flex justify-between">
-          <span className="card--dark-text">Screen</span>
+          <span className="text-dark">Screen</span>
           <span>
             {product.screen.length > 9
               ? product.screen.slice(0, 9)
@@ -39,11 +39,11 @@ export const ProductCard: React.FC<Props> = ({ product }) => (
           </span>
         </div>
         <div className="flex justify-between">
-          <span className="card--dark-text">Capacity</span>
+          <span className="text-dark">Capacity</span>
           <span>{product.capacity}</span>
         </div>
         <div className="flex justify-between">
-          <span className="card--dark-text">RAM</span>
+          <span className="text-dark">RAM</span>
           <span>{product.ram}</span>
         </div>
       </div>
