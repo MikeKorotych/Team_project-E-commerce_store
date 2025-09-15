@@ -95,7 +95,7 @@
   --popover-foreground: oklch(0.9850 0 0);
   --primary: oklch(0.6156 0.2307 293.2893);
   --primary-foreground: oklch(0.9624 0.0094 279.6890);
-  --secondary: oklch(0.2147 0.0297 277.7475);
+  --secondary: #323542;
   --secondary-foreground: oklch(0.9624 0.0094 279.6890);
   --muted: oklch(0.2690 0 0);
   --muted-foreground: oklch(0.7080 0 0);
@@ -243,4 +243,8 @@ body {
 
 button {
   cursor: pointer;
+}
+
+.card--dark-text {
+  color: #75767F;
 }

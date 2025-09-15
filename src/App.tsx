@@ -6,7 +6,7 @@ function App() {
     <div>
       <Header />
 
-      <div>
+      <div className="max-w-[1200px] px-[32px] mx-auto">
         <Outlet />
       </div>
     </div>
