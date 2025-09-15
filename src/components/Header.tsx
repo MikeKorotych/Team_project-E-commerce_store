@@ -5,7 +5,7 @@ import { Heart, ShoppingBag } from 'lucide-react';
 
 export const Header = () => (
   <nav className="inline-flex border-b w-full">
-    <div className="flex justify-between items-center w-full">
+    <div className="flex justify-between items-center max-sm:w-full">
       <Link to="/" className="lg:py-4.5 lg:px-6 py-2.5 px-4">
         <img
           className="w-22.5 h-7 inline object-contain"

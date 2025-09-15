@@ -6,7 +6,7 @@ function App() {
     <div>
       <Header />
 
-      <div className="mx-auto max-w-[1200px] min-[1200px]:px-[32px] min-[1200px]:py-[56px] px-4 py-8 sm:px-8 sm:py-10">
+      <div className="mx-auto max-w-[1200px] min-[1200px]:px-[32px] px-4 sm:px-8 py-6">
         <Outlet />
       </div>
     </div>
