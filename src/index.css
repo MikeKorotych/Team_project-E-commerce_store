@@ -3,7 +3,34 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@font-face {
+  font-family: 'Montserrat';
+  src: url('../styles/fonts/Mont-Regular.otf');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  src: url('../styles/fonts/Mont-Bold.otf');
+  font-weight: 800;
+  font-style: normal;
+}
+
 :root {
+  font-family: var(--font-sans);
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  --radius: 0rem;
+
   --background: oklch(1 0 0);
   --foreground: oklch(0.1450 0 0);
   --card: oklch(1 0 0);
