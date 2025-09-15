@@ -1,6 +1,6 @@
-import { ProductCard } from "@/components/ProductCard";
-import { supabase } from "@/utils/supabase";
-import { useQuery } from "@tanstack/react-query";
+import { ProductCard } from '@/components/ProductCard';
+import { supabase } from '@/utils/supabase';
+import { useQuery } from '@tanstack/react-query';
 
 //todo create type for Product
 
@@ -12,9 +12,9 @@ import { useQuery } from "@tanstack/react-query";
 const fetchPhones = async () => {
   // request to Supabase
   const { data, error } = await supabase
-    .from("products")
-    .select("*")
-    .eq("category", "phones");
+    .from('products')
+    .select('*')
+    .eq('category', 'phones');
 
   // process error
   if (error) {
@@ -33,7 +33,7 @@ const PhonesPage = () => {
     isError, // `true`, якщо функція `fetchPhones` кинула помилку
     error, // Об'єкт помилки
   } = useQuery({
-    queryKey: ["products", "phones"], // 1. Унікальний ключ для цього запиту
+    queryKey: ['products', 'phones'], // 1. Унікальний ключ для цього запиту
     queryFn: fetchPhones, // 2. Функція, яка буде виконувати запит
   });
 
