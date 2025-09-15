@@ -1,43 +1,12 @@
-import { Link } from 'react-router';
-import { ModeToggle } from './components/mode-toggle';
-import { Button } from './components/ui/button';
-
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const imgFromSupabase = `${supabaseUrl}/storage/v1/object/public/product-images/img/banner-phones.png`;
-
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from '@/components/ui/carousel';
+import { Outlet } from "react-router";
+import { Navbar } from "./components/Navbar";
 
 function App() {
   return (
-    <div className="max-w-[100vw] h-[100vh] flex flex-col gap-4 justify-center items-center">
-      <ModeToggle />
-      <Button>Button</Button>
-      <span className="text-2xl font-bold ">test text</span>
-
-      <Link to="/phones">Go to phones page</Link>
-
+    <div className="">
+      <Navbar />
       <div>
-        <Carousel className="w-[600px]">
-          <CarouselContent>
-            <CarouselItem>
-              <img src={imgFromSupabase} alt="logo" />
-            </CarouselItem>
-            <CarouselItem>
-              <img src="https://placehold.co/600x400" alt="logo" />
-            </CarouselItem>
-            <CarouselItem>
-              <img src="https://placehold.co/600x400" alt="logo" />
-            </CarouselItem>
-          </CarouselContent>
-          <CarouselPrevious className="rounded-[0px] h-full max-md:hidden" />
-          <CarouselNext className="rounded-[0px] h-full" />
-        </Carousel>
+        <Outlet />
       </div>
     </div>
   );
