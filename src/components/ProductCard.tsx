@@ -8,7 +8,8 @@ type Props = {
 };
 
 export const ProductCard: React.FC<Props> = ({ product }) => (
-  <Card>
+  // todo adaptation for full screens
+  <Card className="w-[272px]">
     <CardHeader>
       <img
         src={`${product.images[0]}`}
@@ -49,10 +50,10 @@ export const ProductCard: React.FC<Props> = ({ product }) => (
     </CardContent>
     <CardFooter>
       <div className="flex w-full gap-2">
-        <Button className="flex-1 h-[40px]">Add to cart</Button>
+        <Button className="flex-1 py-5">Add to cart</Button>
         <Button
           variant="secondary"
-          className="h-[40px] w-[40px] items-center justify-center"
+          className="items-center justify-center py-5"
         >
           <Heart />
         </Button>
