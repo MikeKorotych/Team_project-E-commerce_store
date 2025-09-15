@@ -2,6 +2,7 @@ import type { Product } from "@/types/Product";
 import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
 import { Button } from "./ui/button";
 
+
 type Props = {
   product: Product;
 };
