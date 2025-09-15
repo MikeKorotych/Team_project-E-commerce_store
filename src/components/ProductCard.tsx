@@ -1,6 +1,7 @@
-import type { Product } from "@/types/Product";
-import { Card, CardFooter, CardHeader } from "./ui/card";
-import { Button } from "./ui/button";
+import type { Product } from '@/types/Product';
+import { Card, CardFooter, CardHeader } from './ui/card';
+import { Button } from './ui/button';
+import { Heart } from 'lucide-react';
 
 type Props = {
   product: Product;
@@ -21,9 +22,11 @@ export const ProductCard: React.FC<Props> = ({ product }) => (
         <span>{product.ram}</span>
       </div>
     </CardHeader>
-    <CardFooter>
+    <CardFooter className="flex gap-2">
       <Button className="w-max">Add to cart</Button>
-      <Button variant="secondary" className="w-max">❤</Button>
+      <Button variant="secondary" className="w-max">
+        <Heart />
+      </Button>
     </CardFooter>
   </Card>
 );

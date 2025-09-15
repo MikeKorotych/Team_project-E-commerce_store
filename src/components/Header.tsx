@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router';
-import { ModeToggle } from './mode-toggle';
 import { Heart, ShoppingBag } from 'lucide-react';
+// import { ModeToggle } from './mode-toggle';
 
 export const Header = () => (
   <nav className="inline-flex border-b w-full">
