@@ -6,11 +6,11 @@ import { supabase } from '../utils/supabase';
 import { useState, useEffect } from 'react';
 import { AuthModal } from '../features/auth/AuthModal';
 
-interface HeaderProps {
+interface Props {
   session: Session | null;
 }
 
-export const Header = ({ session }: HeaderProps) => {
+export const Header = ({ session }: Props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
@@ -97,11 +97,7 @@ export const Header = ({ session }: HeaderProps) => {
           </div>
         </div>
       </nav>
-      <AuthModal
-        open={isModalOpen}
-        onOpenChange={setIsModalOpen}
-        supabaseClient={supabase}
-      />
+      <AuthModal open={isModalOpen} onOpenChange={setIsModalOpen} />
     </>
   );
 };

@@ -6,19 +6,13 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import { AuthForm } from './AuthForm';
-import type { SupabaseClient } from '@supabase/supabase-js';
 
-interface AuthModalProps {
+interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  supabaseClient: SupabaseClient;
 }
 
-export const AuthModal = ({
-  open,
-  onOpenChange,
-  supabaseClient,
-}: AuthModalProps) => {
+export const AuthModal = ({ open, onOpenChange }: Props) => {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[425px]">
@@ -28,7 +22,8 @@ export const AuthModal = ({
             Sign in or create an account to continue.
           </DialogDescription>
         </DialogHeader>
-        <AuthForm supabaseClient={supabaseClient} />
+        {/* Form */}
+        <AuthForm />
       </DialogContent>
     </Dialog>
   );

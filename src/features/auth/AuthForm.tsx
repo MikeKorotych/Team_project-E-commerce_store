@@ -1,28 +1,24 @@
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
-import type { SupabaseClient } from '@supabase/supabase-js';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useState } from 'react';
 import { Spinner } from '@/components/ui/shadcn-io/spinner';
+import { supabase } from '@/utils/supabase';
 
 // Define the validation schema
 const formSchema = z.object({
   email: z.email({ message: 'Invalid email address.' }),
   password: z
     .string()
-    .min(8, { message: 'Password must be at least 8 characters.' }),
+    .min(6, { message: 'Password must be at least 6 characters.' }),
 });
 
 type FormData = z.infer<typeof formSchema>;
 
-interface AuthFormProps {
-  supabaseClient: SupabaseClient;
-}
-
-export const AuthForm = ({ supabaseClient }: AuthFormProps) => {
+export const AuthForm = () => {
   const [isSignUp, setIsSignUp] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
 
@@ -41,9 +37,9 @@ export const AuthForm = ({ supabaseClient }: AuthFormProps) => {
     try {
       let error;
       if (isSignUp) {
-        ({ error } = await supabaseClient.auth.signUp({ email, password }));
+        ({ error } = await supabase.auth.signUp({ email, password }));
       } else {
-        ({ error } = await supabaseClient.auth.signInWithPassword({
+        ({ error } = await supabase.auth.signInWithPassword({
           email,
           password,
         }));
