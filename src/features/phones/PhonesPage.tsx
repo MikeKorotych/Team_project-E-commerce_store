@@ -49,7 +49,7 @@ const PhonesPage = () => {
           {phones?.length} models
         </span>
 
-        <div className="flex flex-row gap-2 col-start-1 col-end-7 mt-[32px]">
+        <div className="flex flex-row gap-4 col-start-1 col-end-15 mt-[36px] mb-[-7px]">
           <DropdownMenu
             label="Sort by:"
             options={sortByOptions}

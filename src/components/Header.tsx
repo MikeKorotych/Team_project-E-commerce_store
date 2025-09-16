@@ -32,7 +32,7 @@ export const Header = () => (
           <Link to="/phones">PHONES</Link>
         </Button>
         <Button asChild variant={'ghost'} className="text-xs lg:p-8 sm:p-6">
-          <Link to="/tables">TABLETS</Link>
+          <Link to="/tablets">TABLETS</Link>
         </Button>
         <Button asChild variant={'ghost'} className="text-xs lg:p-8 sm:p-6">
           <Link to="/accessories">ACCESSORIES</Link>

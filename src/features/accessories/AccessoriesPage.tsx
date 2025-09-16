@@ -9,7 +9,7 @@ import {
 } from '@/utils/helpers';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
-import DropdownMenu from '@/components/DropdownMenu';
+import DropDownMenu from '@/components/DropdownMenu';
 
 const AccessoriesPage = () => {
   const { data, isLoading, isError, error, refetch } = useQuery({
@@ -40,7 +40,7 @@ const AccessoriesPage = () => {
       <span className="text-sm text-dark">{data?.length} models</span>
 
       <div className="flex gap-4 mt-10">
-        <DropdownMenu
+        <DropDownMenu
           label="Sort by:"
           options={sortByOptions}
           value={sortBy}
@@ -49,7 +49,7 @@ const AccessoriesPage = () => {
           contentClassName="w-[187px] max-[380px]:w-[136px]"
         />
         <div className="mb-6">
-          <DropdownMenu
+          <DropDownMenu
             label="Items on page:"
             options={itemsPerPageOptions}
             value={itemsPerPage}
