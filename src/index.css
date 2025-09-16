@@ -258,7 +258,10 @@ button {
 .hide-scrollbar::-webkit-scrollbar {
   display: none;            
 }
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 .product-title {
   @apply text-[32px]/[41px] sm:text-[48px]/[56px] font-bold mb-2;
 }

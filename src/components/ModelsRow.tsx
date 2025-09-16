@@ -6,7 +6,7 @@ import type { Product } from "@/types/Product";
 
 type Props = {
   title: string;
-  product: Product[];
+  product?: Product[];
 };
 
 export const ModelsRow: React.FC<Props> = ({ title, product }) => {
@@ -33,8 +33,8 @@ export const ModelsRow: React.FC<Props> = ({ title, product }) => {
         <div className="overflow-x-auto hide-scrollbar">
           <div className="flex justify-between gap-4">
             {product?.map((phone) => (
-              <div className="min-w-[250px] flex-shrink-0 ">
-                <ProductCard key={phone.id} product={phone} />
+              <div key={phone.id} className="min-w-[250px] flex-shrink-0 ">
+                <ProductCard product={phone} />
               </div>
             ))}
           </div>
