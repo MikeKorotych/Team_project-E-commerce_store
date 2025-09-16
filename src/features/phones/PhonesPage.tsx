@@ -2,26 +2,29 @@ import { ErrorMessage } from '@/components/error-message';
 import { ProductCard } from '@/components/ProductCard';
 import ProductPageNav from '@/components/ProductPageNav';
 import { Spinner } from '@/components/ui/shadcn-io/spinner';
-import { fetchProductsByType } from '@/utils/helpers';
+import {
+  fetchProductsByType,
+  itemsPerPageOptions,
+  sortByOptions,
+} from '@/utils/helpers';
 import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
+import DropdownMenu from '@/components/DropdownMenu';
 
 const PhonesPage = () => {
-  // --- ОСНОВНИЙ ХУК TANSTACK QUERY ---
   const {
-    data: phones, // `data` містить успішно завантажені дані, перейменовані в `phones`
-    isLoading, // `true`, поки дані завантажуються
-    isError, // `true`, якщо функція `fetchPhones` кинула помилку
-    error, // Об'єкт помилки
-    refetch, // Функція для перезавантаження даних
+    data: phones,
+    isLoading,
+    isError,
+    error,
+    refetch,
   } = useQuery({
-    queryKey: ['products', 'phones'], // 1. Унікальний ключ для цього запиту
-    queryFn: () => fetchProductsByType('phones'), // 2. Функція, яка буде виконувати запит
+    queryKey: ['products', 'phones'],
+    queryFn: () => fetchProductsByType('phones'),
   });
 
-  console.log(`Data from useQuery: `);
-  console.log(phones);
-
-  // --- ВІДОБРАЖЕННЯ СТАНУ В UI (стало ще простішим) ---
+  const [sortBy, setSortBy] = useState('newest');
+  const [itemsPerPage, setItemsPerPage] = useState('16');
 
   if (isLoading) {
     return (
@@ -38,9 +41,8 @@ const PhonesPage = () => {
     <>
       <ProductPageNav category="Phones" />
 
-      {/* info before items list */}
       <div className="grid grid-cols-24 gap-[8px]">
-        <h1 className="text-5xl/[56px] font-bold col-start-1 col-end-9">
+        <h1 className="text-5xl/[56px] font-bold col-start-1 col-end-24">
           Mobile phones
         </h1>
         <span className="text-sm col-start-1 col-end-3 text-dark">
@@ -48,17 +50,23 @@ const PhonesPage = () => {
         </span>
 
         <div className="flex flex-row gap-2 col-start-1 col-end-7 mt-[32px]">
-          <div className="flex flex-1 flex-col gap-2">
-            <span className="text-sm text-dark">Sort by:</span>
-            <select className="bg-[#323542] px-3 py-2 text-sm focus:border border-[#905BFF]">
-              <option>Newest</option>
-            </select>
-          </div>
-          <div className="flex flex-col gap-2">
-            <span className="text-sm text-dark">Items on page</span>
-            <select className="bg-[#323542] px-3 py-2 text-sm">
-              <option className="bg-transparent">16</option>
-            </select>
+          <DropdownMenu
+            label="Sort by:"
+            options={sortByOptions}
+            value={sortBy}
+            onValueChange={setSortBy}
+            triggerClassName="w-[187px] max-[380px]:w-[136px]"
+            contentClassName="w-[187px] max-[380px]:w-[136px]"
+          />
+          <div className="mb-6">
+            <DropdownMenu
+              label="Items on page:"
+              options={itemsPerPageOptions}
+              value={itemsPerPage}
+              onValueChange={setItemsPerPage}
+              triggerClassName="w-[136px]"
+              contentClassName="w-[136px]"
+            />
           </div>
         </div>
 
