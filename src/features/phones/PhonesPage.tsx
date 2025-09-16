@@ -1,15 +1,16 @@
-import { ErrorMessage } from "@/components/error-message";
-import { ProductCard } from "@/components/ProductCard";
-import ProductPageNav from "@/components/ProductPageNav";
-import { Spinner } from "@/components/ui/shadcn-io/spinner";
+
+import { ErrorMessage } from '@/components/error-message';
+import { ProductCard } from '@/components/ProductCard';
+import ProductPageNav from '@/components/ProductPageNav';
+import { Spinner } from '@/components/ui/shadcn-io/spinner';
 import {
   fetchProductsByType,
   itemsPerPageOptions,
   sortByOptions,
-} from "@/utils/helpers";
-import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
-import DropdownMenu from "@/components/DropDownMenu";
+} from '@/utils/helpers';
+import { useQuery } from '@tanstack/react-query';
+import { useState } from 'react';
+import DropdownMenu from '@/components/DropDownMenu';
 
 const PhonesPage = () => {
   const {
@@ -19,12 +20,12 @@ const PhonesPage = () => {
     error,
     refetch,
   } = useQuery({
-    queryKey: ["products", "phones"],
-    queryFn: () => fetchProductsByType("phones"),
+    queryKey: ['products', 'phones'],
+    queryFn: () => fetchProductsByType('phones'),
   });
 
-  const [sortBy, setSortBy] = useState("newest");
-  const [itemsPerPage, setItemsPerPage] = useState("16");
+  const [sortBy, setSortBy] = useState('newest');
+  const [itemsPerPage, setItemsPerPage] = useState('16');
 
   if (isLoading) {
     return (
@@ -42,10 +43,10 @@ const PhonesPage = () => {
       <ProductPageNav category="Phones" />
 
       <div className="grid grid-cols-24 gap-[8px]">
-        <h1 className="text-5xl/[56px] font-bold col-start-1 col-end-24">
+        <h1 className="product-title col-start-1 col-end-24">
           Mobile phones
         </h1>
-        <span className="text-sm col-start-1 col-end-3 text-dark">
+        <span className="text-sm/[21px] col-start-1 col-end-3 text-dark">
           {phones?.length} models
         </span>
 
@@ -70,7 +71,7 @@ const PhonesPage = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 min-[490px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 col-start-1 col-end-25 mt-[16px] mb-[40px]">
+        <div className="products-table">
           {phones?.map((phone) => {
             return <ProductCard key={phone.id} product={phone} />;
           })}
@@ -81,3 +82,4 @@ const PhonesPage = () => {
 };
 
 export default PhonesPage;
+
