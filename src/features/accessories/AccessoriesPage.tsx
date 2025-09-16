@@ -9,7 +9,7 @@ import {
 } from '@/utils/helpers';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
-import DropDownMenu from '@/components/DropdownMenu';
+import DropDownMenu from '@/components/DropDownMenu';
 
 const AccessoriesPage = () => {
   const { data, isLoading, isError, error, refetch } = useQuery({

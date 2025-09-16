@@ -1,4 +1,4 @@
-import DropDownMenu from '@/components/DropdownMenu';
+import DropDownMenu from '@/components/DropDownMenu';
 import { ErrorMessage } from '@/components/error-message';
 import { ProductCard } from '@/components/ProductCard';
 import ProductPageNav from '@/components/ProductPageNav';
