@@ -35,8 +35,8 @@ const TabletsPage = () => {
     <>
       <ProductPageNav category="Tablets" />
 
-      <h1 className="text-5xl/[56px] font-bold mb-2">Tablets</h1>
-      <span className="text-sm text-dark">{data?.length} models</span>
+      <h1 className="product-title">Tablets</h1>
+      <span className="text-sm/[21px] text-dark">{data?.length} models</span>
 
       <div className="flex gap-4 mt-10">
         <DropDownMenu
@@ -59,7 +59,7 @@ const TabletsPage = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 min-[490px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 col-start-1 col-end-25 mt-[16px] mb-[40px]">
+      <div className="products-table">
         {data?.map((item) => (
           <ProductCard key={item.id} product={item}></ProductCard>
         ))}

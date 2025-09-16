@@ -42,10 +42,10 @@ const PhonesPage = () => {
       <ProductPageNav category="Phones" />
 
       <div className="grid grid-cols-24 gap-[8px]">
-        <h1 className="text-5xl/[56px] font-bold col-start-1 col-end-24">
+        <h1 className="product-title col-start-1 col-end-24">
           Mobile phones
         </h1>
-        <span className="text-sm col-start-1 col-end-3 text-dark">
+        <span className="text-sm/[21px] col-start-1 col-end-3 text-dark">
           {phones?.length} models
         </span>
 
@@ -70,7 +70,7 @@ const PhonesPage = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 min-[490px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 col-start-1 col-end-25 mt-[16px] mb-[40px]">
+        <div className="products-table">
           {phones?.map((phone) => {
             return <ProductCard key={phone.id} product={phone} />;
           })}

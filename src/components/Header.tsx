@@ -45,7 +45,7 @@ export const Header = () => (
           variant="ghost"
           className="border-l lg:has-[>svg]:px-6 lg:py-8 sm:has-[svg]:px-4 sm:py-6"
         >
-          <Link to="/favorites">
+          <Link to="/favourites">
             <Heart className="w-4 h-4" />
           </Link>
         </Button>
