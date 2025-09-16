@@ -1,3 +1,4 @@
+
 import { ErrorMessage } from '@/components/error-message';
 import { ProductCard } from '@/components/ProductCard';
 import ProductPageNav from '@/components/ProductPageNav';
@@ -81,3 +82,4 @@ const PhonesPage = () => {
 };
 
 export default PhonesPage;
+
