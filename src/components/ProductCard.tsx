@@ -8,24 +8,23 @@ type Props = {
 };
 
 export const ProductCard: React.FC<Props> = ({ product }) => (
-  // todo adaptation for full screens
-  <Card className="w-[272px]">
+  <Card className="w-full">
     <CardHeader>
       <img
         src={`${product.images[0]}`}
         alt="Product Image"
-        className="object-contain h-[196px] w-[206px]"
+        className="object-contain h-[196px] w-[206px] mx-auto"
       />
     </CardHeader>
     <CardContent>
-      <div className="flex flex-col gap-2 min-h-[58px] mt-4">
-        <h2 className="">{product.name}</h2>
+      <div className="flex flex-col gap-2 sm:min-h-[58px] mt-4">
+        <h2 className="text-[14px]/[21px]">{product.name}</h2>
         <div className="flex flex-row gap-2 text-2xl"></div>
       </div>
       <div className="flex gap-2">
-        <h2 className="font-bold">${product.priceRegular}</h2>
-        <h3 className="font-bold line-through text-dark">
-          ${product.priceDiscount}
+        <h2 className="font-bold text-[22px]/[140%]">${product.priceDiscount}</h2>
+        <h3 className="font-bold text-[22px]/[140%] line-through text-dark">
+          ${product.priceRegular}
         </h3>
       </div>
       <div className="border-t border-[#3B3E4A] my-2" />

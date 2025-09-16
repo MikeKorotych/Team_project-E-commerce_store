@@ -21,3 +21,5 @@ export type Product = {
   zoom: string;
   cell: string[];
 };
+
+export type ProductTypes = 'phones' | 'tablets' | 'accessories';
