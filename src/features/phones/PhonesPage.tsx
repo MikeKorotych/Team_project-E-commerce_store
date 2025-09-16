@@ -9,7 +9,7 @@ import {
 } from '@/utils/helpers';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
-import DropdownMenu from '@/components/DropdownMenu';
+import DropdownMenu from '@/components/DropDownMenu';
 
 const PhonesPage = () => {
   const {
