@@ -35,7 +35,7 @@ const TabletsPage = () => {
     <>
       <ProductPageNav category="Tablets" />
 
-      <h1 className="product-title">Tablets</h1>
+      <h1 className="page-title">Tablets</h1>
       <span className="text-sm/[21px] text-dark">{data?.length} models</span>
 
       <div className="flex gap-4 mt-10">
