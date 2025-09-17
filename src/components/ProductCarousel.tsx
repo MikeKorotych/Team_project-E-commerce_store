@@ -39,16 +39,20 @@ export function ProductCarousel({ supabaseUrl }: { supabaseUrl: string }) {
           </CarouselItem>
 
           <CarouselItem>
-            <img
-              src={`${supabaseUrl}/storage/v1/object/public/product-images/img/home-carousel-lg.png`}
-              alt="carousel"
-            />
+            <Link to="/phones">
+              <img
+                src={`${supabaseUrl}/storage/v1/object/public/product-images/img/home-carousel-lg.png`}
+                alt="carousel"
+              />
+            </Link>
           </CarouselItem>
           <CarouselItem>
-            <img
-              src={`${supabaseUrl}/storage/v1/object/public/product-images/img/home-carousel-lg.png`}
-              alt="carousel"
-            />
+            <Link to="/phones">
+              <img
+                src={`${supabaseUrl}/storage/v1/object/public/product-images/img/home-carousel-lg.png`}
+                alt="carousel"
+              />
+            </Link>
           </CarouselItem>
         </CarouselContent>
 

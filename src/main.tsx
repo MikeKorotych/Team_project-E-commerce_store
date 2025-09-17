@@ -11,6 +11,8 @@ import AccessoriesPage from './features/accessories/AccessoriesPage.tsx';
 import TabletsPage from './features/tablets/TabletsPage.tsx';
 import { FavouritesPage } from './features/favourites/FavouritesPage.tsx';
 import { CartPage } from './features/cart/CartPage.tsx';
+import { PageNotFound } from './features/pageNotFound/pageNotFound.tsx';
+
 
 // Create client
 const queryClient = new QueryClient();
@@ -44,6 +46,9 @@ const router = createBrowserRouter([
         path: '/cart',
         element: <CartPage />,
       }
+        path: '/*',
+        element: <PageNotFound />,
+      },
     ],
   },
 ]);
