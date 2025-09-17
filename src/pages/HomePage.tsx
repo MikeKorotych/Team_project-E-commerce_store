@@ -4,7 +4,6 @@ import { ProductCarousel } from "@/components/ProductCarousel";
 import { supabase } from "@/utils/supabase";
 import { useQuery } from "@tanstack/react-query";
 import { HomeShopCategory } from "@/components/HomeShopCategory";
-import type { Product } from "@/types/Product";
 
 export const HomePage = () => {
   const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
@@ -46,9 +45,6 @@ export const HomePage = () => {
     return <div>Error: {error.message}</div>;
   }
 
-  const fetchedPhones: Product[] = phones?.slice(0, 4);
-  console.log("firstfour", fetchedPhones);
-
   return (
     <>
       <h1 className="font-bold text-[32px] py-[24px] sm:text-5xl sm:py-[32px] md:py-[56px] md:text-[48px]">
@@ -56,11 +52,9 @@ export const HomePage = () => {
       </h1>
 
       <ProductCarousel supabaseUrl={supabaseUrl} />
-      <ModelsRow title={"Brand new models"} product={fetchedPhones} />
+      <ModelsRow title={"Brand new models"} product={phones?.slice(0, 4)} />
       <HomeShopCategory supabaseUrl={supabaseUrl} />
-      <ModelsRow title={"Hot prices"} product={fetchedPhones} />
-
-      {/* <ProductCard product={phones[0]} /> */}
+      <ModelsRow title={"Hot prices"} product={phones?.slice(0, 4)} />
     </>
   );
 };
