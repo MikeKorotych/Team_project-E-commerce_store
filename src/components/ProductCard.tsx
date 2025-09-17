@@ -3,14 +3,25 @@ import { Card, CardContent, CardFooter, CardHeader } from './ui/card';
 import { Button } from './ui/button';
 import { Heart } from 'lucide-react';
 import { useCartStore } from '@/features/cart/cartStore';
+import { useTransition } from 'react';
+import { Spinner } from './ui/shadcn-io/spinner';
+import QuantityController from './QuantityController';
 
 type Props = {
   product: Product;
 };
 
 export const ProductCard: React.FC<Props> = ({ product }) => {
+  const [isPending, startTransition] = useTransition();
   const { addToCart, items } = useCartStore();
-  const isInCart = items.some((item) => item.product.id === product.id);
+  const currentItem = items.find((item) => item.product.id === product.id);
+
+  const handleAddToCart = (product: Product) => {
+    startTransition(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+      await addToCart(product);
+    });
+  };
 
   return (
     <Card className="w-full">
@@ -55,10 +66,20 @@ export const ProductCard: React.FC<Props> = ({ product }) => {
         </div>
       </CardContent>
       <CardFooter>
-        <div className="flex w-full gap-2">
-          <Button onClick={() => addToCart(product)} className="flex-1 py-5">
-            {isInCart ? 'Add one more 😍' : 'Add to cart'}
-          </Button>
+        <div className="flex w-full gap-2 justify-between">
+          {currentItem ? (
+            <QuantityController
+              currentItem={currentItem}
+              quantity={currentItem.quantity}
+            />
+          ) : (
+            <Button
+              onClick={() => handleAddToCart(product)}
+              className="flex-1 py-5"
+            >
+              {isPending ? <Spinner width={20} height={20} /> : 'Add to cart'}
+            </Button>
+          )}
           <Button
             variant="secondary"
             className="items-center justify-center py-5"
