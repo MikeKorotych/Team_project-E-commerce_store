@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 import { Heart, ShoppingBag, LogOut, LogIn } from 'lucide-react';
 import type { Session } from '@supabase/supabase-js';
 import { supabase } from '../utils/supabase';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, RefObject } from 'react';
 import { AuthModal } from '../features/auth/AuthModal';
 import { toast } from 'sonner';
 import { useCartStore } from '@/features/cart/cartStore';
@@ -14,9 +14,10 @@ const imgFromSupabase = `${supabaseUrl}/storage/v1/object/public/product-images/
 
 interface Props {
   session: Session | null;
+  cartIconRef: RefObject<HTMLAnchorElement>; // Add ref to props
 }
 
-export const Header = ({ session }: Props) => {
+export const Header = ({ session, cartIconRef }: Props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { items } = useCartStore();
 
@@ -100,7 +101,7 @@ export const Header = ({ session }: Props) => {
               variant="ghost"
               className="border-l lg:has-[>svg]:px-6 lg:py-8 sm:has-[svg]:px-4 sm:py-6"
             >
-              <Link to="/cart" className="relative">
+              <Link to="/cart" className="relative" ref={cartIconRef}>
                 <ShoppingBag className="w-4 h-4" />
                 {totalItems > 0 && (
                   <div className="absolute rounded-full bg-red-400 top-3 right-3 flex items-center justify-center text-sm h-4.5 w-4.5">
