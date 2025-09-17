@@ -260,7 +260,7 @@ button {
 
 /* Enables smooth transition for items re-ordering */
 .cart-item-wrapper {
-  transition: all 300ms ease-in-out;
+  transition: all 300ms ease-out;
 }
 
 /* CSSTransition classes for cart item removal animation */
@@ -271,7 +271,7 @@ button {
 
 .cart-item-exit-active {
   opacity: 0;
-  transform: translateX(100%);
+  transform: translateX(-100%);
   /* Slide to the right */
   transition: opacity 300ms, transform 300ms;
 }

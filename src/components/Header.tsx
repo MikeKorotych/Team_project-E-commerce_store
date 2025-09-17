@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 import { Heart, ShoppingBag, LogOut, LogIn } from 'lucide-react';
 import type { Session } from '@supabase/supabase-js';
 import { supabase } from '../utils/supabase';
-import { useState, useEffect, RefObject } from 'react';
+import { useState, useEffect, type RefObject } from 'react';
 import { AuthModal } from '../features/auth/AuthModal';
 import { toast } from 'sonner';
 import { useCartStore } from '@/features/cart/cartStore';
@@ -14,7 +14,7 @@ const imgFromSupabase = `${supabaseUrl}/storage/v1/object/public/product-images/
 
 interface Props {
   session: Session | null;
-  cartIconRef: RefObject<HTMLAnchorElement>; // Add ref to props
+  cartIconRef: RefObject<HTMLAnchorElement | null>; // Add ref to props
 }
 
 export const Header = ({ session, cartIconRef }: Props) => {

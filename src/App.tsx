@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router';
 import { Header } from './components/Header';
-import Footer from './components/Footer'; // Corrected import
+import Footer from '@/components/Footer'; // Corrected import
 import { useState, useEffect, useRef } from 'react'; // import useRef
 import { supabase } from './utils/supabase';
 import type { Session } from '@supabase/supabase-js';

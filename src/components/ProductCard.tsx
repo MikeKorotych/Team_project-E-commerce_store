@@ -1,7 +1,7 @@
 import type { Product } from '@/types/Product';
 import { Card, CardContent, CardFooter, CardHeader } from './ui/card';
 import { Button } from './ui/button';
-import { Heart, ShoppingBasket } from 'lucide-react';
+import { ArrowRight, Heart, ShoppingBasket } from 'lucide-react';
 import { useCartStore } from '@/features/cart/cartStore';
 import { useTransition, useContext, useRef } from 'react';
 import { Spinner } from './ui/shadcn-io/spinner';
@@ -23,7 +23,7 @@ export const ProductCard: React.FC<Props> = ({ product }) => {
   const { addToCart, items } = useCartStore();
   const { toggleFavorites, favorites } = useFavoritesStore();
 
-  const { cartIconRef } = useContext(AnimationContext);
+  const cartIconRef = useContext(AnimationContext)?.cartIconRef;
   const productImageRef = useRef<HTMLImageElement>(null);
 
   const currentItem = items.find((item) => item.product.id === product.id);
@@ -147,39 +147,53 @@ export const ProductCard: React.FC<Props> = ({ product }) => {
           {currentItem ? (
             <Button
               asChild
-              className="flex-1 py-5 bg-secondary"
+              className="flex-1 py-5 bg-secondary group"
               disabled={isCartPending}
             >
-              <Link to="/cart">
+              <Link
+                to="/cart"
+                className="flex items-center justify-center gap-x-1"
+              >
                 Go to cart
-                <ShoppingBasket className="!w-4 !h-4" />
+                <div className="w-0 group-hover:w-4 group-hover:opacity-100 opacity-0 transition-all duration-300 overflow-hidden scale-0 group-hover:scale-100">
+                  <ArrowRight className="h-4 w-4" />
+                </div>
               </Link>
             </Button>
           ) : (
             <Button
               onClick={() => handleAddToCart(product)}
-              className="flex-1 py-5"
+              className="flex-1 py-5 group"
               disabled={isCartPending}
             >
               {isCartPending ? (
                 <Spinner width={20} height={20} />
               ) : (
-                'Add to cart'
+                <>
+                  Add to cart
+                  <div className="w-0 group-hover:w-4 group-hover:opacity-100 opacity-0 transition-all duration-300 overflow-hidden scale-0 group-hover:scale-100">
+                    <ShoppingBasket className="h-4 w-4" />
+                  </div>
+                </>
               )}
             </Button>
           )}
           <Button
             onClick={() => handleToggleFavorites(product)}
             variant="secondary"
-            className="items-center justify-center py-5"
+            className="items-center justify-center py-5 group"
             disabled={isFavoritePending}
           >
             {isFavoritePending ? (
               <Spinner width={20} height={20} />
             ) : isFavorite ? (
-              <Heart fill="#f53353" color="#f53353" />
+              <Heart
+                fill="#f53353"
+                color="#f53353"
+                className="transition-all duration-300 group-hover:scale-120"
+              />
             ) : (
-              <Heart />
+              <Heart className="transition-all duration-300  group-hover:stroke-[#ff3546e4] group-hover:stroke-3 stroke-1" />
             )}
           </Button>
         </div>
