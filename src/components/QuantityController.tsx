@@ -1,4 +1,4 @@
-import { useCartStore, type CartItem } from '@/features/cart/cartStore';
+import { useCartStore, type CartItemType } from '@/features/cart/cartStore';
 import { useTransition } from 'react';
 import { Button } from './ui/button';
 import { Minus, Plus } from 'lucide-react';
@@ -6,7 +6,7 @@ import { Spinner } from './ui/shadcn-io/spinner';
 import { toast } from 'sonner';
 
 type QCProps = {
-  currentItem: CartItem;
+  currentItem: CartItemType;
   quantity: number;
 };
 

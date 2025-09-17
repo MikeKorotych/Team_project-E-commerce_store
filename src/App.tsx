@@ -36,13 +36,14 @@ function App() {
   }, [fetchCart, fetchFavorites]);
 
   return (
-    <div>
+    <div className="flex flex-col min-h-screen">
       <Header session={session} />
-      {/* <Toaster richColors /> */}
       <Toaster richColors position="top-center" />
-      <div className="mx-auto max-w-[1200px] min-[1200px]:px-[32px] px-4 sm:px-8 py-6">
-        <Outlet />
-      </div>
+      <main className="flex-grow w-full">
+        <div className="w-full mx-auto max-w-[1200px] min-[1200px]:px-[32px] px-4 sm:px-8 py-6">
+          <Outlet />
+        </div>
+      </main>
       <Footer />
     </div>
   );

@@ -12,14 +12,14 @@ interface CartItemFromDB {
 }
 
 // Define the type for a single item in the cart for our app state
-export interface CartItem {
+export type CartItemType = {
   product: Product;
   quantity: number;
-}
+};
 
 // Define the state structure
 interface CartState {
-  items: CartItem[];
+  items: CartItemType[];
   isLoading: boolean;
   error: string | null;
   addToCart: (product: Product) => Promise<void>;
@@ -55,7 +55,7 @@ export const useCartStore = create<CartState>()(
         } else {
           // Map the data from DB shape to our app's state shape
           const typedData = data as CartItemFromDB[];
-          const cartItems: CartItem[] = typedData.map((item) => ({
+          const cartItems: CartItemType[] = typedData.map((item) => ({
             product: item.products,
             quantity: item.quantity,
           }));

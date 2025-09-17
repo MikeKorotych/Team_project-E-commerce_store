@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { useState } from 'react';
 import { Spinner } from '@/components/ui/shadcn-io/spinner';
 import { supabase } from '@/utils/supabase';
+import { toast } from 'sonner';
 
 // Define the validation schema
 const formSchema = z.object({
@@ -37,19 +38,37 @@ export const AuthForm = () => {
     try {
       let error;
       if (isSignUp) {
-        ({ error } = await supabase.auth.signUp({ email, password }));
-      } else {
-        ({ error } = await supabase.auth.signInWithPassword({
+        // Регистрация
+        const { error: signUpError } = await supabase.auth.signUp({
           email,
           password,
-        }));
+        });
+        error = signUpError;
+        if (!error) {
+          toast.success(
+            'Registration successful! Please check your email for confirmation.'
+          );
+        }
+      } else {
+        // Вход
+        const { error: signInError } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
+        error = signInError;
+        if (!error) {
+          toast.success('You have successfully logged in!');
+        }
       }
 
+      // Если есть ошибка, показываем тост с ошибкой
       if (error) {
-        setServerError(error.message);
+        setServerError(error.message); // Можно оставить для отображения ошибки в форме
+        toast.error(error.message);
       }
     } catch (error: any) {
       setServerError(error.message);
+      toast.error(error.message);
     }
   };
 

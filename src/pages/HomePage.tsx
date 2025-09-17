@@ -1,18 +1,18 @@
 // import { ProductCard } from "@/components/ProductCard";
-import { ModelsRow } from "@/components/ModelsRow";
-import { ProductCarousel } from "@/components/ProductCarousel";
-import { supabase } from "@/utils/supabase";
-import { useQuery } from "@tanstack/react-query";
-import { HomeShopCategory } from "@/components/HomeShopCategory";
+import { ModelsRow } from '@/components/ModelsRow';
+import { ProductCarousel } from '@/components/ProductCarousel';
+import { supabase } from '@/utils/supabase';
+import { useQuery } from '@tanstack/react-query';
+import { HomeShopCategory } from '@/components/HomeShopCategory';
 
 export const HomePage = () => {
   const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
   const fetchPhones = async () => {
     // request to Supabase
     const { data, error } = await supabase
-      .from("products")
-      .select("*")
-      .eq("category", "phones");
+      .from('products')
+      .select('*')
+      .eq('category', 'phones');
 
     // process error
     if (error) {
@@ -29,7 +29,7 @@ export const HomePage = () => {
     isError, // `true`, якщо функція `fetchPhones` кинула помилку
     error, // Об'єкт помилки
   } = useQuery({
-    queryKey: ["products", "phones"], // 1. Унікальний ключ для цього запиту
+    queryKey: ['products', 'phones'], // 1. Унікальний ключ для цього запиту
     queryFn: fetchPhones, // 2. Функція, яка буде виконувати запит
   });
 
@@ -47,14 +47,14 @@ export const HomePage = () => {
 
   return (
     <>
-      <h1 className="font-bold text-[32px] py-[24px] sm:text-5xl sm:py-[32px] md:py-[56px] md:text-[48px]">
+      <h1 className="font-bold text-[32px] min-[855px]:text-[48px] pb-[24px] sm:pb-[32px] md:pb-[56px] sm:pt-[8px] lg:pt-[32px]">
         Welcome to Nice Gadgets store!
       </h1>
 
       <ProductCarousel supabaseUrl={supabaseUrl} />
-      <ModelsRow title={"Brand new models"} product={phones?.slice(0, 4)} />
+      <ModelsRow title={'Brand new models'} product={phones?.slice(0, 4)} />
       <HomeShopCategory supabaseUrl={supabaseUrl} />
-      <ModelsRow title={"Hot prices"} product={phones?.slice(0, 4)} />
+      <ModelsRow title={'Hot prices'} product={phones?.slice(0, 4)} />
     </>
   );
 };
