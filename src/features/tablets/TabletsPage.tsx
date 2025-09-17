@@ -10,7 +10,6 @@ import {
 } from '@/utils/helpers';
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
 
 const TabletsPage = () => {
   const { data, isLoading, isError, error, refetch } = useQuery({
@@ -62,9 +61,7 @@ const TabletsPage = () => {
 
       <div className="products-table">
         {data?.map((item) => (
-          <Link to={`/product/${item.id}`}>
-            <ProductCard key={item.id} product={item}></ProductCard>
-          </Link>
+          <ProductCard key={item.id} product={item}></ProductCard>
         ))}
       </div>
     </>

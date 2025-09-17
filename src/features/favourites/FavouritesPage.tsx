@@ -1,6 +1,5 @@
 import { ProductCard } from "@/components/ProductCard";
 import ProductPageNav from "@/components/ProductPageNav";
-import { Link } from 'react-router-dom';
 
 // Temporary data for test
 const data = [
@@ -255,9 +254,7 @@ export const FavouritesPage = () => {
 
       <div className="products-table">
         {data.map((item) => (
-          <Link to={`/product/${item.id}`}>
-            <ProductCard key={item.id} product={item} />
-          </Link>
+          <ProductCard key={item.id} product={item} />
         ))}
       </div>
     </>

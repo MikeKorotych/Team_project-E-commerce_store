@@ -84,11 +84,9 @@ const ProductPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log('Current productId:', productId);
     const foundProduct = productsData.find(p => p.itemId === productId);
 
     if (foundProduct) {
-      console.log('Found product overview:', foundProduct);
       setProductOverview(foundProduct);
       let foundDetailedProduct: DetailedProduct | undefined;
 

@@ -2,6 +2,7 @@ import type { Product } from '@/types/Product';
 import { Card, CardContent, CardFooter, CardHeader } from './ui/card';
 import { Button } from './ui/button';
 import { Heart } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 type Props = {
   product: Product;
@@ -10,15 +11,19 @@ type Props = {
 export const ProductCard: React.FC<Props> = ({ product }) => (
   <Card className="w-full">
     <CardHeader>
-      <img
-        src={`${product.images[0]}`}
-        alt="Product Image"
-        className="object-contain h-[196px] w-[206px] mx-auto"
-      />
+      <Link to={`/product/${product.id}`}>
+        <img
+          src={`${product.images[0]}`}
+          alt="Product Image"
+          className="object-contain h-[196px] w-[206px] mx-auto"
+        />
+      </Link>
     </CardHeader>
     <CardContent>
       <div className="flex flex-col gap-2 sm:min-h-[58px] mt-4">
-        <h2 className="text-[14px]/[21px]">{product.name}</h2>
+        <Link to={`/product/${product.id}`}>
+          <h2 className="text-[14px]/[21px]">{product.name}</h2>
+        </Link>
         <div className="flex flex-row gap-2 text-2xl"></div>
       </div>
       <div className="flex gap-2">
