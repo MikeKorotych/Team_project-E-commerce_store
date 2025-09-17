@@ -7,6 +7,9 @@ import { supabase } from '../utils/supabase';
 import { useState, useEffect } from 'react';
 import { AuthModal } from '../features/auth/AuthModal';
 
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const imgFromSupabase = `${supabaseUrl}/storage/v1/object/public/product-images/img/header/Nice-Gadgets-with-smile.png`;
+
 interface Props {
   session: Session | null;
 }
@@ -31,8 +34,8 @@ export const Header = ({ session }: Props) => {
           <Link to="/" className="lg:py-4.5 lg:px-6 py-2.5 px-4">
             <img
               className="w-22.5 h-7 inline object-contain"
-              src="/src/img/header/Nice-Gadgets-with-smile.png"
-              alt=""
+              src={imgFromSupabase}
+              alt="header logo"
             />
           </Link>
           {/* burger for small screens */}
