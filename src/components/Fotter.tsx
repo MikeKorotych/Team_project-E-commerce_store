@@ -2,6 +2,9 @@ import React from 'react';
 import { Link } from 'react-router';
 import { ChevronUp } from 'lucide-react';
 
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const imgFromSupabase = `${supabaseUrl}/storage/v1/object/public/product-images/img/header/Nice-Gadgets-with-smile.png`;
+
 const Footer: React.FC = () => {
   const scrollToTop = () => {
     window.scrollTo({
@@ -17,7 +20,7 @@ const Footer: React.FC = () => {
         <Link to="/" className="py-4.5">
           <img
             className="w-22.5 h-7 inline object-contain"
-            src="/src/img/header/Nice-Gadgets-with-smile.png"
+            src={imgFromSupabase}
             alt="Nice Gadgets"
           />
         </Link>

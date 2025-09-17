@@ -3,6 +3,7 @@ import { useTransition } from 'react';
 import { Button } from './ui/button';
 import { Minus, Plus } from 'lucide-react';
 import { Spinner } from './ui/shadcn-io/spinner';
+import { toast } from 'sonner';
 
 type QCProps = {
   currentItem: CartItem;
@@ -25,19 +26,25 @@ const QuantityController: React.FC<QCProps> = ({ currentItem, quantity }) => {
       <Button
         disabled={isPending}
         className="py-5"
-        onClick={() => handleUpdate(quantity - 1)}
+        onClick={() => {
+          handleUpdate(quantity - 1);
+          toast.error('Item removed from cart');
+        }}
       >
         <Minus />
       </Button>
       {isPending ? (
-        <Spinner width={20} height={20} />
+        <Spinner width={16} height={16} />
       ) : (
-        <div className="w-5 text-center">{quantity}</div>
+        <div className="w-4 text-center">{quantity}</div>
       )}
       <Button
         disabled={isPending}
         className="py-5"
-        onClick={() => handleUpdate(quantity + 1)}
+        onClick={() => {
+          handleUpdate(quantity + 1);
+          toast.success('Item added to cart');
+        }}
       >
         <Plus />
       </Button>

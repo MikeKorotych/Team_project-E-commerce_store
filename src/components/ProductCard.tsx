@@ -1,25 +1,48 @@
 import type { Product } from '@/types/Product';
 import { Card, CardContent, CardFooter, CardHeader } from './ui/card';
 import { Button } from './ui/button';
-import { Heart } from 'lucide-react';
+import { Heart, ShoppingBasket } from 'lucide-react';
 import { useCartStore } from '@/features/cart/cartStore';
 import { useTransition } from 'react';
 import { Spinner } from './ui/shadcn-io/spinner';
-import QuantityController from './QuantityController';
+import { useFavoritesStore } from '@/features/favourites/favoritesStore';
+import { toast } from 'sonner';
+import { Link } from 'react-router';
+
+// import QuantityController from './QuantityController';
 
 type Props = {
   product: Product;
 };
 
 export const ProductCard: React.FC<Props> = ({ product }) => {
-  const [isPending, startTransition] = useTransition();
+  // Separate transitions for cart and favorites to handle loading states independently
+  const [isCartPending, startCartTransition] = useTransition();
+  const [isFavoritePending, startFavoriteTransition] = useTransition();
+
   const { addToCart, items } = useCartStore();
+  const { toggleFavorites, favorites } = useFavoritesStore();
+
   const currentItem = items.find((item) => item.product.id === product.id);
+  const isFavorite = favorites.some((item) => item.id === product.id);
 
   const handleAddToCart = (product: Product) => {
-    startTransition(async () => {
+    startCartTransition(async () => {
       await new Promise((resolve) => setTimeout(resolve, 100));
       await addToCart(product);
+      toast.success('Item added to cart');
+    });
+  };
+
+  const handleToggleFavorites = (product: Product) => {
+    startFavoriteTransition(async () => {
+      await new Promise((resolve) => setTimeout(resolve, 100));
+      await toggleFavorites(product);
+      if (isFavorite) {
+        toast.error('Item removed from favorites');
+      } else {
+        toast.success('Item added to favorites');
+      }
     });
   };
 
@@ -67,7 +90,8 @@ export const ProductCard: React.FC<Props> = ({ product }) => {
       </CardContent>
       <CardFooter>
         <div className="flex w-full gap-2 justify-between">
-          {currentItem ? (
+          {/* //? varian 1 with qty controller 🎛️*/}
+          {/* {currentItem ? (
             <QuantityController
               currentItem={currentItem}
               quantity={currentItem.quantity}
@@ -76,15 +100,65 @@ export const ProductCard: React.FC<Props> = ({ product }) => {
             <Button
               onClick={() => handleAddToCart(product)}
               className="flex-1 py-5"
+              disabled={isCartPending} // Disable only this button
             >
-              {isPending ? <Spinner width={20} height={20} /> : 'Add to cart'}
+              {isCartPending ? (
+                <Spinner width={20} height={20} />
+              ) : (
+                'Add to cart'
+              )}
+            </Button>
+          )} */}
+
+          {/* //? varian 2 3 go to the cart 🛒 */}
+          {currentItem ? (
+            <Button
+              asChild
+              className="flex-1 py-5 bg-secondary"
+              disabled={isCartPending} // Disable only this button
+            >
+              <Link to="/cart">
+                {' '}
+                Go to cart
+                <ShoppingBasket className="!w-4 !h-4" />
+              </Link>
+            </Button>
+          ) : (
+            <Button
+              onClick={() => handleAddToCart(product)}
+              className="flex-1 py-5"
+              disabled={isCartPending} // Disable only this button
+            >
+              {isCartPending ? (
+                <Spinner width={20} height={20} />
+              ) : (
+                'Add to cart'
+              )}
             </Button>
           )}
+
+          {/* //? varian leave the same button */}
+          {/* <Button
+            onClick={() => handleAddToCart(product)}
+            className="flex-1 py-5"
+            disabled={isCartPending} // Disable only this button
+          >
+            {isCartPending ? <Spinner width={20} height={20} /> : 'Add to cart'}
+          </Button> */}
+
           <Button
+            onClick={() => handleToggleFavorites(product)}
             variant="secondary"
             className="items-center justify-center py-5"
+            disabled={isFavoritePending} // Disable only this button
           >
-            <Heart />
+            {isFavoritePending ? (
+              <Spinner width={20} height={20} />
+            ) : isFavorite ? (
+              <Heart fill="#f53353" color="#f53353" />
+            ) : (
+              <Heart />
+            )}
           </Button>
         </div>
       </CardFooter>
