@@ -11,6 +11,7 @@ import {
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import DropdownMenu from '@/components/DropDownMenu';
+import { Link } from 'react-router-dom';
 
 const PhonesPage = () => {
   const {
@@ -73,13 +74,17 @@ const PhonesPage = () => {
 
         <div className="products-table">
           {phones?.map((phone) => {
-            return <ProductCard key={phone.id} product={phone} />;
+            return (
+              <Link key={phone.id} to={`/product/${phone.id}`}>
+                <ProductCard product={phone} />
+              </Link>
+            );
           })}
         </div>
       </div>
     </>
   );
-};
+};  
 
 export default PhonesPage;
 

@@ -3,6 +3,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { ProductCard } from "./ProductCard";
 import { Button } from "./ui/button";
 import type { Product } from "@/types/Product";
+import { Link } from 'react-router-dom';
 
 type Props = {
   title: string;
@@ -34,7 +35,9 @@ export const ModelsRow: React.FC<Props> = ({ title, product }) => {
           <div className="flex justify-between gap-4">
             {product?.map((phone) => (
               <div className="min-w-[250px] flex-shrink-0 ">
-                <ProductCard key={phone.id} product={phone} />
+                <Link to={`/product/${phone.id}`}>
+                  <ProductCard key={phone.id} product={phone} />
+                </Link>
               </div>
             ))}
           </div>

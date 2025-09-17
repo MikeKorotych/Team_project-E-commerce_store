@@ -7,6 +7,7 @@ import accessoriesData from '../../api/accessories.json';
 import type { Product } from '../types/Product';
 import { Heart, ChevronLeft } from 'lucide-react';
 import React from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
 interface ProductOverview {
   id: number;
@@ -80,11 +81,14 @@ const ProductPage = () => {
   const [selectedColor, setSelectedColor] = useState<string>('');
   const [selectedCapacity, setSelectedCapacity] = useState<string>('');
   const [youMayAlsoLike, setYouMayAlsoLike] = useState<ProductOverview[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const foundProduct = productsData.find(p => p.id === Number(productId));
+    console.log('Current productId:', productId);
+    const foundProduct = productsData.find(p => p.itemId === productId);
 
     if (foundProduct) {
+      console.log('Found product overview:', foundProduct);
       setProductOverview(foundProduct);
       let foundDetailedProduct: DetailedProduct | undefined;
 
@@ -166,11 +170,11 @@ const ProductPage = () => {
       <nav className="text-sm mb-4">
         <ol className="list-none p-0 inline-flex">
           <li className="flex items-center">
-            <a href="/" className="text-gray-400 hover:text-white">Home</a>
+            <Link to="/" className="text-gray-400 hover:text-white">Home</Link>
             <span className="mx-2 text-gray-500">/</span>
           </li>
           <li className="flex items-center">
-            <a href={`/${productOverview.category}`} className="text-gray-400 hover:text-white">{productOverview.category}</a>
+            <Link to={`/${productOverview.category}`} className="text-gray-400 hover:text-white">{productOverview.category}</Link>
             <span className="mx-2 text-gray-500">/</span>
           </li>
           <li className="flex items-center">
@@ -179,7 +183,7 @@ const ProductPage = () => {
         </ol>
       </nav>
 
-      <button className="text-gray-400 hover:text-white flex items-center mb-6">
+      <button onClick={() => navigate(-1)} className="text-gray-400 hover:text-white flex items-center mb-6">
         <ChevronLeft className="mr-2" />
         Back
       </button>
@@ -286,19 +290,19 @@ const ProductPage = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {youMayAlsoLike.map((item) => (
             <div key={item.id} className="bg-[#2a2a3e] rounded-lg p-4 flex flex-col items-center text-center">
-              <a href={`/product/${item.id}`}>
+              <Link to={`/product/${item.id}`}>
                 <img src={`/src/${item.image}`} alt={item.name} className="w-32 h-32 object-contain mb-4" />
                 <h3 className="text-lg font-semibold mb-2">{item.name}</h3>
                 <div className="flex items-baseline gap-2 mb-4">
                   <span className="text-xl font-bold">${item.price}</span>
-                  <span className="text-md text-gray-500 line-through">${item.fullPrice}</span>
+                  <span className="text-sm text-gray-500 line-through">${item.fullPrice}</span>
                 </div>
                 <div className="text-sm text-gray-400 mb-4">
                   <p>Screen: {item.screen}</p>
                   <p>Capacity: {item.capacity}</p>
                   <p>RAM: {item.ram}</p>
                 </div>
-              </a>
+              </Link>
               <div className="flex gap-2 w-full">
                 <button className="flex-grow bg-[#8b5cf6] hover:bg-[#7c3aed] text-white font-bold py-2 px-4 rounded-lg text-sm">
                   Add to cart

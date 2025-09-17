@@ -10,6 +10,7 @@ import {
 import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import DropDownMenu from '@/components/DropDownMenu';
+import { Link } from 'react-router-dom';
 
 const AccessoriesPage = () => {
   const { data, isLoading, isError, error, refetch } = useQuery({
@@ -62,7 +63,9 @@ const AccessoriesPage = () => {
 
       <div className="products-table">
         {data?.map((item) => (
-          <ProductCard key={item.id} product={item}></ProductCard>
+          <Link to={`/product/${item.id}`}>
+            <ProductCard key={item.id} product={item}></ProductCard>
+          </Link>
         ))}
       </div>
     </>
