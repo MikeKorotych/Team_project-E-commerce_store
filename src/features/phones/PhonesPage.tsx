@@ -43,7 +43,7 @@ const PhonesPage = () => {
       <ProductPageNav category="Phones" />
 
       <div className="grid grid-cols-24 gap-[8px]">
-        <h1 className="product-title col-start-1 col-end-24">
+        <h1 className="page-title col-start-1 col-end-24">
           Mobile phones
         </h1>
         <span className="text-sm/[21px] col-start-1 col-end-3 text-dark">

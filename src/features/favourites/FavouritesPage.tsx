@@ -249,7 +249,7 @@ export const FavouritesPage = () => {
     <>
       <ProductPageNav category="Favourites" />
 
-      <h1 className="product-title">Favourites</h1>
+      <h1 className="page-title">Favourites</h1>
       <span className="text-sm/[21px] text-dark">{data.length} items</span>
 
       <div className="products-table">
