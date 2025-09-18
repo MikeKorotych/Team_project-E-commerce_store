@@ -1,8 +1,8 @@
-import React from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { ProductCard } from "./ProductCard";
-import { Button } from "./ui/button";
-import type { Product } from "@/types/Product";
+import React from 'react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ProductCard } from './ProductCard';
+import { Button } from './ui/button';
+import type { Product } from '@/types/Product';
 
 type Props = {
   title: string;
@@ -30,8 +30,8 @@ export const ModelsRow: React.FC<Props> = ({ title, product }) => {
             </Button>
           </div>
         </div>
-        <div className="overflow-x-auto hide-scrollbar">
-          <div className="flex justify-between gap-4">
+        <div className="overflow-visible hide-scrollbar">
+          <div className="flex justify-between gap-4 ">
             {product?.map((phone) => (
               <div key={phone.id} className="min-w-[250px] flex-shrink-0 ">
                 <ProductCard product={phone} />

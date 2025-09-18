@@ -275,3 +275,7 @@ button {
   /* Slide to the right */
   transition: opacity 300ms, transform 300ms;
 }
+
+* {
+  /* overflow: visible; */
+}
