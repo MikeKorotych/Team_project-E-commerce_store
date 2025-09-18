@@ -33,7 +33,7 @@ export const PaginationButtons: React.FC<Props> = ({
             variant="secondary"
             onClick={() =>
               currentPage > 1 &&
-              navigate(`/phones/${currentPage - 1}?limit=${itemsPerPage}`)
+              navigate(`../${currentPage - 1}?limit=${itemsPerPage}`)
             }
             className="h-10 w-10 items-center justify-center py-5"
           >
@@ -43,7 +43,7 @@ export const PaginationButtons: React.FC<Props> = ({
         {pagesToShow.map((page) => {
           return (
             <PaginationItem key={page}>
-              <Link to={`/phones/${page}?limit=${itemsPerPage}`}>
+              <Link to={`../${page}?limit=${itemsPerPage}`}>
                 <Button
                   variant={page === currentPage ? "default" : "outline"}
                   className="h-10 w-10 items-center justify-center py-5"
@@ -59,7 +59,7 @@ export const PaginationButtons: React.FC<Props> = ({
             variant="secondary"
             onClick={() =>
               currentPage < totalPages &&
-              navigate(`/phones/${currentPage + 1}?limit=${itemsPerPage}`)
+              navigate(`../${currentPage + 1}?limit=${itemsPerPage}`)
             }
             className="h-10 w-10 items-center justify-center py-5"
           >
