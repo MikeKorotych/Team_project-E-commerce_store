@@ -1,5 +1,4 @@
 import { ErrorMessage } from "@/components/error-message";
-import { ProductCard } from "@/components/ProductCard";
 import ProductPageNav from "@/components/ProductPageNav";
 import { Spinner } from "@/components/ui/shadcn-io/spinner";
 import {
@@ -8,22 +7,37 @@ import {
   sortByOptions,
 } from "@/utils/helpers";
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DropDownMenu from "@/components/DropDownMenu";
+import { PaginationArea } from "@/components/Pagination/PaginationArea";
+import { useSearchParams } from "react-router";
 import { useSortProducts } from "@/hooks/useSortProducts";
 
 const AccessoriesPage = () => {
   const { data, isLoading, isError, error, refetch } = useQuery({
-    queryKey: ["products", "products"],
+    queryKey: ["products", "accessories"],
     queryFn: () => fetchProductsByType("accessories"),
   });
 
-  const initialSortby = sortByOptions[0].value;
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const [sortBy, setSortBy] = useState(initialSortby);
-  const [itemsPerPage, setItemsPerPage] = useState("8");
+  const [sortBy, setSortBy] = useState("newest");
+  const itemsPerPage = searchParams.get("limit") || "16";
 
   const sortedData = useSortProducts(data || [], sortBy, "asc");
+
+  const handleChangeItemsPerPage = (value: string) => {
+    searchParams.set("limit", value);
+    setSearchParams(searchParams, { replace: true });
+  };
+
+  useEffect(() => {
+    if (!searchParams.get("limit")) {
+      searchParams.set("limit", "16");
+      setSearchParams(searchParams, { replace: true });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [itemsPerPage, searchParams]);
 
   if (isLoading) {
     return (
@@ -37,6 +51,7 @@ const AccessoriesPage = () => {
     return <ErrorMessage message={error.message} onRetry={refetch} />;
   }
 
+  console.log(data);
   return (
     <>
       <ProductPageNav category="Accessories" />
@@ -58,18 +73,17 @@ const AccessoriesPage = () => {
             label="Items on page:"
             options={itemsPerPageOptions}
             value={itemsPerPage}
-            onValueChange={setItemsPerPage}
+            onValueChange={(value) => handleChangeItemsPerPage(value)}
             triggerClassName="w-[136px]"
             contentClassName="w-[136px]"
           />
         </div>
       </div>
 
-      <div className="products-table">
-        {sortedData.map((item) => (
-          <ProductCard key={item.id} product={item}></ProductCard>
-        ))}
-      </div>
+      <PaginationArea
+        products={sortedData || []}
+        itemsPerPage={Number(itemsPerPage)}
+      />
     </>
   );
 };

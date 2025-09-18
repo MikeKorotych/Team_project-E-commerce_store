@@ -14,12 +14,12 @@ export const fetchProductsByType = async (type: ProductTypes) => {
 };
 
 export const sortByOptions = [
-  // { value: 'newest', label: 'Newest' },
-  { value: "price", label: "Price" },
+  { value: "newest", label: "Newest" },
+  { value: "priceRegular", label: "Price" },
   { value: "name", label: "Name" },
   { value: "color", label: "Coclor" },
-  { value: "screen resolution", label: "Screen resolution" },
-  { value: "memory capacity", label: "Memory Capacity" },
+  { value: "resolution", label: "Resolution" },
+  { value: "ram", label: "Memory" },
 ];
 
 export const itemsPerPageOptions = [
