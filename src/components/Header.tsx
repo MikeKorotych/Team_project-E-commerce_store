@@ -4,15 +4,24 @@ import { Link } from 'react-router';
 import { Heart, ShoppingBag, LogOut, LogIn } from 'lucide-react';
 import type { Session } from '@supabase/supabase-js';
 import { supabase } from '../utils/supabase';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, type RefObject } from 'react';
 import { AuthModal } from '../features/auth/AuthModal';
+import { toast } from 'sonner';
+import { useCartStore } from '@/features/cart/cartStore';
+
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const imgFromSupabase = `${supabaseUrl}/storage/v1/object/public/product-images/img/header/Nice-Gadgets-with-smile.png`;
 
 interface Props {
   session: Session | null;
+  cartIconRef: RefObject<HTMLAnchorElement | null>; // Add ref to props
 }
 
-export const Header = ({ session }: Props) => {
+export const Header = ({ session, cartIconRef }: Props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { items } = useCartStore();
+
+  const totalItems = items.reduce((acc, cur) => acc + cur.quantity, 0);
 
   useEffect(() => {
     if (session) {
@@ -22,17 +31,18 @@ export const Header = ({ session }: Props) => {
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
+    toast('You have been signed out');
   };
 
   return (
     <>
-      <nav className="inline-flex border-b w-full">
+      <nav className="inline-flex border-b w-full sticky top-0 z-50 bg-background/80 shadow-2xl backdrop-blur-sm">
         <div className="flex justify-between items-center max-sm:w-full">
           <Link to="/" className="lg:py-4.5 lg:px-6 py-2.5 px-4">
             <img
               className="w-22.5 h-7 inline object-contain"
-              src="/src/img/header/Nice-Gadgets-with-smile.png"
-              alt=""
+              src={imgFromSupabase}
+              alt="header logo"
             />
           </Link>
           {/* burger for small screens */}
@@ -91,8 +101,13 @@ export const Header = ({ session }: Props) => {
               variant="ghost"
               className="border-l lg:has-[>svg]:px-6 lg:py-8 sm:has-[svg]:px-4 sm:py-6"
             >
-              <Link to="/cart">
+              <Link to="/cart" className="relative" ref={cartIconRef}>
                 <ShoppingBag className="w-4 h-4" />
+                {totalItems > 0 && (
+                  <div className="absolute rounded-full bg-red-400 top-3 right-3 flex items-center justify-center text-sm h-4.5 w-4.5">
+                    <div className="mt-0.5">{totalItems}</div>
+                  </div>
+                )}
               </Link>
             </Button>
           </div>

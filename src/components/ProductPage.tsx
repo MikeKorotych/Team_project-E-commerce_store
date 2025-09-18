@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import productsData from '../../api/products.json';
 import phonesData from '../../api/phones.json';
 import tabletsData from '../../api/tablets.json';
@@ -7,7 +7,8 @@ import accessoriesData from '../../api/accessories.json';
 import type { Product } from '../types/Product';
 import { Heart, ChevronLeft } from 'lucide-react';
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router';
+import { ModelsRow } from '../components/ModelsRow';
 
 interface ProductOverview {
   id: number;
@@ -83,35 +84,107 @@ const ProductPage = () => {
   const [youMayAlsoLike, setYouMayAlsoLike] = useState<ProductOverview[]>([]);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const foundProduct = productsData.find(p => p.itemId === productId);
+  const parseProductIdFromUrl = (fullProductId: string) => {
+    const parts = fullProductId.split('-');
+    let namespaceId = '';
+    let capacity = '';
+    let color = '';
+    
+    // Знаходимо індекс частини з об'ємом
+    let potentialCapacityIndex = -1;
+    for (let i = parts.length - 1; i >= 0; i--) {
+      const part = parts[i];
+      if (/^\d+(gb|mm|tb)$/i.test(part) || (/^\d+$/.test(part) && i > 0 && parts[i - 1].toLowerCase() !== 'series')) {
+        potentialCapacityIndex = i;
+        break;
+      }
+    }
 
-    if (foundProduct) {
-      setProductOverview(foundProduct);
+    // Розділяємо на назву, об'єм та колір
+    if (potentialCapacityIndex !== -1) {
+      capacity = parts[potentialCapacityIndex];
+      namespaceId = parts.slice(0, potentialCapacityIndex).join('-');
+      color = parts.slice(potentialCapacityIndex + 1).join('-');
+    } else {
+      if (parts.length > 1 && !(/^\d+$/.test(parts[parts.length - 1]) || /^\d+(gb|mm)$/i.test(parts[parts.length - 1]))) {
+        color = parts[parts.length - 1];
+        namespaceId = parts.slice(0, parts.length - 1).join('-');
+      } else {
+        namespaceId = fullProductId;
+      }
+    }
+
+    return { namespaceId, capacity, color };
+  };
+
+   // Конвертує рядок у формат URL (малі літери, пробіли → дефіси
+  const formatStringToUrlParam = (value: string) => {
+    return value.toLowerCase().replace(/\s/g, '-');
+  };
+
+  //Створює ID продукту для URL з нових параметрів   
+  const buildProductIdUrl = (namespaceId: string, newCapacity: string, newColor: string) => {
+    const base = formatStringToUrlParam(namespaceId);
+    const capacityPart = newCapacity ? `-${formatStringToUrlParam(newCapacity)}` : '';
+    const colorPart = newColor ? `-${formatStringToUrlParam(newColor)}` : '';
+    return `${base}${capacityPart}${colorPart}`;
+  };
+
+  useEffect(() => {
+    const { namespaceId, capacity: urlCapacity, color: urlColor } = parseProductIdFromUrl(productId || '');
+
+    const foundProductOverview = productsData.find(p => {
+      const parsedItem = parseProductIdFromUrl(p.itemId);
+      const itemNamespaceId = parsedItem.namespaceId;
+      const itemCapacity = parsedItem.capacity.toLowerCase();
+      const itemColor = parsedItem.color.toLowerCase();
+
+      const namespaceIdMatches = itemNamespaceId.startsWith(namespaceId) || namespaceId.startsWith(itemNamespaceId);
+
+      return namespaceIdMatches &&
+             itemCapacity === urlCapacity.toLowerCase() &&
+             itemColor === urlColor.toLowerCase();
+    });
+
+    if (foundProductOverview) {
+      setProductOverview(foundProductOverview);
       let foundDetailedProduct: DetailedProduct | undefined;
 
-      if (foundProduct.category === 'phones') {
-        foundDetailedProduct = phonesData.find(p => p.id === foundProduct.itemId) as Product;
-      } else if (foundProduct.category === 'tablets') {
-        foundDetailedProduct = tabletsData.find(p => p.id === foundProduct.itemId) as TabletDetails;
-      } else if (foundProduct.category === 'accessories') {
-        foundDetailedProduct = accessoriesData.find(p => p.id === foundProduct.itemId) as AccessoryDetails;
+      if (foundProductOverview.category === 'phones') {
+        foundDetailedProduct = phonesData.find(p => p.id === foundProductOverview.itemId) as Product;
+      } else if (foundProductOverview.category === 'tablets') {
+        foundDetailedProduct = tabletsData.find(p => p.id === foundProductOverview.itemId) as TabletDetails;
+      } else if (foundProductOverview.category === 'accessories') {
+        foundDetailedProduct = accessoriesData.find(p => p.id === foundProductOverview.itemId) as AccessoryDetails;
       }
 
       if (foundDetailedProduct) {
         setProduct(foundDetailedProduct);
         if (foundDetailedProduct.images.length > 0) {
-          setMainImage(foundDetailedProduct.images[0]);
+          setMainImage(`/src/${foundDetailedProduct.images[0]}`);
         }
-        if (foundDetailedProduct.colorsAvailable && foundDetailedProduct.colorsAvailable.length > 0) {
-          setSelectedColor(foundDetailedProduct.colorsAvailable[0]);
+
+        // Встановлюємо вибраний колір з URL або перший доступний
+        const selectedProdColor = foundDetailedProduct.colorsAvailable?.find(
+          (c) => formatStringToUrlParam(c) === formatStringToUrlParam(urlColor)
+        );
+        if (selectedProdColor) {
+          setSelectedColor(formatStringToUrlParam(selectedProdColor));
+        } else if (foundDetailedProduct.colorsAvailable && foundDetailedProduct.colorsAvailable.length > 0) {
+          setSelectedColor(formatStringToUrlParam(foundDetailedProduct.colorsAvailable[0]));
         }
-        if (foundDetailedProduct.capacityAvailable && foundDetailedProduct.capacityAvailable.length > 0) {
-          setSelectedCapacity(foundDetailedProduct.capacityAvailable[0]);
+
+        const selectedProdCapacity = foundDetailedProduct.capacityAvailable?.find(
+          (c) => formatStringToUrlParam(c) === formatStringToUrlParam(urlCapacity)
+        );
+        if (selectedProdCapacity) {
+          setSelectedCapacity(formatStringToUrlParam(selectedProdCapacity).toUpperCase());
+        } else if (foundDetailedProduct.capacityAvailable && foundDetailedProduct.capacityAvailable.length > 0) {
+          setSelectedCapacity(formatStringToUrlParam(foundDetailedProduct.capacityAvailable[0]).toUpperCase());
         }
 
         const relatedProducts = productsData.filter(
-          p => p.category === foundProduct.category && p.id !== foundProduct.id
+          p => p.category === foundProductOverview.category && p.itemId !== foundProductOverview.itemId
         ).slice(0, 4);
         setYouMayAlsoLike(relatedProducts);
       }
@@ -121,6 +194,47 @@ const ProductPage = () => {
   if (!product || !productOverview) {
     return <div className="text-white text-center py-10">Loading product...</div>;
   }
+
+  const transformProductOverviewToProduct = (overview: ProductOverview): Product => {
+    const detailed = product as Product;
+    return {
+      id: overview.itemId,
+      namespaceId: detailed.namespaceId || '',
+      name: overview.name,
+      capacityAvailable: detailed.capacityAvailable || [],
+      capacity: overview.capacity,
+      priceRegular: overview.fullPrice,
+      priceDiscount: overview.price,
+      colorsAvailable: detailed.colorsAvailable || [],
+      color: overview.color,
+      images: detailed.images.map(img => `/src/${img}`),
+      description: detailed.description || [],
+      screen: overview.screen || '',
+      resolution: detailed.resolution || '',
+      processor: detailed.processor || '',
+      ram: overview.ram,
+      camera: detailed.camera || '',
+      zoom: detailed.zoom || '',
+      cell: detailed.cell || [],
+      itemId: overview.itemId,
+    };
+  };
+
+  const handleColorChange = (newColor: string) => {
+    if (productOverview && product) {
+      const { namespaceId } = parseProductIdFromUrl(product.id);
+      const newProductId = buildProductIdUrl(namespaceId, selectedCapacity, newColor);
+      navigate(`/product/${newProductId}`);
+    }
+  };
+
+  const handleCapacityChange = (newCapacity: string) => {
+    if (productOverview && product) {
+      const { namespaceId } = parseProductIdFromUrl(product.id);
+      const newProductId = buildProductIdUrl(namespaceId, newCapacity, selectedColor);
+      navigate(`/product/${newProductId}`);
+    }
+  };
 
   const getColorName = (color: string) => {
     const colorMap: { [key: string]: string } = {
@@ -135,8 +249,16 @@ const ProductPage = () => {
       'white': 'White',
       'purple': 'Purple',
       'red': 'Red',
+      'gray': 'Gray',
+      'starlight': 'Starlight',
+      'pink': 'Pink',
+      'sky-blue': 'Sky Blue',
+      'spaceblack': 'Space Black',
+      'sierrablue': 'Sierra Blue',
+      'graphite': 'Graphite',
+      'midnight': 'Midnight',
     };
-    return colorMap[color.toLowerCase()] || color;
+    return colorMap[formatStringToUrlParam(color)] || color;
   };
 
   const renderTechSpecs = (detailedProduct: DetailedProduct) => {
@@ -197,20 +319,20 @@ const ProductPage = () => {
                 key={index}
                 src={`/src/${image}`}
                 alt={`${product.name} thumbnail ${index + 1}`}
-                className={`w-20 h-20 object-cover border-2 ${mainImage === image ? 'border-blue-500' : 'border-transparent'} cursor-pointer rounded-md`}
-                onClick={() => setMainImage(image)}
+                className={`w-20 h-20 object-cover border-2 ${mainImage === `/src/${image}` ? 'border-blue-500' : 'border-transparent'} cursor-pointer rounded-md`}
+                onClick={() => setMainImage(`/src/${image}`)}
               />
             ))}
           </div>
           <div className="flex-grow">
-            <img src={`/src/${mainImage}`} alt={product.name} className="w-full h-auto object-contain rounded-lg" />
+            <img src={mainImage} alt={product.name} className="w-full h-auto object-contain rounded-lg" />
           </div>
         </div>
 
         {/* Деталі */}
         <div className="w-full md:w-1/2">
           <div className="flex items-center mb-4">
-            <span className="text-gray-500 text-sm">ID: {productOverview.id}</span>
+            <span className="text-gray-500 text-sm">ID: {productOverview.itemId}</span>
           </div>
 
           <div className="mb-6">
@@ -219,9 +341,9 @@ const ProductPage = () => {
               {product.colorsAvailable?.map((color, index) => (
                 <div
                   key={index}
-                  className={`w-8 h-8 rounded-full border-2 ${selectedColor === color ? 'border-blue-500' : 'border-gray-600'} cursor-pointer`}
+                  className={`w-8 h-8 rounded-full border-2 ${selectedColor === formatStringToUrlParam(color) ? 'border-blue-500' : 'border-gray-600'} cursor-pointer`}
                   style={{ backgroundColor: color }}
-                  onClick={() => setSelectedColor(color)}
+                  onClick={() => handleColorChange(color)}
                   title={getColorName(color)}
                 ></div>
               ))}
@@ -231,15 +353,17 @@ const ProductPage = () => {
           <div className="mb-6">
             <h2 className="text-lg font-semibold mb-2">Select capacity</h2>
             <div className="flex gap-2">
-              {product.capacityAvailable?.map((capacity, index) => (
-                <button
-                  key={index}
-                  className={`px-4 py-2 rounded-md border ${selectedCapacity === capacity ? 'border-blue-500 bg-gray-700' : 'border-gray-600 bg-gray-800'} text-white hover:bg-gray-700`}
-                  onClick={() => setSelectedCapacity(capacity)}
-                >
-                  {capacity}
-                </button>
-              ))}
+              {product.capacityAvailable?.map((capacity, index) => {
+                return (
+                  <button
+                    key={index}
+                    className={`px-4 py-2 rounded-md border ${selectedCapacity === formatStringToUrlParam(capacity).toUpperCase() ? 'border-blue-500 bg-gray-700' : 'border-gray-600 bg-gray-800'} text-white hover:bg-gray-700`}
+                    onClick={() => handleCapacityChange(capacity)}
+                  >
+                    {capacity}
+                  </button>
+                );
+              })}
             </div>
           </div>
 
@@ -285,33 +409,7 @@ const ProductPage = () => {
       {/* вам також сподобається */}
       <div className="mt-16 border-t border-gray-700 pt-8">
         <h2 className="text-2xl font-bold mb-6">You may also like</h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {youMayAlsoLike.map((item) => (
-            <div key={item.id} className="bg-[#2a2a3e] rounded-lg p-4 flex flex-col items-center text-center">
-              <Link to={`/product/${item.id}`}>
-                <img src={`/src/${item.image}`} alt={item.name} className="w-32 h-32 object-contain mb-4" />
-                <h3 className="text-lg font-semibold mb-2">{item.name}</h3>
-                <div className="flex items-baseline gap-2 mb-4">
-                  <span className="text-xl font-bold">${item.price}</span>
-                  <span className="text-sm text-gray-500 line-through">${item.fullPrice}</span>
-                </div>
-                <div className="text-sm text-gray-400 mb-4">
-                  <p>Screen: {item.screen}</p>
-                  <p>Capacity: {item.capacity}</p>
-                  <p>RAM: {item.ram}</p>
-                </div>
-              </Link>
-              <div className="flex gap-2 w-full">
-                <button className="flex-grow bg-[#8b5cf6] hover:bg-[#7c3aed] text-white font-bold py-2 px-4 rounded-lg text-sm">
-                  Add to cart
-                </button>
-                <button className="p-2 rounded-lg border border-gray-600 hover:bg-gray-700">
-                  <Heart />
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
+        <ModelsRow product={youMayAlsoLike.map(transformProductOverviewToProduct)} title="" />
       </div>
     </div>
   );

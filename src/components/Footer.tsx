@@ -2,6 +2,9 @@ import React from 'react';
 import { Link } from 'react-router';
 import { ChevronUp } from 'lucide-react';
 
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const imgFromSupabase = `${supabaseUrl}/storage/v1/object/public/product-images/img/header/Nice-Gadgets-with-smile.png`;
+
 const Footer: React.FC = () => {
   const scrollToTop = () => {
     window.scrollTo({
@@ -11,13 +14,13 @@ const Footer: React.FC = () => {
   };
 
   return (
-    <footer className="font-sans bg-[#0f1121] text-white h-[257px] md:h-[96px] border-t">
+    <footer className="font-sans bg-[#0f1121] text-white h-[257px] md:h-[96px] border-t w-full">
       <div className="container mx-auto h-full flex flex-col items-center justify-between space-y-8 md:flex-row md:space-y-0 md:justify-between md:items-center px-[32px]">
         {/* лого */}
         <Link to="/" className="py-4.5">
           <img
             className="w-22.5 h-7 inline object-contain"
-            src="/src/img/header/Nice-Gadgets-with-smile.png"
+            src={imgFromSupabase}
             alt="Nice Gadgets"
           />
         </Link>

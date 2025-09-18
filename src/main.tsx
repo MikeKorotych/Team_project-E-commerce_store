@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
 import { ThemeProvider } from './components/theme-provider.tsx';
-import { createBrowserRouter, RouterProvider } from 'react-router';
+import { createBrowserRouter, Navigate, RouterProvider } from 'react-router';
 import PhonesPage from './features/phones/PhonesPage.tsx';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { HomePage } from './pages/HomePage.tsx';
@@ -11,6 +11,9 @@ import AccessoriesPage from './features/accessories/AccessoriesPage.tsx';
 import TabletsPage from './features/tablets/TabletsPage.tsx';
 import { FavouritesPage } from './features/favourites/FavouritesPage.tsx';
 import ProductPage from './components/ProductPage.tsx';
+import { CartPage } from './features/cart/CartPage.tsx';
+import { PageNotFound } from './features/pageNotFound/pageNotFound.tsx';
+
 
 // Create client
 const queryClient = new QueryClient();
@@ -26,15 +29,42 @@ const router = createBrowserRouter([
       },
       {
         path: '/phones',
-        element: <PhonesPage />,
+        children: [
+          {
+            index: true,
+            element: <Navigate to="1" replace={true} />,
+          },
+          {
+            path: ':page',
+            element: <PhonesPage />,
+          },
+        ],
       },
       {
         path: '/tablets',
-        element: <TabletsPage />,
+        children: [
+          {
+            index: true,
+            element: <Navigate to="1" replace={true} />,
+          },
+          {
+            path: ':page',
+            element: <TabletsPage />,
+          }
+        ]
       },
       {
         path: '/accessories',
-        element: <AccessoriesPage />,
+        children: [
+          {
+            index: true,
+            element: <Navigate to="1" replace={true} />,
+          },
+          {
+            path: ':page',
+            element: <AccessoriesPage />,
+          }
+        ]
       },
       {
         path: '/favourites',
@@ -44,6 +74,15 @@ const router = createBrowserRouter([
         path: '/product/:productId',
         element: <ProductPage />,
       }
+      ,
+      {
+        path: '/cart',
+        element: <CartPage />,
+      },
+      {
+        path: '/*',
+        element: <PageNotFound />,
+      },
     ],
   },
 ]);

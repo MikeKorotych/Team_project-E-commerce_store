@@ -1,23 +1,43 @@
-import DropDownMenu from '@/components/DropDownMenu';
-import { ErrorMessage } from '@/components/error-message';
-import { ProductCard } from '@/components/ProductCard';
-import ProductPageNav from '@/components/ProductPageNav';
-import { Spinner } from '@/components/ui/shadcn-io/spinner';
+import DropDownMenu from "@/components/DropDownMenu";
+import { ErrorMessage } from "@/components/error-message";
+import { PaginationArea } from "@/components/Pagination/PaginationArea";
+import ProductPageNav from "@/components/ProductPageNav";
+import { Spinner } from "@/components/ui/shadcn-io/spinner";
 import {
   fetchProductsByType,
   itemsPerPageOptions,
   sortByOptions,
-} from '@/utils/helpers';
-import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
+} from "@/utils/helpers";
+import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router";
+import { useSortProducts } from "@/hooks/useSortProducts";
 
 const TabletsPage = () => {
   const { data, isLoading, isError, error, refetch } = useQuery({
-    queryKey: ['products', 'tablets'],
-    queryFn: () => fetchProductsByType('tablets'),
+    queryKey: ["products", "tablets"],
+    queryFn: () => fetchProductsByType("tablets"),
   });
-  const [sortBy, setSortBy] = useState('newest');
-  const [itemsPerPage, setItemsPerPage] = useState('8');
+
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const [sortBy, setSortBy] = useState("newest");
+  const itemsPerPage = searchParams.get("limit") || "16";
+
+  const sortedData = useSortProducts(data || [], sortBy, "asc");
+
+  const handleChangeItemsPerPage = (value: string) => {
+    searchParams.set("limit", value);
+    setSearchParams(searchParams, { replace: true });
+  };
+
+  useEffect(() => {
+    if (!searchParams.get("limit")) {
+      searchParams.set("limit", "16");
+      setSearchParams(searchParams, { replace: true });
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [itemsPerPage, searchParams]);
 
   if (isLoading) {
     return (
@@ -35,7 +55,7 @@ const TabletsPage = () => {
     <>
       <ProductPageNav category="Tablets" />
 
-      <h1 className="product-title">Tablets</h1>
+      <h1 className="page-title">Tablets</h1>
       <span className="text-sm/[21px] text-dark">{data?.length} models</span>
 
       <div className="flex gap-4 mt-10">
@@ -52,18 +72,17 @@ const TabletsPage = () => {
             label="Items on page:"
             options={itemsPerPageOptions}
             value={itemsPerPage}
-            onValueChange={setItemsPerPage}
+            onValueChange={(value) => handleChangeItemsPerPage(value)}
             triggerClassName="w-[136px]"
             contentClassName="w-[136px]"
           />
         </div>
       </div>
 
-      <div className="products-table">
-        {data?.map((item) => (
-          <ProductCard key={item.id} product={item}></ProductCard>
-        ))}
-      </div>
+      <PaginationArea
+        products={sortedData || []}
+        itemsPerPage={Number(itemsPerPage)}
+      />
     </>
   );
 };

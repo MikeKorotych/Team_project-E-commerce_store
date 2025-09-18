@@ -2,6 +2,7 @@ export type Product = {
   id: string;
   namespaceId: string;
   name: string;
+  itemId: string;
   capacityAvailable: string[];
   capacity: string;
   priceRegular: number;

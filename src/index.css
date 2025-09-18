@@ -75,8 +75,6 @@
   --shadow-lg: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 4px 6px -1px hsl(0 0% 0% / 0.10);
   --shadow-xl: 0 1px 3px 0px hsl(0 0% 0% / 0.10), 0 8px 10px -1px hsl(0 0% 0% / 0.10);
   --shadow-2xl: 0 1px 3px 0px hsl(0 0% 0% / 0.25);
-  --tracking-normal: 0em;
-  --spacing: 0.25rem;
   --shadow-color: oklch(0 0 0);
   --shadow-opacity: 0.1;
   --shadow-blur: 3px;
@@ -226,20 +224,13 @@
 html,
 body,
 #root {
-  /* height: 100%; */
   margin: 0;
   padding: 0;
 }
 
-/* #root {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-} */
 
-body {
-  min-height: 100vh;
-}
+
+body {}
 
 button {
   cursor: pointer;
@@ -251,18 +242,40 @@ button {
 
 
 .hide-scrollbar {
-  -ms-overflow-style: none;  
-  scrollbar-width: none;     
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 .hide-scrollbar::-webkit-scrollbar {
-  display: none;            
+  display: none;
 }
 
-.product-title {
+.page-title {
   @apply text-[32px]/[41px] sm:text-[48px]/[56px] font-bold mb-2;
 }
 
 .products-table {
   @apply grid grid-cols-1 min-[490px]:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 col-start-1 col-end-25 mt-[16px] mb-[40px];
+}
+
+/* Enables smooth transition for items re-ordering */
+.cart-item-wrapper {
+  transition: all 300ms ease-out;
+}
+
+/* CSSTransition classes for cart item removal animation */
+.cart-item-exit {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.cart-item-exit-active {
+  opacity: 0;
+  transform: translateX(-100%);
+  /* Slide to the right */
+  transition: opacity 300ms, transform 300ms;
+}
+
+* {
+  /* overflow: visible; */
 }
