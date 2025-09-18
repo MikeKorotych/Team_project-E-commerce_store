@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import DropdownMenu from "@/components/DropDownMenu";
 import { PaginationArea } from "@/components/Pagination/PaginationArea";
 import { useSearchParams } from "react-router";
+import { useSortProducts } from "@/hooks/useSortProducts";
 
 const PhonesPage = () => {
   const {
@@ -28,6 +29,8 @@ const PhonesPage = () => {
 
   const [sortBy, setSortBy] = useState("newest");
   const itemsPerPage = searchParams.get("limit") || "16";
+
+  const sortedData = useSortProducts(phones || [], sortBy, "asc");
 
   const handleChangeItemsPerPage = (value: string) => {
     searchParams.set("limit", value);
@@ -80,9 +83,9 @@ const PhonesPage = () => {
           />
         </div>
       </div>
-  
+
       <PaginationArea
-        products={phones || []}
+        products={sortedData || []}
         itemsPerPage={Number(itemsPerPage)}
       />
     </>

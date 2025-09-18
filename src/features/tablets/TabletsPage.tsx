@@ -11,6 +11,7 @@ import {
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { useSearchParams } from "react-router";
+import { useSortProducts } from "@/hooks/useSortProducts";
 
 const TabletsPage = () => {
   const { data, isLoading, isError, error, refetch } = useQuery({
@@ -22,6 +23,8 @@ const TabletsPage = () => {
 
   const [sortBy, setSortBy] = useState("newest");
   const itemsPerPage = searchParams.get("limit") || "16";
+
+  const sortedData = useSortProducts(data || [], sortBy, "asc");
 
   const handleChangeItemsPerPage = (value: string) => {
     searchParams.set("limit", value);
@@ -77,7 +80,7 @@ const TabletsPage = () => {
       </div>
 
       <PaginationArea
-        products={data || []}
+        products={sortedData || []}
         itemsPerPage={Number(itemsPerPage)}
       />
     </>
