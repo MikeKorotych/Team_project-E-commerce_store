@@ -30,7 +30,7 @@ export const ModelsRow: React.FC<Props> = ({ title, product }) => {
             </Button>
           </div>
         </div>
-        <div className="overflow-visible hide-scrollbar">
+        <div className="overflow-x-auto hide-scrollbar">
           <div className="flex justify-between gap-4 ">
             {product?.map((phone) => (
               <div key={phone.id} className="min-w-[250px] flex-shrink-0 ">

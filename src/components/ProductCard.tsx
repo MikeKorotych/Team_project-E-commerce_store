@@ -105,20 +105,24 @@ export const ProductCard: React.FC<Props> = ({ product }) => {
       <Card className="w-full [transform-style:preserve-3d]">
         <CardHeader className="[transform-style:preserve-3d]">
           <CardItem translateZ="40">
-            <img
-              src={`${product.images[0]}`}
-              alt="Product Image"
-              className="object-contain h-[196px] w-[206px] mx-auto"
-              ref={productImageRef}
-            />
+            <Link to={`/product/${product.id}`}>
+              <img
+                src={new URL(product.images[0], import.meta.url).href}
+                alt="Product Image"
+                className="object-contain h-[196px] w-[206px] mx-auto"
+                ref={productImageRef}
+              />
+            </Link>
           </CardItem>
         </CardHeader>
         <CardContent className="[transform-style:preserve-3d]">
           <CardItem translateZ="30">
-            <div className="flex flex-col gap-2 sm:min-h-[58px] mt-4">
-              <h2 className="text-[14px]/[21px]">{product.name}</h2>
-              <div className="flex flex-row gap-2 text-2xl"></div>
-            </div>
+            <Link to={`/product/${product.id}`}>
+              <div className="flex flex-col gap-2 sm:min-h-[58px] mt-4">
+                <h2 className="text-[14px]/[21px]">{product.name}</h2>
+                <div className="flex flex-row gap-2 text-2xl"></div>
+              </div>
+            </Link>
           </CardItem>
           <CardItem translateZ="20">
             <div className="flex gap-2">

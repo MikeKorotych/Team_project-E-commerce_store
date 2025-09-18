@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useState } from 'react';
-import { Spinner } from '@/components/ui/shadcn-io/spinner';
+import { Spinner } from '@/components/ui/shadcn-io/spinner';                    
 import { supabase } from '@/utils/supabase';
 import { toast } from 'sonner';
 import { useCartStore } from '@/features/cart/cartStore';

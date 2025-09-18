@@ -10,6 +10,7 @@ import { HomePage } from './pages/HomePage.tsx';
 import AccessoriesPage from './features/accessories/AccessoriesPage.tsx';
 import TabletsPage from './features/tablets/TabletsPage.tsx';
 import { FavouritesPage } from './features/favourites/FavouritesPage.tsx';
+import ProductPage from './components/ProductPage.tsx';
 import { CartPage } from './features/cart/CartPage.tsx';
 import { PageNotFound } from './features/pageNotFound/pageNotFound.tsx';
 
@@ -69,6 +70,11 @@ const router = createBrowserRouter([
         path: '/favourites',
         element: <FavouritesPage />,
       },
+      {
+        path: '/product/:productId',
+        element: <ProductPage />,
+      }
+      ,
       {
         path: '/cart',
         element: <CartPage />,
