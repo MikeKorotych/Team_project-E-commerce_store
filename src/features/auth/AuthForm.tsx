@@ -8,6 +8,8 @@ import { useState } from 'react';
 import { Spinner } from '@/components/ui/shadcn-io/spinner';
 import { supabase } from '@/utils/supabase';
 import { toast } from 'sonner';
+import { useCartStore } from '@/features/cart/cartStore';
+import { useFavoritesStore } from '@/features/favourites/favoritesStore';
 
 // Define the validation schema
 const formSchema = z.object({
@@ -22,6 +24,8 @@ type FormData = z.infer<typeof formSchema>;
 export const AuthForm = () => {
   const [isSignUp, setIsSignUp] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
+  const { mergeAndSyncCarts } = useCartStore();
+  const { mergeAndSyncFavorites } = useFavoritesStore();
 
   const {
     register,
@@ -58,6 +62,7 @@ export const AuthForm = () => {
         error = signInError;
         if (!error) {
           toast.success('You have successfully logged in!');
+          await Promise.all([mergeAndSyncCarts(), mergeAndSyncFavorites()]);
         }
       }
 
