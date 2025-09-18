@@ -9,7 +9,7 @@ export const HomeShopCategory: React.FC<Props> = ({ supabaseUrl }) => {
   return (
     <div className="max-w-[1136px]">
       <h2 className="text-3xl font-bold mb-4 py-6">Shop by category</h2>
-      <div className="flex justify-between gap-[10px] flex-col sm:flex-row">
+      <div className="flex gap-[10px] justify-between flex-col sm:flex-row items-center">
         <div>
           <Link to="/phones">
             <img

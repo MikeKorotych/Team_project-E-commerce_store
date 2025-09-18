@@ -1,24 +1,29 @@
-import { ErrorMessage } from '@/components/error-message';
-import { ProductCard } from '@/components/ProductCard';
-import ProductPageNav from '@/components/ProductPageNav';
-import { Spinner } from '@/components/ui/shadcn-io/spinner';
+import { ErrorMessage } from "@/components/error-message";
+import { ProductCard } from "@/components/ProductCard";
+import ProductPageNav from "@/components/ProductPageNav";
+import { Spinner } from "@/components/ui/shadcn-io/spinner";
 import {
   fetchProductsByType,
   itemsPerPageOptions,
   sortByOptions,
-} from '@/utils/helpers';
-import { useQuery } from '@tanstack/react-query';
-import { useState } from 'react';
-import DropDownMenu from '@/components/DropDownMenu';
+} from "@/utils/helpers";
+import { useQuery } from "@tanstack/react-query";
+import { useState } from "react";
+import DropDownMenu from "@/components/DropDownMenu";
+import { useSortProducts } from "@/hooks/useSortProducts";
 
 const AccessoriesPage = () => {
   const { data, isLoading, isError, error, refetch } = useQuery({
-    queryKey: ['products', 'accessories'],
-    queryFn: () => fetchProductsByType('accessories'),
+    queryKey: ["products", "products"],
+    queryFn: () => fetchProductsByType("accessories"),
   });
 
-  const [sortBy, setSortBy] = useState('newest');
-  const [itemsPerPage, setItemsPerPage] = useState('8');
+  const initialSortby = sortByOptions[0].value;
+
+  const [sortBy, setSortBy] = useState(initialSortby);
+  const [itemsPerPage, setItemsPerPage] = useState("8");
+
+  const sortedData = useSortProducts(data || [], sortBy, "asc");
 
   if (isLoading) {
     return (
@@ -61,7 +66,7 @@ const AccessoriesPage = () => {
       </div>
 
       <div className="products-table">
-        {data?.map((item) => (
+        {sortedData.map((item) => (
           <ProductCard key={item.id} product={item}></ProductCard>
         ))}
       </div>
