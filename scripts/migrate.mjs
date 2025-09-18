@@ -5,9 +5,10 @@ import 'dotenv/config';
 
 // --- CONFIGURATION ---
 const SUPABASE_URL = process.env.VITE_SUPABASE_URL;
-const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY; // Use the powerful service role key for migration
+const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
 const SOURCE_DIR = 'api';
-const IMAGE_BUCKET_NAME = 'product-images'; // IMPORTANT: Make sure this bucket exists in your Supabase project
+const ENRICHMENT_FILE = 'api/products.json'; // File with the 'year' data
+const IMAGE_BUCKET_NAME = 'product-images';
 
 if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
   throw new Error('Supabase URL or Key is missing in your .env file');
@@ -17,11 +18,6 @@ const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
 
 // --- HELPER FUNCTIONS ---
 
-/**
- * Reads and parses a JSON file.
- * @param {string} filePath - Path to the JSON file.
- * @returns {object[]}
- */
 function readJsonFile(filePath) {
   console.log(`Reading ${filePath}...`);
   const fileContent = fs.readFileSync(filePath, 'utf-8');
@@ -29,44 +25,44 @@ function readJsonFile(filePath) {
 }
 
 /**
- * Transforms product data for insertion.
- * @param {object[]} products - Array of products from the JSON file.
- * @param {string} category - The category of the products (e.g., 'phones').
+ * Transforms product data for insertion by enriching it with the year.
+ * @param {object[]} products - Array of products from the JSON file (e.g., phones.json).
+ * @param {string} category - The category of the products.
+ * @param {Map<string, number>} yearMap - A map from itemId to year.
  * @returns {object[]}
  */
-function transformProducts(products, category) {
+function transformProducts(products, category, yearMap) {
   const {
     data: { publicUrl },
   } = supabase.storage.from(IMAGE_BUCKET_NAME).getPublicUrl('');
 
-  return products.map((product) => ({
-    ...product,
-    category, // Add the category field
-    // Transform image paths to full Supabase URLs
-    images: product.images.map((imgPath) => `${publicUrl}/${imgPath}`),
-    // The 'description' field is already in a valid JSONB format
-  }));
+  return products.map((product) => {
+    // Get the year from the map using the product's id.
+    // The key in products.json is 'itemId', but in phones.json it's 'id'.
+    const year = yearMap.get(product.id);
+
+    return {
+      ...product, // Keep all original fields like 'id', 'priceRegular', etc.
+      year,       // Add the enriched year
+      category,
+      // Transform image paths to full Supabase URLs
+      images: product.images.map((imgPath) => `${publicUrl}/${imgPath}`),
+    };
+  });
 }
 
-/**
- * Inserts data into a Supabase table.
- * @param {string} table - The name of the table.
- * @param {object[]} data - The data to insert.
- */
 async function insertData(table, data) {
   console.log(`Inserting ${data.length} items into "${table}"...`);
 
-  // Supabase has a limit on how many records can be inserted at once.
-  // We'll process in chunks of 500.
   const chunkSize = 500;
   for (let i = 0; i < data.length; i += chunkSize) {
     const chunk = data.slice(i, i + chunkSize);
     const { error } = await supabase.from(table).insert(chunk);
     if (error) {
-      console.error(`Error inserting chunk ${i / chunkSize + 1}:`, error);
+      console.error(`Error inserting chunk ${Math.floor(i / chunkSize) + 1}:`, error);
       throw new Error('Failed to insert data.');
     } else {
-      console.log(`Chunk ${i / chunkSize + 1} inserted successfully.`);
+      console.log(`Chunk ${Math.floor(i / chunkSize) + 1} inserted successfully.`);
     }
   }
 }
@@ -75,7 +71,17 @@ async function insertData(table, data) {
 
 async function migrate() {
   try {
-    console.log('Starting data migration...');
+    console.log('Starting data migration with year enrichment...');
+
+    const enrichmentFilePath = path.join(process.cwd(), ENRICHMENT_FILE);
+    if (!fs.existsSync(enrichmentFilePath)) {
+      throw new Error(`Enrichment file not found: ${ENRICHMENT_FILE}`);
+    }
+    const productsForYear = readJsonFile(enrichmentFilePath);
+    // The map key should be 'itemId' from products.json
+    const yearMap = new Map(productsForYear.map(p => [p.itemId, p.year]));
+
+    console.log(`Created a lookup map with ${yearMap.size} year entries.`);
 
     const categories = ['phones', 'tablets', 'accessories'];
 
@@ -85,7 +91,8 @@ async function migrate() {
 
       if (fs.existsSync(filePath)) {
         const products = readJsonFile(filePath);
-        const transformedData = transformProducts(products, category);
+        console.log(`Transforming ${products.length} products for category: ${category}`);
+        const transformedData = transformProducts(products, category, yearMap);
         await insertData('products', transformedData);
       } else {
         console.warn(`Warning: ${filePath} not found. Skipping.`);
