@@ -3,7 +3,7 @@ import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
 import './index.css';
 import { ThemeProvider } from './components/theme-provider.tsx';
-import { createBrowserRouter, RouterProvider } from 'react-router';
+import { createBrowserRouter, Navigate, RouterProvider } from 'react-router';
 import PhonesPage from './features/phones/PhonesPage.tsx';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { HomePage } from './pages/HomePage.tsx';
@@ -28,15 +28,42 @@ const router = createBrowserRouter([
       },
       {
         path: '/phones',
-        element: <PhonesPage />,
+        children: [
+          {
+            index: true,
+            element: <Navigate to="1" replace={true} />,
+          },
+          {
+            path: ':page',
+            element: <PhonesPage />,
+          },
+        ],
       },
       {
         path: '/tablets',
-        element: <TabletsPage />,
+        children: [
+          {
+            index: true,
+            element: <Navigate to="1" replace={true} />,
+          },
+          {
+            path: ':page',
+            element: <TabletsPage />,
+          }
+        ]
       },
       {
         path: '/accessories',
-        element: <AccessoriesPage />,
+        children: [
+          {
+            index: true,
+            element: <Navigate to="1" replace={true} />,
+          },
+          {
+            path: ':page',
+            element: <AccessoriesPage />,
+          }
+        ]
       },
       {
         path: '/favourites',
