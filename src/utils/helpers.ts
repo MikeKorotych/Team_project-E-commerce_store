@@ -24,3 +24,24 @@ export const itemsPerPageOptions = [
   { value: '24', label: '24' },
   { value: '32', label: '32' },
 ];
+
+export function getLocalStorage<T>(key: string, defaultValue: T): T {
+  try {
+    const storedValue = localStorage.getItem(key);
+    if (storedValue === null) {
+      return defaultValue;
+    }
+    return JSON.parse(storedValue) as T;
+  } catch (error) {
+    console.error(`Error reading from localStorage for key "${key}":`, error);
+    return defaultValue;
+  }
+}
+
+export function setLocalStorage<T>(key: string, value: T): void {
+  try {
+    localStorage.setItem(key, JSON.stringify(value));
+  } catch (error) {
+    console.error(`Error writing to localStorage for key "${key}":`, error);
+  }
+}
