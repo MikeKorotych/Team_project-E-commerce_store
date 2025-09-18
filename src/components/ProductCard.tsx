@@ -1,14 +1,14 @@
-import type { Product } from '@/types/Product';
-import { Card, CardContent, CardFooter, CardHeader } from './ui/card';
-import { Button } from './ui/button';
-import { ArrowRight, Heart, ShoppingBasket } from 'lucide-react';
-import { useCartStore } from '@/features/cart/cartStore';
-import { useTransition, useContext, useRef } from 'react';
-import { Spinner } from './ui/shadcn-io/spinner';
-import { useFavoritesStore } from '@/features/favourites/favoritesStore';
-import { toast } from 'sonner';
-import { Link } from 'react-router';
-import { AnimationContext } from '../context/AnimationContext';
+import type { Product } from "@/types/Product";
+import { Card, CardContent, CardFooter, CardHeader } from "./ui/card";
+import { Button } from "./ui/button";
+import { ArrowRight, Heart, ShoppingBasket } from "lucide-react";
+import { useCartStore } from "@/features/cart/cartStore";
+import { useTransition, useContext, useRef } from "react";
+import { Spinner } from "./ui/shadcn-io/spinner";
+import { useFavoritesStore } from "@/features/favourites/favoritesStore";
+import { toast } from "sonner";
+import { Link } from "react-router";
+import { AnimationContext } from "../context/AnimationContext";
 
 // import QuantityController from './QuantityController';
 
@@ -34,7 +34,7 @@ export const ProductCard: React.FC<Props> = ({ product }) => {
       // Fallback for no animation
       startCartTransition(async () => {
         await addToCart(product);
-        toast.success('Item added to cart');
+        toast.success("Item added to cart");
       });
       return;
     }
@@ -42,20 +42,20 @@ export const ProductCard: React.FC<Props> = ({ product }) => {
     const productImageRect = productImageRef.current.getBoundingClientRect();
     const cartIconRect = cartIconRef.current.getBoundingClientRect();
 
-    const flyingImage = document.createElement('img');
+    const flyingImage = document.createElement("img");
     flyingImage.src = productImageRef.current.src;
-    flyingImage.style.position = 'fixed';
+    flyingImage.style.position = "fixed";
     flyingImage.style.left = `${productImageRect.left}px`;
     flyingImage.style.top = `${productImageRect.top}px`;
     flyingImage.style.width = `${productImageRect.width}px`;
     flyingImage.style.height = `${productImageRect.height}px`;
-    flyingImage.style.objectFit = 'contain';
-    flyingImage.style.zIndex = '1000';
-    flyingImage.style.borderRadius = '0.5rem';
+    flyingImage.style.objectFit = "contain";
+    flyingImage.style.zIndex = "1000";
+    flyingImage.style.borderRadius = "0.5rem";
     // Use transform for smoother animation
-    flyingImage.style.transition = 'transform 1s ease-out, opacity 1s ease-out';
-    flyingImage.style.transform = 'translate(0, 0) scale(1)';
-    flyingImage.style.opacity = '1';
+    flyingImage.style.transition = "transform 1s ease-out, opacity 1s ease-out";
+    flyingImage.style.transform = "translate(0, 0) scale(1)";
+    flyingImage.style.opacity = "1";
 
     document.body.appendChild(flyingImage);
 
@@ -72,13 +72,13 @@ export const ProductCard: React.FC<Props> = ({ product }) => {
     // Trigger the animation
     requestAnimationFrame(() => {
       flyingImage.style.transform = `translate(${deltaX}px, ${deltaY}px) scale(0)`;
-      flyingImage.style.opacity = '0.5';
+      flyingImage.style.opacity = "0.5";
     });
 
     // Add to cart and remove the element after animation
     startCartTransition(async () => {
       await addToCart(product);
-      toast.success('Item added to cart');
+      toast.success("Item added to cart");
       setTimeout(() => {
         if (document.body.contains(flyingImage)) {
           document.body.removeChild(flyingImage);
@@ -92,9 +92,9 @@ export const ProductCard: React.FC<Props> = ({ product }) => {
       await new Promise((resolve) => setTimeout(resolve, 100));
       await toggleFavorites(product);
       if (isFavorite) {
-        toast.error('Item removed from favorites');
+        toast.error("Item removed from favorites");
       } else {
-        toast.success('Item added to favorites');
+        toast.success("Item added to favorites");
       }
     });
   };

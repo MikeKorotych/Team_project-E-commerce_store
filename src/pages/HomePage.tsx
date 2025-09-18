@@ -33,8 +33,8 @@ export const HomePage = () => {
     queryFn: fetchPhones, // 2. Функція, яка буде виконувати запит
   });
 
-  console.log(`Data from useQuery: `);
-  console.log(phones);
+  // console.log(`Data from useQuery: `);
+  // console.log(phones);
 
   // --- ВІДОБРАЖЕННЯ СТАНУ В UI (стало ще простішим) ---
 

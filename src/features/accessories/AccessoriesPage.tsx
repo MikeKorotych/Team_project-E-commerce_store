@@ -11,6 +11,7 @@ import { useEffect, useState } from "react";
 import DropDownMenu from "@/components/DropDownMenu";
 import { PaginationArea } from "@/components/Pagination/PaginationArea";
 import { useSearchParams } from "react-router";
+import { useSortProducts } from "@/hooks/useSortProducts";
 
 const AccessoriesPage = () => {
   const { data, isLoading, isError, error, refetch } = useQuery({
@@ -22,6 +23,8 @@ const AccessoriesPage = () => {
 
   const [sortBy, setSortBy] = useState("newest");
   const itemsPerPage = searchParams.get("limit") || "16";
+
+  const sortedData = useSortProducts(data || [], sortBy, "asc");
 
   const handleChangeItemsPerPage = (value: string) => {
     searchParams.set("limit", value);
@@ -48,6 +51,7 @@ const AccessoriesPage = () => {
     return <ErrorMessage message={error.message} onRetry={refetch} />;
   }
 
+  console.log(data);
   return (
     <>
       <ProductPageNav category="Accessories" />
@@ -77,7 +81,7 @@ const AccessoriesPage = () => {
       </div>
 
       <PaginationArea
-        products={data || []}
+        products={sortedData || []}
         itemsPerPage={Number(itemsPerPage)}
       />
     </>

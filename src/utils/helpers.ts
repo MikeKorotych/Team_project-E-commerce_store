@@ -1,11 +1,11 @@
-import type { ProductTypes } from '@/types/Product';
-import { supabase } from './supabase';
+import type { ProductTypes } from "@/types/Product";
+import { supabase } from "./supabase";
 
 export const fetchProductsByType = async (type: ProductTypes) => {
   const { data, error } = await supabase
-    .from('products')
-    .select('*')
-    .eq('category', type);
+    .from("products")
+    .select("*")
+    .eq("category", type);
 
   if (error)
     throw new Error(`Error fetching products from Database: ${error.message}`);
@@ -14,15 +14,19 @@ export const fetchProductsByType = async (type: ProductTypes) => {
 };
 
 export const sortByOptions = [
-  { value: 'newest', label: 'Newest' },
-  { value: 'price', label: 'Price' },
+  { value: "newest", label: "Newest" },
+  { value: "priceRegular", label: "Price" },
+  { value: "name", label: "Name" },
+  { value: "color", label: "Color" },
+  { value: "resolution", label: "Resolution" },
+  { value: "ram", label: "Memory" },
 ];
 
 export const itemsPerPageOptions = [
-  { value: '8', label: '8' },
-  { value: '16', label: '16' },
-  { value: '24', label: '24' },
-  { value: '32', label: '32' },
+  { value: "8", label: "8" },
+  { value: "16", label: "16" },
+  { value: "24", label: "24" },
+  { value: "32", label: "32" },
 ];
 
 export function getLocalStorage<T>(key: string, defaultValue: T): T {
