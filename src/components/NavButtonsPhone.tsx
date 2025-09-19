@@ -27,7 +27,7 @@ export const NavButtonsPhone: React.FC<Props> = ({
   return (
     <div
       className={classNames(
-        "bg-background fixed w-full h-[calc(100vh-4rem)] right-0 left-0 top-16 flex flex-col justify-between z-70 overflow-hidden transition-[max-height] duration-300 ease-in-out",
+        "bg-background fixed w-full h-[calc(100vh-3rem)] right-0 left-0 top-12 flex flex-col justify-between z-70 overflow-hidden transition-[max-height] duration-300 ease-in-out",
         { "max-h-0": !isBurgerOpen, "max-h-screen": isBurgerOpen }
       )}
     >
