@@ -1,13 +1,14 @@
-import { Button } from '@/components/ui/button';
-import { Link } from 'react-router';
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router";
 
-import { Heart, ShoppingBag, LogOut, LogIn } from 'lucide-react';
-import type { Session } from '@supabase/supabase-js';
-import { supabase } from '../utils/supabase';
-import { useState, useEffect, type RefObject } from 'react';
-import { AuthModal } from '../features/auth/AuthModal';
-import { toast } from 'sonner';
-import { useCartStore } from '@/features/cart/cartStore';
+import { Heart, LogIn, LogOut, ShoppingBag, X } from "lucide-react";
+import type { Session } from "@supabase/supabase-js";
+import { supabase } from "../utils/supabase";
+import { useState, useEffect, type RefObject } from "react";
+import { AuthModal } from "../features/auth/AuthModal";
+import { toast } from "sonner";
+import { useCartStore } from "@/features/cart/cartStore";
+import { NavButtonsPhone } from "./NavButtonsPhone";
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const imgFromSupabase = `${supabaseUrl}/storage/v1/object/public/product-images/img/header/Nice-Gadgets-with-smile.png`;
@@ -21,6 +22,8 @@ export const Header = ({ session, cartIconRef }: Props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { items } = useCartStore();
 
+  const [isBurgerOpen, setBurgerOpen] = useState(false);
+
   const totalItems = items.reduce((acc, cur) => acc + cur.quantity, 0);
 
   useEffect(() => {
@@ -29,14 +32,26 @@ export const Header = ({ session, cartIconRef }: Props) => {
     }
   }, [session]);
 
+  useEffect(() => {
+    if (isBurgerOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isBurgerOpen]);
+
   const handleSignOut = async () => {
     await supabase.auth.signOut();
-    toast('You have been signed out');
+    toast("You have been signed out");
   };
 
   return (
     <>
-      <nav className="inline-flex border-b w-full sticky top-0 z-50 bg-background/80 shadow-2xl backdrop-blur-sm">
+      <nav className="flex items-center justify-between border-b w-full sticky top-0 z-50 bg-background/80 shadow-2xl backdrop-blur-sm">
         <div className="flex justify-between items-center max-sm:w-full">
           <Link to="/" className="lg:py-4.5 lg:px-6 py-2.5 px-4">
             <img
@@ -48,11 +63,18 @@ export const Header = ({ session, cartIconRef }: Props) => {
           {/* burger for small screens */}
           <Button
             variant="link"
-            className="sm:hidden flex flex-col gap-1 py-3 px-4 h-12 w-12"
+            className="sm:hidden flex flex-col gap-1 py-3 px-4 h-12 w-12 border-l"
+            onClick={() => setBurgerOpen(!isBurgerOpen)}
           >
-            <span className="h-0.5 w-4 bg-white"></span>
-            <span className="h-0.5 w-4 bg-white"></span>
-            <span className="h-0.5 w-4 bg-white"></span>
+            {isBurgerOpen ? (
+              <X className="text-white" />
+            ) : (
+              <>
+                <span className="h-0.5 w-4 bg-white"></span>
+                <span className="h-0.5 w-4 bg-white"></span>
+                <span className="h-0.5 w-4 bg-white"></span>
+              </>
+            )}
           </Button>
         </div>
         <div className="justify-between hidden sm:inline-flex w-full">
@@ -111,6 +133,17 @@ export const Header = ({ session, cartIconRef }: Props) => {
               </Link>
             </Button>
           </div>
+        </div>
+        <div className="sm:hidden">
+          <NavButtonsPhone
+            session={session}
+            cartIconRef={cartIconRef}
+            isBurgerOpen={isBurgerOpen}
+            setBurgerOpen={setBurgerOpen}
+            totalItems={totalItems}
+            handleSignOut={handleSignOut}
+            setIsModalOpen={setIsModalOpen}
+          />
         </div>
       </nav>
       <AuthModal open={isModalOpen} onOpenChange={setIsModalOpen} />
