@@ -1,13 +1,13 @@
-import { Outlet } from 'react-router';
-import { Header } from './components/Header';
-import Footer from '@/components/Footer'; // Corrected import
-import { useState, useEffect, useRef } from 'react'; // import useRef
-import { supabase } from './utils/supabase';
-import type { Session } from '@supabase/supabase-js';
-import { useCartStore } from './features/cart/cartStore';
-import { useFavoritesStore } from './features/favourites/favoritesStore';
-import { Toaster } from './components/ui/sonner';
-import { AnimationContext } from './context/AnimationContext'; // import context
+import { Outlet } from "react-router";
+import { Header } from "./components/Header";
+import Footer from "@/components/Footer"; // Corrected import
+import { useState, useEffect, useRef } from "react"; // import useRef
+import { supabase } from "./utils/supabase";
+import type { Session } from "@supabase/supabase-js";
+import { useCartStore } from "./features/cart/cartStore";
+import { useFavoritesStore } from "./features/favourites/favoritesStore";
+import { Toaster } from "./components/ui/sonner";
+import { AnimationContext } from "./context/AnimationContext"; // import context
 
 function App() {
   const [session, setSession] = useState<Session | null>(null);
