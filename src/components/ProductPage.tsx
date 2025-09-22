@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useParams } from 'react-router';
 import type { ProductTypes, Product } from '../types/Product';
-import { Heart, ChevronLeft, ShoppingBasket, ArrowRight } from 'lucide-react';
+import { Heart, ChevronLeft, ShoppingBasket, ArrowRight, Home, ChevronRight } from 'lucide-react';
 import React, { useContext, useRef, useTransition } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { ModelsRow } from '../components/ModelsRow';
@@ -10,6 +10,7 @@ import { fetchProductsByType } from '@/utils/helpers';
 import { Spinner } from '@/components/ui/shadcn-io/spinner';
 import { ErrorMessage } from '@/components/error-message';
 import { Button } from '@/components/ui/button';
+import { NavigationMenu, NavigationMenuList, NavigationMenuItem, NavigationMenuLink } from '@/components/ui/navigation-menu';
 import { useCartStore } from '@/features/cart/cartStore';
 import { useFavoritesStore } from '@/features/favourites/favoritesStore';
 import { toast } from 'sonner';
@@ -76,6 +77,7 @@ const ProductPage = () => {
   const { toggleFavorites, favorites } = useFavoritesStore();
   const cartIconRef = useContext(AnimationContext)?.cartIconRef;
   const mainImageRef = useRef<HTMLImageElement>(null);
+  
 
   const parseProductIdFromUrl = (fullProductId: string) => {
     if (!fullProductId) {
@@ -206,7 +208,7 @@ const ProductPage = () => {
             return p.category === productOverview.category &&
                  parseProductIdFromUrl(p.id ?? '').namespaceId !== parseProductIdFromUrl(productOverview.id ?? '').namespaceId;
           }
-        ).slice(0, 4).map(transformProductOverview) : undefined;
+        ).slice(0, 12).map(transformProductOverview) : undefined;
       },
       enabled: !!productOverview?.category && !!productOverview?.id,
       staleTime: 3000,
@@ -403,23 +405,27 @@ const ProductPage = () => {
 
   return (
     <div className="font-sans bg-[#1a1a29] text-white min-h-screen p-4 md:p-8">
-      <nav className="text-sm mb-4">
-        <ol className="list-none p-0 flex w-full flex-wrap">
-          <li className="flex items-center flex-shrink-0">
-            <Link to="/" className="text-gray-400 hover:text-white">Home</Link>
-            <span className="mx-2 text-gray-500">/</span>
-          </li>
-          <li className="flex items-center flex-shrink-0">
-            <Link to={`/${productOverview.category}`} className="text-gray-400 hover:text-white">{productOverview.category}</Link>
-            <span className="mx-2 text-gray-500">/</span>
-          </li>
-          <li className="flex items-center min-w-0 flex-grow">
-            <span className="text-white truncate">
-              {productOverview.name}
-            </span>
-          </li>
-        </ol>
-      </nav>
+      <div className="text-sm mb-4">
+        <NavigationMenu viewport={false} className="justify-start">
+          <NavigationMenuList className="w-full justify-start gap-2">
+            <NavigationMenuItem>
+              <NavigationMenuLink asChild>
+                <Link to="/" className="text-gray-300 hover:text-white flex items-center gap-1">
+                  <Home className="h-4 w-4" />
+                </Link>
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+            <ChevronRight className="h-4 w-4 text-gray-400" />
+            <NavigationMenuItem>
+              <NavigationMenuLink asChild>
+                <Link to={`/${productOverview.category}`} className="text-gray-300 hover:text-white">
+                  {productOverview.category.charAt(0).toUpperCase() + productOverview.category.slice(1)}
+                </Link>
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+          </NavigationMenuList>
+        </NavigationMenu>
+      </div>
 
       <button onClick={() => navigate(-1)} className="text-gray-400 hover:text-white flex items-center mb-6">
         <ChevronLeft className="mr-2" />
@@ -561,8 +567,7 @@ const ProductPage = () => {
 
       {/* вам також сподобається */}
       <div className="mt-16 border-t border-gray-700 pt-8">
-        <h2 className="text-2xl font-bold mb-6">You may also like</h2>
-        <ModelsRow product={youMayAlsoLike} title="" />
+        <ModelsRow product={youMayAlsoLike} title="You may also like" />
       </div>
     </div>
   );
