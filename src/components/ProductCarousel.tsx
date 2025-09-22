@@ -7,12 +7,17 @@ import {
   CarouselPrevious,
   type CarouselApi,
 } from "@/components/ui/carousel";
+import Autoplay from "embla-carousel-autoplay";
 import { Link } from "react-router";
 
 export function ProductCarousel({ supabaseUrl }: { supabaseUrl: string }) {
   const [api, setApi] = React.useState<CarouselApi>();
   const [current, setCurrent] = React.useState(0);
   const [count, setCount] = React.useState(0);
+
+  const plugin = React.useRef(
+    Autoplay({ delay: 2000, stopOnInteraction: true })
+  );
 
   React.useEffect(() => {
     if (!api) return;
@@ -26,32 +31,75 @@ export function ProductCarousel({ supabaseUrl }: { supabaseUrl: string }) {
   }, [api]);
 
   return (
-    <Carousel setApi={setApi} className="w-full max-w-5xl mx-auto">
+    <Carousel
+      plugins={[plugin.current]}
+      setApi={setApi}
+      className="w-full max-w-5xl mx-auto"
+    >
       <div className="relative">
         <CarouselContent>
           <CarouselItem>
             <Link to="/phones">
-              <img
-                src={`${supabaseUrl}/storage/v1/object/public/product-images/img/home-carousel-lg.png`}
-                alt="carousel"
-              />
+              <div>
+                <img
+                  className="hidden lg:block"
+                  src={`${supabaseUrl}/storage/v1/object/public/product-images/img/home-carousel-lg.png`}
+                  alt="carousel"
+                />
+                <img
+                  className="hidden sm:block lg:hidden"
+                  src={`${supabaseUrl}/storage/v1/object/public/product-images/img/home-carousel-lg.png`}
+                  alt="carousel"
+                />
+                <img
+                  className="block sm:hidden"
+                  src={`${supabaseUrl}/storage/v1/object/public/product-images/img/home-carousel-sm.png`}
+                  alt="carousel"
+                />
+              </div>
             </Link>
           </CarouselItem>
 
           <CarouselItem>
             <Link to="/phones">
-              <img
-                src={`${supabaseUrl}/storage/v1/object/public/product-images/img/home-carousel-lg.png`}
-                alt="carousel"
-              />
+              <div>
+                <img
+                  className="hidden lg:block"
+                  src={`${supabaseUrl}/storage/v1/object/public/product-images/img/home-carousel-lg.png`}
+                  alt="carousel"
+                />
+                <img
+                  className="hidden sm:block lg:hidden"
+                  src={`${supabaseUrl}/storage/v1/object/public/product-images/img/home-carousel-lg.png`}
+                  alt="carousel"
+                />
+                <img
+                  className="block sm:hidden"
+                  src={`${supabaseUrl}/storage/v1/object/public/product-images/img/home-carousel-sm.png`}
+                  alt="carousel"
+                />
+              </div>
             </Link>
           </CarouselItem>
           <CarouselItem>
             <Link to="/phones">
-              <img
-                src={`${supabaseUrl}/storage/v1/object/public/product-images/img/home-carousel-lg.png`}
-                alt="carousel"
-              />
+              <div>
+                <img
+                  className="hidden lg:block"
+                  src={`${supabaseUrl}/storage/v1/object/public/product-images/img/home-carousel-lg.png`}
+                  alt="carousel"
+                />
+                <img
+                  className="hidden sm:block lg:hidden"
+                  src={`${supabaseUrl}/storage/v1/object/public/product-images/img/home-carousel-lg.png`}
+                  alt="carousel"
+                />
+                <img
+                  className="block sm:hidden"
+                  src={`${supabaseUrl}/storage/v1/object/public/product-images/img/home-carousel-sm.png`}
+                  alt="carousel"
+                />
+              </div>
             </Link>
           </CarouselItem>
         </CarouselContent>
