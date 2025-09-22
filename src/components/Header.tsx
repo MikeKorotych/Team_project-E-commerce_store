@@ -79,27 +79,29 @@ export const Header = ({ session, cartIconRef }: Props) => {
         </div>
         <div className="justify-between hidden sm:inline-flex w-full">
           <div className="flex items-center">
-            <Button asChild variant={'ghost'} className="text-xs lg:p-8 sm:p-6">
+            <Button asChild variant={"ghost"} className="text-xs lg:p-8 sm:p-6">
               <Link to="/">HOME</Link>
             </Button>
-            <Button asChild variant={'ghost'} className="text-xs lg:p-8 sm:p-6">
+            <Button asChild variant={"ghost"} className="text-xs lg:p-8 sm:p-6">
               <Link to="/phones">PHONES</Link>
             </Button>
-            <Button asChild variant={'ghost'} className="text-xs lg:p-8 sm:p-6">
+            <Button asChild variant={"ghost"} className="text-xs lg:p-8 sm:p-6">
               <Link to="/tablets">TABLETS</Link>
             </Button>
-            <Button asChild variant={'ghost'} className="text-xs lg:p-8 sm:p-6">
+            <Button asChild variant={"ghost"} className="text-xs lg:p-8 sm:p-6">
               <Link to="/accessories">ACCESSORIES</Link>
             </Button>
           </div>
           <div className="flex items-center justify-center">
             {session ? (
-              <div className="border-l pl-4 ml-4 flex items-center gap-2">
+              <Button
+                onClick={handleSignOut}
+                variant="ghost"
+                className="border-l lg:has-[>svg]:px-6 lg:py-8 sm:has-[svg]:px-4 sm:py-6"
+              >
                 <span>{session.user?.email?.[0].toUpperCase()}</span>
-                <Button onClick={handleSignOut} variant="ghost">
-                  <LogOut className="w-4 h-4" />
-                </Button>
-              </div>
+                <LogOut className="w-4 h-4" />
+              </Button>
             ) : (
               <Button
                 onClick={() => setIsModalOpen(true)}

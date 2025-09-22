@@ -27,7 +27,7 @@ export const NavButtonsPhone: React.FC<Props> = ({
   return (
     <div
       className={classNames(
-        "bg-background fixed w-full h-[calc(100vh-4rem)] right-0 left-0 top-16 flex flex-col justify-between z-70 overflow-hidden transition-[max-height] duration-300 ease-in-out",
+        "bg-background border-t fixed w-full h-[calc(100vh-3rem)] right-0 left-0 top-12 flex flex-col justify-between z-70 overflow-hidden transition-[max-height] duration-300 ease-in-out",
         { "max-h-0": !isBurgerOpen, "max-h-screen": isBurgerOpen }
       )}
     >
@@ -35,7 +35,7 @@ export const NavButtonsPhone: React.FC<Props> = ({
         <Button
           asChild
           variant={"ghost"}
-          className="text-xs lg:p-8 sm:p-6"
+          className="text-xs text-dark lg:p-8 sm:p-6"
           onClick={() => setBurgerOpen(false)}
         >
           <Link to="/">HOME</Link>
@@ -43,7 +43,7 @@ export const NavButtonsPhone: React.FC<Props> = ({
         <Button
           asChild
           variant={"ghost"}
-          className="text-xs lg:p-8 sm:p-6"
+          className="text-xs text-dark lg:p-8 sm:p-6"
           onClick={() => setBurgerOpen(false)}
         >
           <Link to="/phones">PHONES</Link>
@@ -51,7 +51,7 @@ export const NavButtonsPhone: React.FC<Props> = ({
         <Button
           asChild
           variant={"ghost"}
-          className="text-xs lg:p-8 sm:p-6"
+          className="text-xs text-dark lg:p-8 sm:p-6"
           onClick={() => setBurgerOpen(false)}
         >
           <Link to="/tablets">TABLETS</Link>
@@ -59,7 +59,7 @@ export const NavButtonsPhone: React.FC<Props> = ({
         <Button
           asChild
           variant={"ghost"}
-          className="text-xs lg:p-8 sm:p-6"
+          className="text-xs text-dark lg:p-8 sm:p-6"
           onClick={() => setBurgerOpen(false)}
         >
           <Link to="/accessories">ACCESSORIES</Link>
@@ -67,12 +67,14 @@ export const NavButtonsPhone: React.FC<Props> = ({
       </div>
       <div className="flex w-full justify-around items-center">
         {session ? (
-          <div className="flex-1 border pl-4 ml-4 flex items-center gap-2">
+          <Button
+            onClick={handleSignOut}
+            variant="ghost"
+            className="flex-1 border w-auto lg:has-[>svg]:px-6 lg:py-8 sm:has-[svg]:px-4 sm:py-6"
+          >
             <span>{session.user?.email?.[0].toUpperCase()}</span>
-            <Button onClick={handleSignOut} variant="ghost">
-              <LogOut className="w-4 h-4" />
-            </Button>
-          </div>
+            <LogOut className="w-4 h-4" />
+          </Button>
         ) : (
           <Button
             onClick={() => {
@@ -104,7 +106,7 @@ export const NavButtonsPhone: React.FC<Props> = ({
           <Link to="/cart" className="relative" ref={cartIconRef}>
             <ShoppingBag className="w-4 h-4" />
             {totalItems > 0 && (
-              <div className="absolute rounded-full bg-red-400 top-3 right-3 flex items-center justify-center text-sm h-4.5 w-4.5">
+              <div className="flex rounded-full bg-red-400 top-3 right-3 items-center justify-center text-sm h-4.5 w-4.5">
                 <div className="mt-0.5">{totalItems}</div>
               </div>
             )}

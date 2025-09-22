@@ -238,8 +238,13 @@ button {
 
 .text-dark {
   color: #75767F;
+
+  transition: color 0.3s ease;
 }
 
+.text-dark:hover{
+  color: white;
+}
 
 .hide-scrollbar {
   -ms-overflow-style: none;
