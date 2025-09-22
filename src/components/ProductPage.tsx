@@ -5,6 +5,7 @@ import { Heart, ChevronLeft, ShoppingBasket, ArrowRight, Home, ChevronRight } fr
 import React, { useContext, useRef, useTransition } from 'react';
 import { Link, useNavigate } from 'react-router';
 import { ModelsRow } from '../components/ModelsRow';
+import { ProductPageSkeleton } from './ProductPageSkeleton';
 import { useQuery } from '@tanstack/react-query';
 import { fetchProductsByType } from '@/utils/helpers';
 import { Spinner } from '@/components/ui/shadcn-io/spinner';
@@ -251,8 +252,9 @@ const ProductPage = () => {
 
   if (isOverviewLoading || isDetailedLoading || isRelatedLoading) {
     return (
-      <div className="flex justify-center items-center h-screen">
-        <Spinner />
+      <div className="relative">
+        <ProductPageSkeleton />
+        <div className="absolute inset-0 backdrop-blur-sm bg-black/20 pointer-events-none" />
       </div>
     );
   }
