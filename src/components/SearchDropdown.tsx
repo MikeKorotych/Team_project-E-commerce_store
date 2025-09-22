@@ -60,7 +60,7 @@ export function SearchDropdown() {
   };
 
   return (
-    <div ref={wrapperRef} className="hidden lg:block w-[320px] relative">
+    <div ref={wrapperRef} className="hidden lg:block w-[320px] relative px-2">
       <Command className="w-full  bg-black/20">
         <div
           className={`
