@@ -9,6 +9,8 @@ import { AuthModal } from "../features/auth/AuthModal";
 import { toast } from "sonner";
 import { useCartStore } from "@/features/cart/cartStore";
 import { NavButtonsPhone } from "./NavButtonsPhone";
+import { useFavoritesStore } from "@/features/favourites/favoritesStore";
+import { SearchDropdown } from "./SearchDropdown";
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const imgFromSupabase = `${supabaseUrl}/storage/v1/object/public/product-images/img/header/Nice-Gadgets-with-smile.png`;
@@ -21,10 +23,12 @@ interface Props {
 export const Header = ({ session, cartIconRef }: Props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { items } = useCartStore();
+  const { favorites } = useFavoritesStore();
 
   const [isBurgerOpen, setBurgerOpen] = useState(false);
 
   const totalItems = items.reduce((acc, cur) => acc + cur.quantity, 0);
+  const totalFavorites = favorites.length;
 
   useEffect(() => {
     if (session) {
@@ -79,20 +83,21 @@ export const Header = ({ session, cartIconRef }: Props) => {
         </div>
         <div className="justify-between hidden sm:inline-flex w-full">
           <div className="flex items-center">
-            <Button asChild variant={'ghost'} className="text-xs lg:p-8 sm:p-6">
+            <Button asChild variant={"ghost"} className="text-xs lg:p-8 sm:p-6">
               <Link to="/">HOME</Link>
             </Button>
-            <Button asChild variant={'ghost'} className="text-xs lg:p-8 sm:p-6">
+            <Button asChild variant={"ghost"} className="text-xs lg:p-8 sm:p-6">
               <Link to="/phones">PHONES</Link>
             </Button>
-            <Button asChild variant={'ghost'} className="text-xs lg:p-8 sm:p-6">
+            <Button asChild variant={"ghost"} className="text-xs lg:p-8 sm:p-6">
               <Link to="/tablets">TABLETS</Link>
             </Button>
-            <Button asChild variant={'ghost'} className="text-xs lg:p-8 sm:p-6">
+            <Button asChild variant={"ghost"} className="text-xs lg:p-8 sm:p-6">
               <Link to="/accessories">ACCESSORIES</Link>
             </Button>
           </div>
           <div className="flex items-center justify-center">
+            <SearchDropdown />
             {session ? (
               <div className="border-l pl-4 ml-4 flex items-center gap-2">
                 <span>{session.user?.email?.[0].toUpperCase()}</span>
@@ -114,8 +119,13 @@ export const Header = ({ session, cartIconRef }: Props) => {
               variant="ghost"
               className="border-l lg:has-[>svg]:px-6 lg:py-8 sm:has-[svg]:px-4 sm:py-6"
             >
-              <Link to="/favourites">
+              <Link to="/favourites" className="relative">
                 <Heart className="w-4 h-4" />
+                {totalFavorites > 0 && (
+                  <div className="absolute rounded-full bg-red-400 top-3 right-3 flex items-center justify-center text-sm h-4.5 w-4.5">
+                    <div className="mt-0.5">{totalFavorites}</div>
+                  </div>
+                )}
               </Link>
             </Button>
             <Button
@@ -137,7 +147,6 @@ export const Header = ({ session, cartIconRef }: Props) => {
         <div className="sm:hidden">
           <NavButtonsPhone
             session={session}
-            cartIconRef={cartIconRef}
             isBurgerOpen={isBurgerOpen}
             setBurgerOpen={setBurgerOpen}
             totalItems={totalItems}
