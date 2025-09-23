@@ -104,7 +104,9 @@ export const Header = ({ session, cartIconRef }: Props) => {
                 variant="ghost"
                 className="border-l lg:has-[>svg]:px-6 lg:py-8 sm:has-[svg]:px-4 sm:py-6"
               >
-                <span>{session.user?.email?.[0].toUpperCase()}</span>
+                <span className="font-bold">
+                  {session.user?.email?.[0].toUpperCase()}
+                </span>
                 <LogOut className="w-4 h-4" />
               </Button>
             ) : (

@@ -1,14 +1,23 @@
-import { Button } from '@/components/ui/button';
-import { ChevronLeft } from 'lucide-react';
-import { Link } from 'react-router';
-import CartItem from '@/components/CartItem';
-import { useCartStore } from './cartStore';
-import { TransitionGroup, CSSTransition } from 'react-transition-group';
-import React from 'react'; // Import React to use createRef
+import { Button } from "@/components/ui/button";
+import { ChevronLeft } from "lucide-react";
+import { Link, useNavigate } from "react-router";
+import CartItem from "@/components/CartItem";
+import { useCartStore } from "./cartStore";
+import { TransitionGroup, CSSTransition } from "react-transition-group";
+import React from "react"; // Import React to use createRef
+import { toast } from "sonner";
 
 export const CartPage = () => {
   const { items } = useCartStore();
+  const navigate = useNavigate();
 
+  const handleCheckout = () => {
+    if (totalItems === 0) {
+      toast.error("No items in the cart...");
+    } else {
+      navigate("/checkout");
+    }
+  };
   const totalPrice = items.reduce(
     (sum, item) => sum + item.product.priceDiscount * item.quantity,
     0
@@ -17,7 +26,7 @@ export const CartPage = () => {
 
   return (
     <>
-      <div className="mb-10 max-sm:mb-6 flex flex-row gap-2">
+      <div className="mb-10 max-sm:mb-6 flex flex-row gap-2 items-center">
         <ChevronLeft className="w-4 h-4" />
         <Link to="/" className="text-[#F1F2F9] text-xs mt-0.5">
           Back to shop
@@ -28,7 +37,7 @@ export const CartPage = () => {
 
       <div className="flex flex-col xl:flex-row gap-8 lg:gap-4 mt-10 max-lg:items-center">
         <TransitionGroup className="w-full flex flex-col items-center mx-auto">
-          {' '}
+          {" "}
           {/* Removed gap-4 */}
           {items.map((item) => {
             const nodeRef = React.createRef<HTMLDivElement>();
@@ -60,7 +69,13 @@ export const CartPage = () => {
             </span>
           </div>
           <div className="w-full max-w-[544px] border-t border-[#3B3E4A] my-4" />
-          <Button className="w-full max-w-[544px] py-5">Checkout</Button>
+          <Button
+            className="w-full max-w-[544px] py-5"
+            onClick={handleCheckout}
+            disabled={totalItems === 0}
+          >
+            Checkout
+          </Button>
         </div>
       </div>
     </>
