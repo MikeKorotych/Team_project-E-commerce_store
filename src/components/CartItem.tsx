@@ -14,8 +14,7 @@ const CartItem: React.FC<Props> = ({ item }) => {
     removeFromCart(item.product.id);
     toast.error('Item removed from cart');
   };
-
-  console.log(item);
+  
   return (
     <div className="w-full sm:max-w-[592px] xl:max-w-[752px] bg-card flex flex-col gap-3 border shadow-sm p-4">
       <div className="flex flex-row gap-4 max-sm:flex-col justify-between">

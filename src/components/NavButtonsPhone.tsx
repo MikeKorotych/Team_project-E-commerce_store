@@ -1,13 +1,12 @@
 import classNames from "classnames";
 import type { Session } from "@supabase/supabase-js";
-import type { RefObject } from "react";
+// import type { RefObject } from "react";
 import { Button } from "./ui/button";
 import { Link } from "react-router";
 import { Heart, LogIn, LogOut, ShoppingBag } from "lucide-react";
 
 type Props = {
   session: Session | null;
-  cartIconRef: RefObject<HTMLAnchorElement | null>;
   isBurgerOpen: boolean;
   setBurgerOpen: (value: boolean) => void;
   totalItems: number;
@@ -17,7 +16,6 @@ type Props = {
 
 export const NavButtonsPhone: React.FC<Props> = ({
   session,
-  cartIconRef,
   isBurgerOpen,
   setBurgerOpen,
   totalItems,
@@ -103,7 +101,7 @@ export const NavButtonsPhone: React.FC<Props> = ({
           className="flex-1 border w-auto lg:has-[>svg]:px-6 lg:py-8 sm:has-[svg]:px-4 sm:py-6"
           onClick={() => setBurgerOpen(false)}
         >
-          <Link to="/cart" className="relative" ref={cartIconRef}>
+          <Link to="/cart" className="relative">
             <ShoppingBag className="w-4 h-4" />
             {totalItems > 0 && (
               <div className="flex rounded-full bg-red-400 top-3 right-3 items-center justify-center text-sm h-4.5 w-4.5">
