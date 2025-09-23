@@ -29,6 +29,7 @@ interface CartState {
   removeFromCart: (productId: string) => Promise<void>;
   updateQuantity: (productId: string, quantity: number) => Promise<void>;
   fetchCart: () => Promise<void>;
+  clearCart: () => Promise<void>;
   mergeAndSyncCarts: () => Promise<void>;
 }
 
@@ -248,6 +249,27 @@ export const useCartStore = create<CartState>()(
           set({ error: 'Failed to save merged cart.', isLoading: false });
         } else {
           set({ items: finalCart, isLoading: false });
+          setLocalStorage(GUEST_CART_KEY, []);
+        }
+      },
+
+      clearCart: async () => {
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
+
+        set({ items: [], isLoading: false, error: null });
+
+        if (session) {
+          const { error } = await supabase
+            .from('cart_items')
+            .delete()
+            .eq('user_id', session.user.id);
+
+          if (error) {
+            set({ error: 'Failed to clear cart.' });
+          }
+        } else {
           setLocalStorage(GUEST_CART_KEY, []);
         }
       },

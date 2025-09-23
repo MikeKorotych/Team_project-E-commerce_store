@@ -1,25 +1,21 @@
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import * as z from 'zod';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { useState } from 'react';
-import { Spinner } from '@/components/ui/shadcn-io/spinner';                    
-import { supabase } from '@/utils/supabase';
-import { toast } from 'sonner';
-import { useCartStore } from '@/features/cart/cartStore';
-import { useFavoritesStore } from '@/features/favourites/favoritesStore';
+import { useForm } from "react-hook-form";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useState } from "react";
+import { Spinner } from "@/components/ui/shadcn-io/spinner";
+import { supabase } from "@/utils/supabase";
+import { toast } from "sonner";
+import { useCartStore } from "@/features/cart/cartStore";
+import { useFavoritesStore } from "@/features/favourites/favoritesStore";
 
-// Define the validation schema
-const formSchema = z.object({
-  email: z.email({ message: 'Invalid email address.' }),
-  password: z
-    .string()
-    .min(6, { message: 'Password must be at least 6 characters.' }),
-});
-
-type FormData = z.infer<typeof formSchema>;
+type FormData = {
+  email: string;
+  password: string;
+  firstName?: string;
+  lastName?: string;
+  phoneNumber?: string;
+};
 
 export const AuthForm = () => {
   const [isSignUp, setIsSignUp] = useState(false);
@@ -31,44 +27,45 @@ export const AuthForm = () => {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<FormData>({
-    resolver: zodResolver(formSchema),
-  });
+    reset,
+  } = useForm<FormData>();
 
   const onSubmit = async (data: FormData) => {
     setServerError(null);
-    const { email, password } = data;
 
     try {
       let error;
       if (isSignUp) {
-        // Регистрация
         const { error: signUpError } = await supabase.auth.signUp({
-          email,
-          password,
+          email: data.email,
+          password: data.password,
+          options: {
+            data: {
+              first_name: data.firstName,
+              last_name: data.lastName,
+              phone_number: data.phoneNumber,
+            },
+          },
         });
         error = signUpError;
         if (!error) {
           toast.success(
-            'Registration successful! Please check your email for confirmation.'
+            "Registration successful! Please check your email for confirmation."
           );
         }
       } else {
-        // Вход
         const { error: signInError } = await supabase.auth.signInWithPassword({
-          email,
-          password,
+          email: data.email,
+          password: data.password,
         });
         error = signInError;
         if (!error) {
-          toast.success('You have successfully logged in!');
+          toast.success("You have successfully logged in!");
           await Promise.all([mergeAndSyncCarts(), mergeAndSyncFavorites()]);
         }
       }
-
-      // Если есть ошибка, показываем тост с ошибкой
       if (error) {
-        setServerError(error.message); // Можно оставить для отображения ошибки в форме
+        setServerError(error.message);
         toast.error(error.message);
       }
     } catch (error: any) {
@@ -79,13 +76,71 @@ export const AuthForm = () => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
+      {isSignUp && (
+        <>
+          <div className="grid grid-cols-2 gap-4">
+            <div className="grid gap-2">
+              <Label htmlFor="firstName">First Name</Label>
+              <Input
+                id="firstName"
+                placeholder="John"
+                {...register("firstName", {
+                  required: "First name is required.",
+                })}
+              />
+              {errors.firstName && (
+                <p className="text-sm text-red-500">
+                  {errors.firstName.message}
+                </p>
+              )}
+            </div>
+            <div className="grid gap-2">
+              <Label htmlFor="lastName">Last Name</Label>
+              <Input
+                id="lastName"
+                placeholder="Doe"
+                {...register("lastName", {
+                  required: "Last name is required.",
+                })}
+              />
+              {errors.lastName && (
+                <p className="text-sm text-red-500">
+                  {errors.lastName.message}
+                </p>
+              )}
+            </div>
+          </div>
+          <div className="grid gap-2">
+            <Label htmlFor="phoneNumber">Phone Number</Label>
+            <Input
+              id="phoneNumber"
+              type="tel"
+              placeholder="+1234567890"
+              {...register("phoneNumber", {
+                required: "Phone number is required.",
+              })}
+            />
+            {errors.phoneNumber && (
+              <p className="text-sm text-red-500">
+                {errors.phoneNumber.message}
+              </p>
+            )}
+          </div>
+        </>
+      )}
       <div className="grid gap-2">
         <Label htmlFor="email">Email</Label>
         <Input
           id="email"
           type="email"
           placeholder="youremail@example.com"
-          {...register('email')}
+          {...register("email", {
+            required: "Email is required.",
+            pattern: {
+              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+              message: "Invalid email address.",
+            },
+          })}
         />
         {errors.email && (
           <p className="text-sm text-red-500">{errors.email.message}</p>
@@ -97,7 +152,13 @@ export const AuthForm = () => {
           id="password"
           type="password"
           placeholder="********"
-          {...register('password')}
+          {...register("password", {
+            required: "Password is required.",
+            minLength: {
+              value: 6,
+              message: "Password must be at least 6 characters.",
+            },
+          })}
         />
         {errors.password && (
           <p className="text-sm text-red-500">{errors.password.message}</p>
@@ -107,7 +168,7 @@ export const AuthForm = () => {
         <p className="text-sm text-red-500 text-center">{serverError}</p>
       )}
       <Button type="submit" disabled={isSubmitting} className="w-full mt-5">
-        {isSubmitting ? <Spinner /> : isSignUp ? 'Sign Up' : 'Sign In'}
+        {isSubmitting ? <Spinner /> : isSignUp ? "Sign Up" : "Sign In"}
       </Button>
       <Button
         type="button"
@@ -115,10 +176,11 @@ export const AuthForm = () => {
         onClick={() => {
           setIsSignUp(!isSignUp);
           setServerError(null);
+          reset(); // Сбрасываем форму при переключении
         }}
       >
         {isSignUp
-          ? 'Already have an account? Sign In'
+          ? "Already have an account? Sign In"
           : "Don't have an account? Sign Up"}
       </Button>
     </form>
