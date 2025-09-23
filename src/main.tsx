@@ -13,6 +13,8 @@ import { FavouritesPage } from "./features/favourites/FavouritesPage.tsx";
 import ProductPage from "./components/ProductPage.tsx";
 import { CartPage } from "./features/cart/CartPage.tsx";
 import { PageNotFound } from "./features/pageNotFound/pageNotFound.tsx";
+import { ProfilePage } from "./features/profile/ProfilePage.tsx";
+import { CreditCardsPage } from "./features/credit/CreditCardsPage.tsx";
 import CheckoutPage from "./features/cart/CheckoutPage.tsx";
 import { PaymentSuccessPage } from "./features/cart/PaymentSuccessPage.tsx";
 
@@ -28,6 +30,7 @@ const router = createBrowserRouter([
         index: true,
         element: <HomePage />,
       },
+
       {
         path: "/phones",
         children: [
@@ -41,6 +44,7 @@ const router = createBrowserRouter([
           },
         ],
       },
+
       {
         path: "/tablets",
         children: [
@@ -54,6 +58,7 @@ const router = createBrowserRouter([
           },
         ],
       },
+
       {
         path: "/accessories",
         children: [
@@ -67,18 +72,32 @@ const router = createBrowserRouter([
           },
         ],
       },
+
       {
         path: "/favourites",
         element: <FavouritesPage />,
       },
+
       {
         path: "/product/:productId",
         element: <ProductPage />,
       },
+
       {
         path: "/cart",
         element: <CartPage />,
       },
+
+      {
+        path: "/profile",
+        element: <ProfilePage />,
+      },
+
+      {
+        path: "/credit_cards",
+        element: <CreditCardsPage />,
+      },
+
       { path: "checkout", element: <CheckoutPage /> },
       { path: "payment-success", element: <PaymentSuccessPage /> },
       {

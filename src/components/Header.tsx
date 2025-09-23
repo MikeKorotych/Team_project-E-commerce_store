@@ -1,26 +1,22 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router";
-
-import { Heart, LogIn, LogOut, ShoppingBag, X } from "lucide-react";
-import type { Session } from "@supabase/supabase-js";
-import { supabase } from "../utils/supabase";
-import { useState, useEffect, type RefObject } from "react";
+import { Heart, LogIn, ShoppingBag, X } from "lucide-react";
+import { useAuthStore } from "../features/auth/sessionStore";
+import { useState, useEffect } from "react";
 import { AuthModal } from "../features/auth/AuthModal";
-import { toast } from "sonner";
 import { useCartStore } from "@/features/cart/cartStore";
 import { NavButtonsPhone } from "./NavButtonsPhone";
 import { useFavoritesStore } from "@/features/favourites/favoritesStore";
 import { SearchDropdown } from "./SearchDropdown";
+import { supabase } from "@/utils/supabase";
+import { toast } from "sonner";
 
 const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
 const imgFromSupabase = `${supabaseUrl}/storage/v1/object/public/product-images/img/header/Nice-Gadgets-with-smile.png`;
 
-interface Props {
-  session: Session | null;
-  cartIconRef: RefObject<HTMLAnchorElement | null>; // Add ref to props
-}
+export const Header = () => {
+  const { session, cartIconRef, initialize } = useAuthStore();
 
-export const Header = ({ session, cartIconRef }: Props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { items } = useCartStore();
   const { favorites } = useFavoritesStore();
@@ -29,6 +25,16 @@ export const Header = ({ session, cartIconRef }: Props) => {
 
   const totalItems = items.reduce((acc, cur) => acc + cur.quantity, 0);
   const totalFavorites = favorites.length;
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    toast("You have been signed out");
+  };
+
+  useEffect(() => {
+    const unsubscribe = initialize();
+    return () => unsubscribe?.();
+  }, [initialize]);
 
   useEffect(() => {
     if (session) {
@@ -47,11 +53,6 @@ export const Header = ({ session, cartIconRef }: Props) => {
       document.body.style.overflow = "";
     };
   }, [isBurgerOpen]);
-
-  const handleSignOut = async () => {
-    await supabase.auth.signOut();
-    toast("You have been signed out");
-  };
 
   return (
     <>
@@ -100,14 +101,13 @@ export const Header = ({ session, cartIconRef }: Props) => {
             <SearchDropdown />
             {session ? (
               <Button
-                onClick={handleSignOut}
+                asChild
                 variant="ghost"
-                className="border-l lg:has-[>svg]:px-6 lg:py-8 sm:has-[svg]:px-4 sm:py-6"
+                className="border-l px-7 lg:py-8 sm:has-[svg]:px-4 sm:py-6"
               >
-                <span className="font-bold">
-                  {session.user?.email?.[0].toUpperCase()}
-                </span>
-                <LogOut className="w-4 h-4" />
+                <Link to="/profile">
+                  <span>{session.user?.email?.[0].toUpperCase()}</span>
+                </Link>
               </Button>
             ) : (
               <Button

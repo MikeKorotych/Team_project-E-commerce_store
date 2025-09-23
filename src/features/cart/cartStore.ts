@@ -55,7 +55,6 @@ export const useCartStore = create<CartState>()(
           .from('cart_items')
           .select('*, products(*)') // Join with products table
           .eq('user_id', session.user.id);
-
         if (error) {
           set({ error: 'Failed to fetch cart.', isLoading: false });
         } else {
