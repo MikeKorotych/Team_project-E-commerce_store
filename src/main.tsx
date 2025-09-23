@@ -14,6 +14,7 @@ import ProductPage from './components/ProductPage.tsx';
 import { CartPage } from './features/cart/CartPage.tsx';
 import { PageNotFound } from './features/pageNotFound/pageNotFound.tsx';
 import { ProfilePage } from './features/profile/ProfilePage.tsx';
+import { CreditCardsPage } from './features/credit/CreditCardsPage.tsx';
 
 
 // Create client
@@ -90,11 +91,17 @@ const router = createBrowserRouter([
         path: '/profile',
         element: <ProfilePage />,
       },
-
+      
+      {
+        path: '/credit_cards',
+        element: <CreditCardsPage />,
+      },
+      
       {
         path: '/*',
         element: <PageNotFound />,
       },
+
     ],
   },
 ]);

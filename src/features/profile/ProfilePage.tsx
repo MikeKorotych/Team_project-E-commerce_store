@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { EyeClosed, LogOut, SquarePen } from "lucide-react";
 import { supabase } from "../../utils/supabase";
 import { toast } from "sonner";
-import { useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router";
 import { useAuthStore } from "../auth/sessionStore";
 import { useState } from "react";
 import { OrderProducts } from "./OrderProducts";
@@ -105,19 +105,28 @@ export const ProfilePage = () => {
 
           {/* Credit cards */}
           <div className="flex flex-col gap-4 bg-card p-4">
-            <Button variant={"outline"} className="max-w-[150px]">Add Card</Button>
+            <Button asChild variant={"outline"} className="max-w-[150px]">
+              <Link to="/credit_cards">Choose card</Link>
+            </Button>
 
             {/* Visible choosed Credit Card */}
             <div className="flex bg-secondary justify-center gap-5 p-6">
-              <img src="https://placehold.co/300x200" alt="Choosed Credit Card" />
+              <img
+                src="https://placehold.co/300x200"
+                alt="Choosed Credit Card"
+              />
             </div>
-            <span className="self-center">You haven't created or choosed your credit card</span>
+            <span className="self-center">
+              You haven't created or choosed your credit card
+            </span>
           </div>
         </div>
       </div>
       {/* Purchase history */}
       <div className="flex flex-col mt-10">
-        <h1 className="text-[22px]/[32px] font-bold mb-2 self-center">Purchase history</h1>
+        <h1 className="text-[22px]/[32px] font-bold mb-2 self-center">
+          Purchase history
+        </h1>
 
         <div className="flex flex-col gap-6 bg-card p-5">
           {/* Order */}
