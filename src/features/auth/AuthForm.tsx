@@ -8,29 +8,13 @@ import { supabase } from "@/utils/supabase";
 import { toast } from "sonner";
 import { useCartStore } from "@/features/cart/cartStore";
 import { useFavoritesStore } from "@/features/favourites/favoritesStore";
-<<<<<<< Updated upstream
-import { useForm } from "react-hook-form";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useState } from "react";
-import { Spinner } from "@/components/ui/shadcn-io/spinner";
-import { supabase } from "@/utils/supabase";
-import { toast } from "sonner";
-import { useCartStore } from "@/features/cart/cartStore";
-import { useFavoritesStore } from "@/features/favourites/favoritesStore";
-=======
->>>>>>> Stashed changes
 
 type FormData = {
   email: string;
   password: string;
-<<<<<<< Updated upstream
-=======
   firstName?: string;
   lastName?: string;
   phoneNumber?: string;
->>>>>>> Stashed changes
 };
 
 export const AuthForm = () => {
@@ -43,10 +27,7 @@ export const AuthForm = () => {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-<<<<<<< Updated upstream
-=======
     reset,
->>>>>>> Stashed changes
   } = useForm<FormData>();
 
   const onSubmit = async (data: FormData) => {
@@ -70,10 +51,6 @@ export const AuthForm = () => {
         if (!error) {
           toast.success(
             "Registration successful! Please check your email for confirmation."
-<<<<<<< Updated upstream
-            "Registration successful! Please check your email for confirmation."
-=======
->>>>>>> Stashed changes
           );
         }
       } else {
@@ -84,19 +61,11 @@ export const AuthForm = () => {
         error = signInError;
         if (!error) {
           toast.success("You have successfully logged in!");
-<<<<<<< Updated upstream
-          toast.success("You have successfully logged in!");
-=======
->>>>>>> Stashed changes
           await Promise.all([mergeAndSyncCarts(), mergeAndSyncFavorites()]);
         }
       }
       if (error) {
         setServerError(error.message);
-<<<<<<< Updated upstream
-        setServerError(error.message);
-=======
->>>>>>> Stashed changes
         toast.error(error.message);
       }
     } catch (error: any) {
@@ -165,7 +134,6 @@ export const AuthForm = () => {
           id="email"
           type="email"
           placeholder="youremail@example.com"
-<<<<<<< Updated upstream
           {...register("email", {
             required: "Email is required.",
             pattern: {
@@ -173,9 +141,6 @@ export const AuthForm = () => {
               message: "Invalid email address.",
             },
           })}
-=======
-          {...register("email", { required: "Email is required." })}
->>>>>>> Stashed changes
         />
         {errors.email && (
           <p className="text-sm text-red-500">{errors.email.message}</p>
@@ -194,16 +159,6 @@ export const AuthForm = () => {
               message: "Password must be at least 6 characters.",
             },
           })}
-<<<<<<< Updated upstream
-          {...register("password", {
-            required: "Password is required.",
-            minLength: {
-              value: 6,
-              message: "Password must be at least 6 characters.",
-            },
-          })}
-=======
->>>>>>> Stashed changes
         />
         {errors.password && (
           <p className="text-sm text-red-500">{errors.password.message}</p>
@@ -214,10 +169,6 @@ export const AuthForm = () => {
       )}
       <Button type="submit" disabled={isSubmitting} className="w-full mt-5">
         {isSubmitting ? <Spinner /> : isSignUp ? "Sign Up" : "Sign In"}
-<<<<<<< Updated upstream
-        {isSubmitting ? <Spinner /> : isSignUp ? "Sign Up" : "Sign In"}
-=======
->>>>>>> Stashed changes
       </Button>
       <Button
         type="button"
@@ -230,10 +181,6 @@ export const AuthForm = () => {
       >
         {isSignUp
           ? "Already have an account? Sign In"
-<<<<<<< Updated upstream
-          ? "Already have an account? Sign In"
-=======
->>>>>>> Stashed changes
           : "Don't have an account? Sign Up"}
       </Button>
     </form>
