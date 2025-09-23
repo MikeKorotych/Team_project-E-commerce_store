@@ -1,5 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { useParams } from "react-router";
+import { ProductPageSkeleton } from "./ProductPageSkeleton";
 import type { ProductTypes, Product } from "../types/Product";
 import {
   Heart,
@@ -313,8 +314,9 @@ const ProductPage = () => {
 
   if (isOverviewLoading || isDetailedLoading || isRelatedLoading) {
     return (
-      <div className="flex justify-center items-center h-screen">
-        <Spinner />
+      <div className="relative">
+        <ProductPageSkeleton />
+        <div className="absolute inset-0 backdrop-blur-sm bg-black/20 pointer-events-none" />
       </div>
     );
   }
