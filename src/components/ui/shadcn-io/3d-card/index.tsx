@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
-import { cn } from '@/lib/utils';
+import { cn } from "@/lib/utils";
 import React, {
   createContext,
   useState,
   useContext,
   useRef,
   useEffect,
-} from 'react';
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
+} from "react";
+import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 
 const MouseEnterContext = createContext<
   [boolean, React.Dispatch<React.SetStateAction<boolean>>] | undefined
@@ -73,9 +73,9 @@ export const CardContainer = ({
   return (
     <MouseEnterContext.Provider value={[isMouseEntered, setIsMouseEntered]}>
       <div
-        className={cn('flex items-center justify-center', containerClassName)}
+        className={cn("flex items-center justify-center", containerClassName)}
         style={{
-          perspective: '1000px',
+          perspective: "1000px",
         }}
       >
         <motion.div
@@ -84,13 +84,13 @@ export const CardContainer = ({
           onMouseLeave={handleMouseLeave}
           onMouseMove={handleMouseMove}
           className={cn(
-            'flex items-center justify-center relative w-full',
+            "flex items-center justify-center relative w-full",
             // 'flex items-center justify-center relative transition-all duration-200 ease-linear w-full',
 
             className
           )}
           style={{
-            transformStyle: 'preserve-3d',
+            transformStyle: "preserve-3d",
             transform,
           }}
         >
@@ -111,7 +111,7 @@ export const CardBody = ({
   return (
     <div
       className={cn(
-        '[transform-style:preserve-3d] [&>*]:[transform-style:preserve-3d]',
+        "[transform-style:preserve-3d] [&>*]:[transform-style:preserve-3d]",
         className
       )}
     >
@@ -121,7 +121,7 @@ export const CardBody = ({
 };
 
 export const CardItem = ({
-  as: Tag = 'div',
+  as: Tag = "div",
   children,
   className,
   translateX = 0,
@@ -225,7 +225,7 @@ export const CardItem = ({
 export const useMouseEnter = () => {
   const context = useContext(MouseEnterContext);
   if (context === undefined) {
-    throw new Error('useMouseEnter must be used within a CardContainer');
+    throw new Error("useMouseEnter must be used within a CardContainer");
   }
   return context;
 };
