@@ -34,7 +34,7 @@ const Footer: React.FC = () => {
             Github
           </Link>
           <Link
-            to="#"
+            to="/contacts"
             className="font-extrabold text-[12px] leading-[11px] tracking-[0.04em] text-[#F1F2F9] hover:text-gray-400"
           >
             Contacts
