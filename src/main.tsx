@@ -17,6 +17,7 @@ import { ProfilePage } from "./features/profile/ProfilePage.tsx";
 import { CreditCardsPage } from "./features/credit/CreditCardsPage.tsx";
 import CheckoutPage from "./features/cart/CheckoutPage.tsx";
 import { PaymentSuccessPage } from "./features/cart/PaymentSuccessPage.tsx";
+import { Rights } from "./features/rights/Rights.tsx";
 
 // Create client
 const queryClient = new QueryClient();
@@ -100,6 +101,7 @@ const router = createBrowserRouter([
 
       { path: "checkout", element: <CheckoutPage /> },
       { path: "payment-success", element: <PaymentSuccessPage /> },
+      { path: "/rights", element: <Rights /> },
       {
         path: "/*",
         element: <PageNotFound />,
