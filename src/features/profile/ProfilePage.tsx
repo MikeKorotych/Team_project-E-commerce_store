@@ -13,7 +13,7 @@ const orders = [
     id: "1234567",
     createdAt: "23.09.2025",
     status: true,
-    totalPrice: "$1234",
+    totalPrice: "$1233",
     shippingAddress: "3 Sadova Street, Kyiv, Kyiv Region",
   },
 ];
@@ -144,12 +144,21 @@ export const ProfilePage = () => {
             </thead>
             <tbody>
               <tr className="hover:bg-muted">
-                <td className="px-7 py-2 border-l align-middle cursor-pointer" onClick={() => setIsModalOpen(true)}>{orders[0].id}</td>
-                <td className="px-7 py-2 border-l align-middle">{orders[0].createdAt}</td>
+                <td
+                  className="px-7 py-2 border-l align-middle cursor-pointer"
+                  onClick={() => setIsModalOpen(true)}
+                >
+                  {orders[0].id}
+                </td>
+                <td className="px-7 py-2 border-l align-middle">
+                  {orders[0].createdAt}
+                </td>
                 <td className="px-7 py-2 border-l align-middle">
                   {orders[0].shippingAddress}
                 </td>
-                <td className="px-7 py-2 border-l align-middle">{orders[0].totalPrice}</td>
+                <td className="px-7 py-2 border-l align-middle">
+                  {orders[0].totalPrice}
+                </td>
                 <td className="px-7 py-2 border-l align-middle">
                   {orders[0].status ? (
                     <Check className="text-green-600 mx-auto" />
