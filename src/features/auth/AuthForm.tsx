@@ -68,9 +68,10 @@ export const AuthForm = () => {
         setServerError(error.message);
         toast.error(error.message);
       }
-    } catch (error: any) {
-      setServerError(error.message);
-      toast.error(error.message);
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : String(error);
+      setServerError(message);
+      toast.error(message);
     }
   };
 
