@@ -15,10 +15,10 @@ type MagneticProps = {
   springOptions?: SpringOptions;
   onlyOnHover?: boolean;
   disableOnTouch?: boolean;
-} & React.ComponentPropsWithoutRef<typeof motion.div>;
+} & React.ComponentPropsWithRef<typeof motion.div>;
 
 function Magnetic({
-  ref,
+  ref,  
   children,
   strength = 0.3,
   range = 180,

@@ -64,7 +64,7 @@ const ImageZoom = React.forwardRef<HTMLImageElement, ImageZoomProps>(
             )}
           </div>
         </DialogTrigger>
-        <DialogContent className="z-50 max-w-[80vw] max-h-[80vh] flex items-center justify-center p-0">
+        <DialogContent className="z-50 max-w-[80vw] max-h-[80vh] flex items-center justify-center p-0.5">
           <img
             src={src}
             alt={alt}
