@@ -29,8 +29,9 @@ const CheckoutPage = () => {
         if (error) throw error;
 
         setClientSecret(data.clientSecret);
-      } catch (error: any) {
-        console.error("Error fetching payment intent:", error);
+      } catch (error: unknown) {
+        const msg = error instanceof Error ? error.message : String(error);
+        console.error("Error fetching payment intent:", msg);
         // Здесь можно показать ошибку пользователю
       }
     };
