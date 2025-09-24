@@ -27,9 +27,24 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
   cartIconRef: React.createRef<HTMLAnchorElement>(),
   setSession: (session) => set({ session }),
 
+  fetchProfile: async () => {
+    const user = get().session?.user;
+  
+    if (!user) return;
+
+    const { data: profile, error } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', user.id)
+      .single();
+    
+    if (!error) set({ profile });
+  },
+
   initialize: () => {
     const { fetchCart } = useCartStore.getState();
     const { fetchFavorites } = useFavoritesStore.getState();
+    const { fetchProfile } = get();
 
     supabase.auth.getSession().then(({ data: { session } }) => {
       set({ session });
@@ -44,21 +59,11 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       set({ session });
       fetchCart(); // Also fetch cart on auth state change (login/logout)
       fetchFavorites(); // Also fetch favorites on auth state change
+      if (session) {
+        fetchProfile();
+      }
     });
 
     return subscription.unsubscribe;
-  },
-
-  fetchProfile: async () => {
-    const user = get().session?.user;
-    if (!user) return;
-
-    const { data: profile, error } = await supabase
-      .from('profiles')
-      .select('*')
-      .eq('id', user.id)
-      .single();
-    
-    if (!error) set({ profile });
   }
 }));
