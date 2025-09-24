@@ -28,6 +28,9 @@ import { useCartStore } from "@/features/cart/cartStore";
 import { useFavoritesStore } from "@/features/favourites/favoritesStore";
 import { toast } from "sonner";
 import { AnimationContext } from "../context/AnimationContext";
+//import { useTranslation } from "react-i18next";
+import { ImageZoom } from "@/components/ui/image-zoom";
+import { Magnetic } from "@/components/ui/magnetic";
 
 interface ProductOverview {
   id: string;
@@ -552,11 +555,13 @@ const ProductPage = () => {
             ))}
           </div>
           <div className="flex-grow flex justify-center items-center p-2">
-            <img
+            <ImageZoom
               ref={mainImageRef}
               src={mainImage}
               alt={detailedProduct.name}
               className="max-h-[300px] md:max-h-full w-auto object-contain rounded-lg"
+              width={1200}
+              height={900}
             />
           </div>
         </div>
@@ -641,24 +646,26 @@ const ProductPage = () => {
                 </Link>
               </Button>
             ) : (
-              <Button
-                onClick={() =>
-                  handleAddToCart(detailedProduct as unknown as Product)
-                }
-                className="flex-grow group"
-                disabled={isCartPending}
-              >
-                {isCartPending ? (
-                  <Spinner width={20} height={20} />
-                ) : (
-                  <>
-                    Add to cart
-                    <div className="w-0 group-hover:w-4 group-hover:opacity-100 opacity-0 transition-all duration-300 overflow-hidden scale-0 group-hover:scale-100">
-                      <ShoppingBasket className="h-4 w-4" />
-                    </div>
-                  </>
-                )}
-              </Button>
+              <Magnetic style={{ width: '100%' }}>
+                <Button
+                  onClick={() =>
+                    handleAddToCart(detailedProduct as unknown as Product)
+                  }
+                  className="flex-grow group w-full"
+                  disabled={isCartPending}
+                >
+                  {isCartPending ? (
+                    <Spinner width={20} height={20} />
+                  ) : (
+                    <>
+                      Add to cart
+                      <div className="w-0 group-hover:w-4 group-hover:opacity-100 opacity-0 transition-all duration-300 overflow-hidden scale-0 group-hover:scale-100">
+                        <ShoppingBasket className="h-4 w-4" />
+                      </div>
+                    </>
+                  )}
+                </Button>
+              </Magnetic>
             )}
             <Button
               onClick={() =>
