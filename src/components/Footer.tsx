@@ -27,24 +27,24 @@ const Footer: React.FC = () => {
 
         {/* лінки */}
         <nav className="flex flex-col space-y-4 md:flex-row md:space-y-0 md:space-x-4 uppercase items-center">
-          <a
-            href="https://github.com/MikeKorotych/Team_project-E-commerce_store"
+          <Link
+            to="https://github.com/MikeKorotych/Team_project-E-commerce_store"
             className="font-extrabold text-[12px] leading-[11px] tracking-[0.04em] text-[#F1F2F9] hover:text-gray-400"
           >
             Github
-          </a>
-          <a
-            href="#"
+          </Link>
+          <Link
+            to="#"
             className="font-extrabold text-[12px] leading-[11px] tracking-[0.04em] text-[#F1F2F9] hover:text-gray-400"
           >
             Contacts
-          </a>
-          <a
-            href="#"
+          </Link>
+          <Link
+            to="/rights"
             className="font-extrabold text-[12px] leading-[11px] tracking-[0.04em] text-[#F1F2F9] hover:text-gray-400"
           >
             Rights
-          </a>
+          </Link>
         </nav>
 
         {/* кнопка топа */}
