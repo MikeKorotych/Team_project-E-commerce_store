@@ -6,7 +6,7 @@ export const Rights = () => (
 
     <h1 className="page-title">Rights</h1>
 
-    <div className="bg-secondary p-5 mt-10 overflow-x-auto rounded-2xl">
+    <div className="bg-card p-5 mt-10 overflow-x-auto rounded-2xl">
       <h1 className="text-4xl">Nice Gadgets Terms and Conditions</h1>
 
       <div className="flex flex-col my-5 gap-3">
