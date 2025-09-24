@@ -31,15 +31,6 @@ export const Contacts = () => (
       </div>
 
       <div className="flex flex-col my-5 gap-3">
-        <h2 className="text-2xl">Working Hours</h2>
-        <p className="mx-5">
-          Monday – Friday: 09:00 – 18:00 <br />
-          Saturday: 10:00 – 16:00 <br />
-          Sunday: Closed
-        </p>
-      </div>
-
-      <div className="flex flex-col my-5 gap-3">
         <h2 className="text-2xl">Social Media</h2>
         <p className="mx-5">
           Instagram: @nicegadgets <br />
