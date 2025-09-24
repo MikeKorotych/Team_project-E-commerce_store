@@ -1,6 +1,6 @@
 import ProductPageNav from "@/components/ProductPageNav";
 import { Button } from "@/components/ui/button";
-import { EyeClosed, LogOut, SquarePen } from "lucide-react";
+import { Check, EyeClosed, LogOut, SquarePen, X } from "lucide-react";
 import { supabase } from "../../utils/supabase";
 import { toast } from "sonner";
 import { Link, useNavigate } from "react-router";
@@ -36,7 +36,7 @@ export const ProfilePage = () => {
 
       <h1 className="page-title">Profile page</h1>
 
-      <div className="flex flex-row mt-10 gap-3 justify-between">
+      <div className="flex flex-row max-lg:flex-col mt-10 gap-3 justify-between">
         {/* Profile picture, name and buttons for change them */}
         <div className="flex flex-col justify-center items-center">
           <img
@@ -44,8 +44,8 @@ export const ProfilePage = () => {
             alt=""
             className="rounded-full border-6"
           />
-          <div className="">
-            <span className="text-2xl">{profile?.first_name}</span>
+          <div className="flex flex-row">
+            <span className="text-2xl">{`${profile?.first_name} ${profile?.last_name}`}</span>
             <Button variant={"ghost"}>
               <SquarePen className="w-4 h-4" />
             </Button>
@@ -60,12 +60,12 @@ export const ProfilePage = () => {
           <div className="flex flex-col bg-card p-4 gap-3">
             <h2 className="text-2xl font-bold">My profile</h2>
 
-            <div className="flex flex-row gap-10 justify-between">
+            <div className="flex flex-row gap-10 justify-between max-sm:flex-col">
               {/* Email */}
               <div className="flex flex-col">
                 <span className="select-none">Email:</span>
 
-                <span className="text-xl font-semibold">
+                <span className="text-xl font-semibold max-sm:text-sm">
                   {session?.user.email}
                 </span>
               </div>
@@ -83,24 +83,25 @@ export const ProfilePage = () => {
                 </div>
               </div>
             </div>
-
-            <Button variant={"outline"} className="font-bold max-w-2xs">
-              Change password
-            </Button>
-            <Button variant={"outline"} className="font-bold max-w-2xs">
-              Settings
-            </Button>
-            <Button
-              variant={"destructive"}
-              className="font-bold max-w-2xs"
-              onClick={() => {
-                handleSignOut();
-                navigate("/");
-              }}
-            >
-              Log out
-              <LogOut className="w-4 h-4" />
-            </Button>
+            <div className="flex flex-col sm:flex-row lg:flex-col gap-4 mt-5">
+              <Button variant={"outline"} className="flex-1 font-bold w-auto">
+                Change password
+              </Button>
+              <Button variant={"outline"} className="flex-1 font-bold w-auto">
+                Settings
+              </Button>
+              <Button
+                variant={"destructive"}
+                className="flex-1 font-bold w-auto"
+                onClick={() => {
+                  handleSignOut();
+                  navigate("/");
+                }}
+              >
+                Log out
+                <LogOut className="w-4 h-4" />
+              </Button>
+            </div>
           </div>
 
           {/* Credit cards */}
@@ -114,6 +115,7 @@ export const ProfilePage = () => {
               <img
                 src="https://placehold.co/300x200"
                 alt="Choosed Credit Card"
+                className="rounded-2xl"
               />
             </div>
             <span className="self-center">
@@ -128,35 +130,37 @@ export const ProfilePage = () => {
           Purchase history
         </h1>
 
-        <div className="flex flex-col gap-6 bg-card p-5">
+        <div className="w-full flex flex-col gap-6 bg-card p-5 overflow-x-auto">
           {/* Order */}
-          <div className="w-full bg-secondary flex flex-row justify-center gap-6 border shadow-sm p-4">
-            <span
-              onClick={() => setIsModalOpen(true)}
-              className="cursor-pointer"
-            >
-              {orders[0].id}
-            </span>
-            <span>{orders[0].createdAt}</span>
-            <span>{orders[0].shippingAddress}</span>
-            <span>{orders[0].totalPrice}</span>
-            <span>{orders[0].status}</span>
-            <OrderProducts open={isModalOpen} onOpenChange={setIsModalOpen} />
-          </div>
-
-          <div className="w-full bg-secondary flex flex-row justify-center gap-6 border shadow-sm p-4">
-            <span
-              onClick={() => setIsModalOpen(true)}
-              className="cursor-pointer"
-            >
-              {orders[0].id}
-            </span>
-            <span>{orders[0].createdAt}</span>
-            <span>{orders[0].shippingAddress}</span>
-            <span>{orders[0].totalPrice}</span>
-            <span>{orders[0].status}</span>
-            <OrderProducts open={isModalOpen} onOpenChange={setIsModalOpen} />
-          </div>
+          <table className="border shadow-sm text-center min-w-[800px]">
+            <thead className="bg-secondary">
+              <tr>
+                <th className="px-7 py-2 border-l">ID</th>
+                <th className="px-7 py-2 border-l">Created At</th>
+                <th className="px-7 py-2 border-l">Shipping address</th>
+                <th className="px-7 py-2 border-l">Total price</th>
+                <th className="px-7 py-2 border-l">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="hover:bg-muted">
+                <td className="px-7 py-2 border-l align-middle cursor-pointer" onClick={() => setIsModalOpen(true)}>{orders[0].id}</td>
+                <td className="px-7 py-2 border-l align-middle">{orders[0].createdAt}</td>
+                <td className="px-7 py-2 border-l align-middle">
+                  {orders[0].shippingAddress}
+                </td>
+                <td className="px-7 py-2 border-l align-middle">{orders[0].totalPrice}</td>
+                <td className="px-7 py-2 border-l align-middle">
+                  {orders[0].status ? (
+                    <Check className="text-green-600 mx-auto" />
+                  ) : (
+                    <X className="text-red-600 mx-auto" />
+                  )}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <OrderProducts open={isModalOpen} onOpenChange={setIsModalOpen} />
         </div>
       </div>
     </>

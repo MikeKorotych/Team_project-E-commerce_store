@@ -2,6 +2,7 @@ import { ChevronLeft } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router";
 import { CreditInfo } from "./CreditInfo";
+import { Button } from "@/components/ui/button";
 
 export const CreditCardsPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -16,8 +17,11 @@ export const CreditCardsPage = () => {
       </div>
 
       <h1 className="page-title">Credit Cards</h1>
+
+      <Button variant={"outline"} className="mt-5">Add card</Button>
+
       {/* Credit Cards */}
-      <div className="grid grid-cols-3 bg-card gap-5 mt-10 p-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 bg-card gap-5 mt-10 p-5">
         <div>
           <div className="flex flex-col bg-secondary items-center justify-center gap-5 p-6">
             <img
@@ -52,7 +56,9 @@ export const CreditCardsPage = () => {
           </div>
         </div>
         <CreditInfo open={isModalOpen} onOpenChange={setIsModalOpen} />
+        
       </div>
+
     </>
   );
 };
