@@ -496,7 +496,7 @@ const ProductPage = () => {
   );
 
   return (
-    <div className="font-sans bg-[#1a1a29] text-white min-h-screen p-4 md:p-8">
+    <div className="font-sans bg-[#1a1a29] text-white min-h-screen p-4 md:p-6">
       <div className="text-sm mb-4">
         <NavigationMenu viewport={false} className="justify-start">
           <NavigationMenuList className="w-full justify-start gap-2">

@@ -68,7 +68,7 @@ export const ModelsRow: React.FC<Props> = ({ title, product }) => {
         </div>
       </div>
       <div ref={scrollRef} className="overflow-x-auto hide-scrollbar">
-        <div className="flex gap-8">
+        <div className="flex gap-9">
           {product?.map((phone) => (
             <div key={phone.id} className="w-[250px] flex-shrink-0">
               <ProductCard product={phone} />

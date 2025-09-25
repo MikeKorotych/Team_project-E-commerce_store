@@ -8,22 +8,68 @@ import { useAuthStore } from "../auth/sessionStore";
 import { useEffect, useState } from "react";
 import { OrderProducts } from "./order/OrderProducts";
 import { AvatarsChanger } from "./avatars/AvatarsChanger";
-// import { useUserStore } from "../user/userStore";
 
 export const ProfilePage = () => {
-  const { session, profile, orders, fetchOrders } = useAuthStore();
+  const { session, profile, fetchProfile, orders, fetchOrders, updateProfile } =
+    useAuthStore();
 
   const [selectedId, setSelectedId] = useState("");
 
   const [isOrderItemsOpen, setIsOrderItemsOpen] = useState(false);
   const [isChangeAvatarOpen, setIsChangeAvatarOpen] = useState(false);
 
-  // const [isAdressEditing, setIsAdressEditing] = useState(false);
-  // const [isNameEditing, setIsNameEditing] = useState(false);
+  const [isAddressEditing, setIsAddressEditing] = useState(false);
+  const [valueAddress, setValueAddress] = useState("");
+
+  const [isNameEditing, setIsNameEditing] = useState(false);
+  const [valueName, setValueName] = useState("");
 
   const navigate = useNavigate();
 
-  useEffect(() => {fetchOrders()}, [orders])
+  const initChangeAddress = async (event: React.FormEvent) => {
+    event.preventDefault();
+
+    try {
+      await updateProfile({ default_shipping_address: valueAddress });
+      toast.success("Address has been changed!");
+    } catch {
+      toast.error(`You can't do that...`);
+    } finally {
+      setValueAddress("");
+      setIsAddressEditing(false);
+    }
+  };
+
+  const initChangeName = async (event: React.FormEvent) => {
+    event.preventDefault();
+
+    if (valueName.length === 0) {
+      toast.error(`You can't just leave it empty.`);
+      setValueName("");
+      setIsNameEditing(false);
+      return;
+    }
+
+    try {
+      await updateProfile({ first_name: valueName });
+      toast.success("Name has been changed!");
+    } catch {
+      toast.error(`Something went wrong...`);
+    } finally {
+      setValueName("");
+      setIsNameEditing(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchOrders();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    fetchProfile();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
@@ -46,11 +92,39 @@ export const ProfilePage = () => {
               className="rounded-full border-6 object-contain"
             />
           </div>
-          <div className="flex flex-row">
-            <span className="text-2xl">{`${profile?.first_name} ${profile?.last_name}`}</span>
-            <Button variant={"ghost"}>
-              <SquarePen className="w-4 h-4" />
-            </Button>
+          <div className="flex flex-row gap-2">
+            {isNameEditing ? (
+              <form onSubmit={initChangeName}>
+                <input
+                  data-cy="TodoTitleField"
+                  type="text"
+                  className="text-2xl"
+                  value={valueName}
+                  onChange={(e) => {
+                    setValueName(e.target.value);
+                  }}
+                  onKeyUp={(e) => {
+                    if (e.key === "Escape") {
+                      setIsNameEditing(false);
+                      setValueName("");
+                    }
+                  }}
+                  placeholder="Write your name here"
+                />
+              </form>
+            ) : (
+              <>
+                <span className="text-2xl">{`${profile?.first_name}`}</span>
+                <button
+                  className="mb-1"
+                  onClick={() => {
+                    setIsNameEditing(!isNameEditing);
+                  }}
+                >
+                  <SquarePen className="w-4 h-4" />
+                </button>
+              </>
+            )}
           </div>
           <Button
             variant={"ghost"}
@@ -77,7 +151,7 @@ export const ProfilePage = () => {
               <div className="flex flex-col">
                 <span className="select-none">Email:</span>
 
-                <span className="text-xl font-semibold max-sm:text-sm">
+                <span className="text-[20px] font-semibold max-sm:text-sm">
                   {session?.user.email}
                 </span>
               </div>
@@ -86,23 +160,47 @@ export const ProfilePage = () => {
               <div className="flex flex-col">
                 <span className="select-none">Shipping address:</span>
 
-                <div className="flex flex-row gap-2 items-center">
-                  <span>
-                    {profile?.shipping_address === undefined
-                      ? "Address not specified."
-                      : profile?.shipping_address}
-                  </span>
-                  <Button variant={"ghost"}>
+                <div className="flex flex-row gap-2">
+                  {isAddressEditing ? (
+                    <form onSubmit={initChangeAddress}>
+                      <input
+                        data-cy="TodoTitleField"
+                        type="text"
+                        value={valueAddress}
+                        onChange={(e) => {
+                          setValueAddress(e.target.value);
+                        }}
+                        onKeyUp={(e) => {
+                          if (e.key === "Escape") {
+                            setIsAddressEditing(false);
+                            setValueAddress("");
+                          }
+                        }}
+                        placeholder="Write address here."
+                        className="w-[202px]"
+                      />
+                    </form>
+                  ) : profile?.default_shipping_address.length === 0 ? (
+                    <span className="text-7 font-semibold max-sm:text-sm">
+                      Address not specified.
+                    </span>
+                  ) : (
+                    <span className="text-7/7 font-semibold max-sm:text-sm">
+                      {profile?.default_shipping_address}
+                    </span>
+                  )}
+                  <button
+                    className="mb-1"
+                    onClick={() => {
+                      setIsAddressEditing(!isAddressEditing);
+                    }}
+                  >
                     <SquarePen className="w-4 h-4" />
-                  </Button>
+                  </button>
                 </div>
               </div>
             </div>
-            <div className="flex flex-col sm:flex-row lg:flex-col gap-4 mt-5">
-              <Button variant={"outline"} className="flex-1 font-bold w-auto">
-                Settings
-              </Button>
-
+            <div className="flex flex-col mt-5">
               <Button
                 variant={"destructive"}
                 className="flex-1 font-bold w-auto"
