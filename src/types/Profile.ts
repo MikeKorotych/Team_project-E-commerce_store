@@ -4,7 +4,7 @@ export interface Profile {
   first_name?: string;
   last_name?: string;
   phone_number?: string;
-  shipping_address: string,
+  default_shipping_address: string,
   stripe_customer_id: string,
   user_ava: string,
 }
