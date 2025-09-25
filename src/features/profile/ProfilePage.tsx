@@ -5,13 +5,13 @@ import { supabase } from "../../utils/supabase";
 import { toast } from "sonner";
 import { useNavigate } from "react-router";
 import { useAuthStore } from "../auth/sessionStore";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { OrderProducts } from "./order/OrderProducts";
 import { AvatarsChanger } from "./avatars/AvatarsChanger";
 // import { useUserStore } from "../user/userStore";
 
 export const ProfilePage = () => {
-  const { session, profile, orders } = useAuthStore();
+  const { session, profile, orders, fetchOrders } = useAuthStore();
 
   const [selectedId, setSelectedId] = useState("");
 
@@ -22,6 +22,8 @@ export const ProfilePage = () => {
   // const [isNameEditing, setIsNameEditing] = useState(false);
 
   const navigate = useNavigate();
+
+  useEffect(() => {fetchOrders()}, [orders])
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
