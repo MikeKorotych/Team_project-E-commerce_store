@@ -14,8 +14,8 @@ const teamMembers = [
   },
   {
     name: "Serhii Mashnin",
-    email: "serhii.mashnin@gmail.com",
-    linkedin: "https://www.linkedin.com/in/serhii-mashnin-4b148a359/",
+    email: "lvlashnin@gmail.com",
+    linkedin: "https://www.linkedin.com/in/serhii-mashnin-106081163/",
     avatar: "https://media.mate.academy/fit-in/128x128/users/403005/avatars/current-1745586223332.jpg",
   },
   {
