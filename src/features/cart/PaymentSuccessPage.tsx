@@ -13,6 +13,7 @@ export const PaymentSuccessPage = () => {
   const [searchParams] = useSearchParams();
   const [status, setStatus] = useState<Status>("loading");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [orderId, setOrderId] = useState<string | number | null>(null);
   const hasProcessed = useRef(false);
 
   const { clearCart } = useCartStore();
@@ -24,6 +25,23 @@ export const PaymentSuccessPage = () => {
         const {
           data: { user },
         } = await supabase.auth.getUser();
+
+        // Если пользователь - гость, просто очищаем корзину и показываем успех
+        if (!user) {
+          console.log("Guest checkout: clearing cart without saving order.");
+          await clearCart();
+          setStatus("success");
+          toast.success("Thank you for your purchase!");
+
+          // Убираем параметры из URL, чтобы избежать повторной обработки при обновлении
+          try {
+            const cleanUrl = window.location.origin + window.location.pathname;
+            window.history.replaceState({}, document.title, cleanUrl);
+          } catch (e) {
+            // ignore
+          }
+          return; // Завершаем выполнение для гостя
+        }
 
         // Ensure cart is hydrated from DB/localStorage before reading items
         const fetchCart = useCartStore.getState().fetchCart;
@@ -59,12 +77,16 @@ export const PaymentSuccessPage = () => {
         }
 
         // create order
-        const orderPayload = {
-          user_id: user?.id ?? null,
+        const orderPayload: Record<string, any> = {
           total_price: totalPrice,
           status: "succeeded",
           shipping_address: shippingAddress,
         };
+        if (user && user.id) {
+          orderPayload.user_id = user.id;
+        } else {
+          console.debug("Creating guest order (no authenticated user)");
+        }
 
         console.debug("Inserting order payload:", orderPayload);
         const orderRes = await supabase
@@ -113,8 +135,19 @@ export const PaymentSuccessPage = () => {
         // clear cart locally and in DB
         await clearCart();
 
+        // store order id for UI
+        setOrderId(newOrder.id);
+
         setStatus("success");
         toast.success("Your order has been saved successfully!");
+
+        // remove query params so refresh won't re-trigger
+        try {
+          const cleanUrl = window.location.origin + window.location.pathname;
+          window.history.replaceState({}, document.title, cleanUrl);
+        } catch (e) {
+          // ignore
+        }
       } catch (err: unknown) {
         console.error("Order processing failed:", err);
         const message = err instanceof Error ? err.message : String(err);
@@ -184,6 +217,11 @@ export const PaymentSuccessPage = () => {
       {icon}
       <h1 className="text-3xl font-bold mb-2">{title}</h1>
       <p className="text-gray-400 mb-6">{message}</p>
+      {status === "success" && orderId && (
+        <p className="text-gray-400 mb-4">
+          Order ID: <span className="font-mono">{orderId}</span>
+        </p>
+      )}
       <Link
         to="/"
         className="bg-primary hover:bg-primary/90 text-primary-foreground font-bold py-2 px-4 rounded"
