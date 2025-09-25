@@ -16,7 +16,7 @@ export function ProductCarousel({ supabaseUrl }: { supabaseUrl: string }) {
   const [count, setCount] = React.useState(0);
 
   const plugin = React.useRef(
-    Autoplay({ delay: 2000, stopOnInteraction: true })
+    Autoplay({ delay: 5000, stopOnInteraction: true })
   );
 
   React.useEffect(() => {
@@ -35,6 +35,12 @@ export function ProductCarousel({ supabaseUrl }: { supabaseUrl: string }) {
       plugins={[plugin.current]}
       setApi={setApi}
       className="w-full max-w-5xl mx-auto"
+      opts={{
+        duration: 100, // default 25 → higher = smoother/slower
+        dragFree: true, // free momentum-like scroll
+        loop: true, // seamless looping
+        align: "center", // feels smoother than "start"
+      }}
     >
       <div className="relative">
         <CarouselContent>
