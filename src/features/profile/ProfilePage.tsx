@@ -1,27 +1,25 @@
 import ProductPageNav from "@/components/ProductPageNav";
 import { Button } from "@/components/ui/button";
-import { Check, EyeClosed, LogOut, SquarePen, X } from "lucide-react";
+import { Check, LogOut, SquarePen, X } from "lucide-react";
 import { supabase } from "../../utils/supabase";
 import { toast } from "sonner";
-import { Link, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import { useAuthStore } from "../auth/sessionStore";
 import { useState } from "react";
-import { OrderProducts } from "./OrderProducts";
-// Temprorary
-const orders = [
-  {
-    id: "1234567",
-    createdAt: "23.09.2025",
-    status: true,
-    totalPrice: "$1233",
-    shippingAddress: "3 Sadova Street, Kyiv, Kyiv Region",
-  },
-];
+import { OrderProducts } from "./order/OrderProducts";
+import { AvatarsChanger } from "./avatars/AvatarsChanger";
+// import { useUserStore } from "../user/userStore";
 
-// ----------
 export const ProfilePage = () => {
-  const { session, profile } = useAuthStore();
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const { session, profile, orders } = useAuthStore();
+
+  const [selectedId, setSelectedId] = useState("");
+
+  const [isOrderItemsOpen, setIsOrderItemsOpen] = useState(false);
+  const [isChangeAvatarOpen, setIsChangeAvatarOpen] = useState(false);
+
+  // const [isAdressEditing, setIsAdressEditing] = useState(false);
+  // const [isNameEditing, setIsNameEditing] = useState(false);
 
   const navigate = useNavigate();
 
@@ -39,20 +37,32 @@ export const ProfilePage = () => {
       <div className="flex flex-row max-lg:flex-col mt-10 gap-3 justify-between">
         {/* Profile picture, name and buttons for change them */}
         <div className="flex flex-col justify-center items-center">
-          <img
-            src="https://placehold.co/400x400"
-            alt=""
-            className="rounded-full border-6"
-          />
+          <div className="max-w-[428px] max-h-[428px]">
+            <img
+              src={profile?.user_ava}
+              alt="Profile Avatar"
+              className="rounded-full border-6 object-contain"
+            />
+          </div>
           <div className="flex flex-row">
             <span className="text-2xl">{`${profile?.first_name} ${profile?.last_name}`}</span>
             <Button variant={"ghost"}>
               <SquarePen className="w-4 h-4" />
             </Button>
           </div>
-          <Button variant={"ghost"} className="text-1xl">
+          <Button
+            variant={"ghost"}
+            className="text-1xl"
+            onClick={() => {
+              setIsChangeAvatarOpen(true);
+            }}
+          >
             Change avatar
           </Button>
+          <AvatarsChanger
+            open={isChangeAvatarOpen}
+            onOpenChange={setIsChangeAvatarOpen}
+          />
         </div>
 
         <div className="flex flex-col gap-6">
@@ -72,24 +82,25 @@ export const ProfilePage = () => {
 
               {/* Password */}
               <div className="flex flex-col">
-                <span className="select-none">Password:</span>
+                <span className="select-none">Shipping address:</span>
 
                 <div className="flex flex-row gap-2 items-center">
-                  <span>*********</span>
-
-                  <Button variant={"ghost"} size={"sm"}>
-                    <EyeClosed />
+                  <span>
+                    {profile?.shipping_address === undefined
+                      ? "Address not specified."
+                      : profile?.shipping_address}
+                  </span>
+                  <Button variant={"ghost"}>
+                    <SquarePen className="w-4 h-4" />
                   </Button>
                 </div>
               </div>
             </div>
             <div className="flex flex-col sm:flex-row lg:flex-col gap-4 mt-5">
               <Button variant={"outline"} className="flex-1 font-bold w-auto">
-                Change password
-              </Button>
-              <Button variant={"outline"} className="flex-1 font-bold w-auto">
                 Settings
               </Button>
+
               <Button
                 variant={"destructive"}
                 className="flex-1 font-bold w-auto"
@@ -105,12 +116,12 @@ export const ProfilePage = () => {
           </div>
 
           {/* Credit cards */}
-          <div className="flex flex-col gap-4 bg-card p-4">
+          {/* <div className="flex flex-col gap-4 bg-card p-4">
             <Button asChild variant={"outline"} className="max-w-[150px]">
               <Link to="/credit_cards">Choose card</Link>
             </Button>
 
-            {/* Visible choosed Credit Card */}
+            Visible choosed Credit Card
             <div className="flex bg-secondary justify-center gap-5 p-6">
               <img
                 src="https://placehold.co/300x200"
@@ -121,7 +132,7 @@ export const ProfilePage = () => {
             <span className="self-center">
               You haven't created or choosed your credit card
             </span>
-          </div>
+          </div> */}
         </div>
       </div>
       {/* Purchase history */}
@@ -143,33 +154,50 @@ export const ProfilePage = () => {
               </tr>
             </thead>
             <tbody>
-              <tr className="hover:bg-muted">
-                <td
-                  className="px-7 py-2 border-l align-middle cursor-pointer"
-                  onClick={() => setIsModalOpen(true)}
-                >
-                  {orders[0].id}
-                </td>
-                <td className="px-7 py-2 border-l align-middle">
-                  {orders[0].createdAt}
-                </td>
-                <td className="px-7 py-2 border-l align-middle">
-                  {orders[0].shippingAddress}
-                </td>
-                <td className="px-7 py-2 border-l align-middle">
-                  {orders[0].totalPrice}
-                </td>
-                <td className="px-7 py-2 border-l align-middle">
-                  {orders[0].status ? (
-                    <Check className="text-green-600 mx-auto" />
-                  ) : (
-                    <X className="text-red-600 mx-auto" />
-                  )}
-                </td>
-              </tr>
+              {orders?.length === 0 ? (
+                <div className="flex justify-center p-5">
+                  <h2>No orders made yet</h2>
+                </div>
+              ) : (
+                orders?.map((order) => {
+                  return (
+                    <tr key={order.id}>
+                      <td
+                        className="px-7 py-2 border-l align-middle cursor-pointer hover:bg-muted"
+                        onClick={() => {
+                          setIsOrderItemsOpen(true);
+                          setSelectedId(order.id);
+                        }}
+                      >
+                        {order.id}
+                      </td>
+                      <td className="px-7 py-2 border-l align-middle">
+                        {order.created_at.split("T")[0]}
+                      </td>
+                      <td className="px-7 py-2 border-l align-middle">
+                        {order.shipping_address}
+                      </td>
+                      <td className="px-7 py-2 border-l align-middle">
+                        {`$${order.total_price}`}
+                      </td>
+                      <td className="px-7 py-2 border-l align-middle">
+                        {order.status ? (
+                          <Check className="text-green-600 mx-auto" />
+                        ) : (
+                          <X className="text-red-600 mx-auto" />
+                        )}
+                      </td>
+                    </tr>
+                  );
+                })
+              )}
             </tbody>
           </table>
-          <OrderProducts open={isModalOpen} onOpenChange={setIsModalOpen} />
+          <OrderProducts
+            orderId={selectedId}
+            open={isOrderItemsOpen}
+            onOpenChange={setIsOrderItemsOpen}
+          />
         </div>
       </div>
     </>

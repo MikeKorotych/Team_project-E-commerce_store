@@ -11,8 +11,6 @@ import { Link } from "react-router";
 import { AnimationContext } from "../context/AnimationContext";
 import { CardContainer, CardItem } from "./ui/shadcn-io/3d-card";
 
-// import QuantityController from './QuantityController';
-
 type Props = {
   product: Product;
 };
