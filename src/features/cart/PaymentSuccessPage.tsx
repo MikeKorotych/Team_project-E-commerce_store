@@ -92,6 +92,7 @@ export const PaymentSuccessPage = () => {
           product_id: item.product.id,
           quantity: item.quantity,
           price_at_purchase: item.product.priceDiscount,
+          product_img: item.product.images[0],
         }));
 
         console.debug("Inserting order_items payload:", orderItemsToInsert);

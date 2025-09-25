@@ -16,7 +16,7 @@ export function ProductCarousel({ supabaseUrl }: { supabaseUrl: string }) {
   const [count, setCount] = React.useState(0);
 
   const plugin = React.useRef(
-    Autoplay({ delay: 2000, stopOnInteraction: true })
+    Autoplay({ delay: 5000, stopOnInteraction: true })
   );
 
   React.useEffect(() => {
@@ -35,6 +35,12 @@ export function ProductCarousel({ supabaseUrl }: { supabaseUrl: string }) {
       plugins={[plugin.current]}
       setApi={setApi}
       className="w-full max-w-5xl mx-auto"
+      opts={{
+        duration: 100, // default 25 → higher = smoother/slower
+        dragFree: true, // free momentum-like scroll
+        loop: true, // seamless looping
+        align: "center", // feels smoother than "start"
+      }}
     >
       <div className="relative">
         <CarouselContent>
@@ -43,12 +49,12 @@ export function ProductCarousel({ supabaseUrl }: { supabaseUrl: string }) {
               <div>
                 <img
                   className="hidden lg:block"
-                  src={`${supabaseUrl}/storage/v1/object/public/product-images/img/home-carousel-lg.png`}
+                  src={`${supabaseUrl}/storage/v1/object/public/product-images/img/home-carousel-phones-lg.jpg`}
                   alt="carousel"
                 />
                 <img
                   className="hidden sm:block lg:hidden"
-                  src={`${supabaseUrl}/storage/v1/object/public/product-images/img/home-carousel-lg.png`}
+                  src={`${supabaseUrl}/storage/v1/object/public/product-images/img/home-carousel-phones-lg.jpg`}
                   alt="carousel"
                 />
                 <img
@@ -65,12 +71,12 @@ export function ProductCarousel({ supabaseUrl }: { supabaseUrl: string }) {
               <div>
                 <img
                   className="hidden lg:block"
-                  src={`${supabaseUrl}/storage/v1/object/public/product-images/img/home-carousel-lg.png`}
+                  src={`${supabaseUrl}/storage/v1/object/public/product-images/img/home-carousel-gadgets-lg.jpg`}
                   alt="carousel"
                 />
                 <img
                   className="hidden sm:block lg:hidden"
-                  src={`${supabaseUrl}/storage/v1/object/public/product-images/img/home-carousel-lg.png`}
+                  src={`${supabaseUrl}/storage/v1/object/public/product-images/img/home-carousel-gadgets-lg.jpg`}
                   alt="carousel"
                 />
                 <img
@@ -86,12 +92,12 @@ export function ProductCarousel({ supabaseUrl }: { supabaseUrl: string }) {
               <div>
                 <img
                   className="hidden lg:block"
-                  src={`${supabaseUrl}/storage/v1/object/public/product-images/img/home-carousel-lg.png`}
+                  src={`${supabaseUrl}/storage/v1/object/public/product-images/img/home-carousel-tablet-lg.jpg`}
                   alt="carousel"
                 />
                 <img
                   className="hidden sm:block lg:hidden"
-                  src={`${supabaseUrl}/storage/v1/object/public/product-images/img/home-carousel-lg.png`}
+                  src={`${supabaseUrl}/storage/v1/object/public/product-images/img/home-carousel-tablet-lg.jpg`}
                   alt="carousel"
                 />
                 <img
