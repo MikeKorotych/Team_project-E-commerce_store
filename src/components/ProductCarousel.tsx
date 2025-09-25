@@ -49,12 +49,12 @@ export function ProductCarousel({ supabaseUrl }: { supabaseUrl: string }) {
               <div>
                 <img
                   className="hidden lg:block"
-                  src={`${supabaseUrl}/storage/v1/object/public/product-images/img/home-carousel-lg.png`}
+                  src={`${supabaseUrl}/storage/v1/object/public/product-images/img/home-carousel-phones-lg.jpg`}
                   alt="carousel"
                 />
                 <img
                   className="hidden sm:block lg:hidden"
-                  src={`${supabaseUrl}/storage/v1/object/public/product-images/img/home-carousel-lg.png`}
+                  src={`${supabaseUrl}/storage/v1/object/public/product-images/img/home-carousel-phones-lg.jpg`}
                   alt="carousel"
                 />
                 <img
@@ -71,12 +71,12 @@ export function ProductCarousel({ supabaseUrl }: { supabaseUrl: string }) {
               <div>
                 <img
                   className="hidden lg:block"
-                  src={`${supabaseUrl}/storage/v1/object/public/product-images/img/home-carousel-lg.png`}
+                  src={`${supabaseUrl}/storage/v1/object/public/product-images/img/home-carousel-gadgets-lg.jpg`}
                   alt="carousel"
                 />
                 <img
                   className="hidden sm:block lg:hidden"
-                  src={`${supabaseUrl}/storage/v1/object/public/product-images/img/home-carousel-lg.png`}
+                  src={`${supabaseUrl}/storage/v1/object/public/product-images/img/home-carousel-gadgets-lg.jpg`}
                   alt="carousel"
                 />
                 <img
@@ -92,12 +92,12 @@ export function ProductCarousel({ supabaseUrl }: { supabaseUrl: string }) {
               <div>
                 <img
                   className="hidden lg:block"
-                  src={`${supabaseUrl}/storage/v1/object/public/product-images/img/home-carousel-lg.png`}
+                  src={`${supabaseUrl}/storage/v1/object/public/product-images/img/home-carousel-tablet-lg.jpg`}
                   alt="carousel"
                 />
                 <img
                   className="hidden sm:block lg:hidden"
-                  src={`${supabaseUrl}/storage/v1/object/public/product-images/img/home-carousel-lg.png`}
+                  src={`${supabaseUrl}/storage/v1/object/public/product-images/img/home-carousel-tablet-lg.jpg`}
                   alt="carousel"
                 />
                 <img
