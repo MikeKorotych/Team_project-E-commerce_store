@@ -16,6 +16,7 @@ interface AuthStore {
   setSession: (session: Session | null) => void;
   initialize: () => (() => void) | undefined;
   fetchProfile: () => Promise<void>;
+  updateProfile: (value: Partial<Profile>) => Promise<void>;
   fetchOrders: () => Promise<void>;
   fetchOrderItems: (value: string) => Promise<void>;
 }
@@ -69,6 +70,21 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       set({ orderItems });
     } else {
       set({ orderItems: []});
+    }
+  },
+
+  updateProfile: async (updates: Partial<Profile>) => {
+    const user = get().session?.user;
+    if (!user) return;
+
+    const {data: profile, error} = await supabase
+      .from("profiles")
+      .upsert({id: user.id, ...updates})
+      .select()
+      .single();
+
+    if (!error) {
+      set({ profile });
     }
   },
 

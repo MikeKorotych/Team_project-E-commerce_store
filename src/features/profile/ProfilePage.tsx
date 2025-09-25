@@ -6,7 +6,8 @@ import { toast } from "sonner";
 import { useNavigate } from "react-router";
 import { useAuthStore } from "../auth/sessionStore";
 import { useState } from "react";
-import { OrderProducts } from "./OrderProducts";
+import { OrderProducts } from "./order/OrderProducts";
+import { AvatarsChanger } from "./avatars/AvatarsChanger";
 // import { useUserStore } from "../user/userStore";
 
 export const ProfilePage = () => {
@@ -14,7 +15,11 @@ export const ProfilePage = () => {
 
   const [selectedId, setSelectedId] = useState("");
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isOrderItemsOpen, setIsOrderItemsOpen] = useState(false);
+  const [isChangeAvatarOpen, setIsChangeAvatarOpen] = useState(false);
+
+  // const [isAdressEditing, setIsAdressEditing] = useState(false);
+  // const [isNameEditing, setIsNameEditing] = useState(false);
 
   const navigate = useNavigate();
 
@@ -32,20 +37,32 @@ export const ProfilePage = () => {
       <div className="flex flex-row max-lg:flex-col mt-10 gap-3 justify-between">
         {/* Profile picture, name and buttons for change them */}
         <div className="flex flex-col justify-center items-center">
-          <img
-            src={profile?.user_ava}
-            alt=""
-            className="rounded-full border-6"
-          />
+          <div className="max-w-[428px] max-h-[428px]">
+            <img
+              src={profile?.user_ava}
+              alt="Profile Avatar"
+              className="rounded-full border-6 object-contain"
+            />
+          </div>
           <div className="flex flex-row">
             <span className="text-2xl">{`${profile?.first_name} ${profile?.last_name}`}</span>
             <Button variant={"ghost"}>
               <SquarePen className="w-4 h-4" />
             </Button>
           </div>
-          <Button variant={"ghost"} className="text-1xl">
+          <Button
+            variant={"ghost"}
+            className="text-1xl"
+            onClick={() => {
+              setIsChangeAvatarOpen(true);
+            }}
+          >
             Change avatar
           </Button>
+          <AvatarsChanger
+            open={isChangeAvatarOpen}
+            onOpenChange={setIsChangeAvatarOpen}
+          />
         </div>
 
         <div className="flex flex-col gap-6">
@@ -68,7 +85,14 @@ export const ProfilePage = () => {
                 <span className="select-none">Shipping address:</span>
 
                 <div className="flex flex-row gap-2 items-center">
-                  <span>{/* profile?.shippingAddress */}</span>
+                  <span>
+                    {profile?.shipping_address === undefined
+                      ? "Address not specified."
+                      : profile?.shipping_address}
+                  </span>
+                  <Button variant={"ghost"}>
+                    <SquarePen className="w-4 h-4" />
+                  </Button>
                 </div>
               </div>
             </div>
@@ -141,7 +165,7 @@ export const ProfilePage = () => {
                       <td
                         className="px-7 py-2 border-l align-middle cursor-pointer hover:bg-muted"
                         onClick={() => {
-                          setIsModalOpen(true);
+                          setIsOrderItemsOpen(true);
                           setSelectedId(order.id);
                         }}
                       >
@@ -171,8 +195,8 @@ export const ProfilePage = () => {
           </table>
           <OrderProducts
             orderId={selectedId}
-            open={isModalOpen}
-            onOpenChange={setIsModalOpen}
+            open={isOrderItemsOpen}
+            onOpenChange={setIsOrderItemsOpen}
           />
         </div>
       </div>
