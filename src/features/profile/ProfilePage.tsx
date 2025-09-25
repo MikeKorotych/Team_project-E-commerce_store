@@ -1,26 +1,19 @@
 import ProductPageNav from "@/components/ProductPageNav";
 import { Button } from "@/components/ui/button";
-import { Check, EyeClosed, LogOut, SquarePen, X } from "lucide-react";
+import { Check, LogOut, SquarePen, X } from "lucide-react";
 import { supabase } from "../../utils/supabase";
 import { toast } from "sonner";
 import { Link, useNavigate } from "react-router";
 import { useAuthStore } from "../auth/sessionStore";
 import { useState } from "react";
 import { OrderProducts } from "./OrderProducts";
-// Temprorary
-const orders = [
-  {
-    id: "1234567",
-    createdAt: "23.09.2025",
-    status: true,
-    totalPrice: "$1233",
-    shippingAddress: "3 Sadova Street, Kyiv, Kyiv Region",
-  },
-];
+// import { useUserStore } from "../user/userStore";
 
-// ----------
 export const ProfilePage = () => {
-  const { session, profile } = useAuthStore();
+  const { session, profile, orders } = useAuthStore();
+
+  const [selectedId, setSelectedId] = useState("");
+
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const navigate = useNavigate();
@@ -72,24 +65,18 @@ export const ProfilePage = () => {
 
               {/* Password */}
               <div className="flex flex-col">
-                <span className="select-none">Password:</span>
+                <span className="select-none">Shipping address:</span>
 
                 <div className="flex flex-row gap-2 items-center">
-                  <span>*********</span>
-
-                  <Button variant={"ghost"} size={"sm"}>
-                    <EyeClosed />
-                  </Button>
+                  <span>{/* profile?.shippingAddress */}</span>
                 </div>
               </div>
             </div>
             <div className="flex flex-col sm:flex-row lg:flex-col gap-4 mt-5">
               <Button variant={"outline"} className="flex-1 font-bold w-auto">
-                Change password
-              </Button>
-              <Button variant={"outline"} className="flex-1 font-bold w-auto">
                 Settings
               </Button>
+
               <Button
                 variant={"destructive"}
                 className="flex-1 font-bold w-auto"
@@ -143,33 +130,40 @@ export const ProfilePage = () => {
               </tr>
             </thead>
             <tbody>
-              <tr className="hover:bg-muted">
-                <td
-                  className="px-7 py-2 border-l align-middle cursor-pointer"
-                  onClick={() => setIsModalOpen(true)}
-                >
-                  {orders[0].id}
-                </td>
-                <td className="px-7 py-2 border-l align-middle">
-                  {orders[0].createdAt}
-                </td>
-                <td className="px-7 py-2 border-l align-middle">
-                  {orders[0].shippingAddress}
-                </td>
-                <td className="px-7 py-2 border-l align-middle">
-                  {orders[0].totalPrice}
-                </td>
-                <td className="px-7 py-2 border-l align-middle">
-                  {orders[0].status ? (
-                    <Check className="text-green-600 mx-auto" />
-                  ) : (
-                    <X className="text-red-600 mx-auto" />
-                  )}
-                </td>
-              </tr>
+              {orders?.map((order) => {
+                return (
+                  <tr className="hover:bg-muted" key={order.id}>
+                    <td
+                      className="px-7 py-2 border-l align-middle cursor-pointer"
+                      onClick={() => {
+                        setIsModalOpen(true);
+                        setSelectedId(order.id);
+                      }}
+                    >
+                      {order.id}
+                    </td>
+                    <td className="px-7 py-2 border-l align-middle">
+                      {order.created_at.split("T")[0]}
+                    </td>
+                    <td className="px-7 py-2 border-l align-middle">
+                      {order.shipping_address}
+                    </td>
+                    <td className="px-7 py-2 border-l align-middle">
+                      {`$${order.total_price}`}
+                    </td>
+                    <td className="px-7 py-2 border-l align-middle">
+                      {order.status ? (
+                        <Check className="text-green-600 mx-auto" />
+                      ) : (
+                        <X className="text-red-600 mx-auto" />
+                      )}
+                    </td>
+                  </tr>
+                );
+              })}
             </tbody>
           </table>
-          <OrderProducts open={isModalOpen} onOpenChange={setIsModalOpen} />
+          <OrderProducts orderId={selectedId} open={isModalOpen} onOpenChange={setIsModalOpen} />
         </div>
       </div>
     </>

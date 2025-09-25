@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { supabase } from '@/utils/supabase';
 import type { Session } from '@supabase/supabase-js';
+// import type { Profile } from '@/types/Profile';
 
 // Тип для профиля, который мы создали в базе данных
 export interface Profile {

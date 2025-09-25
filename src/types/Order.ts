@@ -1,17 +1,16 @@
 export type Order = {
-  id: string,
-  createdAt: string,
-  status: boolean,
-  totalPrice: string,
-  shippingAddress: string
-}
+  id: string;
+  created_at: string;
+  user_id: number;
+  status: boolean;
+  total_price: string;
+  shipping_address: string;
+};
 
 export type OrderItem = {
-  id: string,
-  orderId: string,
-  productId: string,
-  quantity: number,
-  priceAtPurchase: number,
-  userId: number,
-  createdAt: string
-}
+  id: string;
+  order_id: string;
+  product_id: string;
+  quantity: number;
+  price_at_purchase: number;
+};
