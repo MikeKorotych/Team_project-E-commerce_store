@@ -31,6 +31,7 @@ import { AnimationContext } from "../context/AnimationContext";
 //import { useTranslation } from "react-i18next";
 import { ImageZoom } from "@/components/ui/image-zoom";
 import { Magnetic } from "@/components/ui/magnetic";
+import productsIndex from "../../api/products.json";
 
 interface ProductOverview {
   id: string;
@@ -187,14 +188,6 @@ const ProductPage = () => {
     };
   };
 
-  const getSimplifiedProductId = (fullId: string): string => {
-    const match = fullId.match(/(\d+)(gb|mm|tb)?$/i);
-    if (match && match[0]) {
-      return match[1] + (match[2] ? match[2].toUpperCase() : "");
-    }
-    return fullId;
-  };
-
   const {
     data: productOverview,
     isLoading: isOverviewLoading,
@@ -278,14 +271,14 @@ const ProductPage = () => {
     staleTime: 3000,
   });
 
-  // Main image defaults to the first product image
+
   useEffect(() => {
     if (detailedProduct?.images?.length) {
       setMainImage(`${detailedProduct.images[0]}`);
     }
   }, [detailedProduct]);
 
-  // Derive selected color/capacity from URL, fallback to first available
+
   const { capacity: urlCapacity, color: urlColor } = useMemo(
     () => parseProductIdFromUrl(productId || ""),
     [productId]
@@ -315,14 +308,19 @@ const ProductPage = () => {
     }
   }, [relatedProductsData]);
 
-  if (isOverviewLoading || isDetailedLoading || isRelatedLoading) {
-    return (
-      <div className="relative">
-        <ProductPageSkeleton />
-        <div className="absolute inset-0 backdrop-blur-sm bg-black/20 pointer-events-none" />
-      </div>
-    );
-  }
+  const numericIdFromIndex = useMemo(() => {
+    try {
+      if (!detailedProduct?.id) return null;
+      const entry = (productsIndex as Array<{ id: number; itemId: string }>).find(
+        (p) => p.itemId === detailedProduct.id
+      );
+      return entry ? String(entry.id) : null;
+    } catch {
+      return null;
+    }
+  }, [detailedProduct?.id]);
+
+  const isLoadingAny = isOverviewLoading || isDetailedLoading || isRelatedLoading;
 
   if (isOverviewError || isDetailedError || isRelatedError) {
     return (
@@ -338,7 +336,7 @@ const ProductPage = () => {
     );
   }
 
-  if (!productOverview || !detailedProduct) {
+  if (!isLoadingAny && (!productOverview || !detailedProduct)) {
     return (
       <div className="text-white text-center py-10">Product not found.</div>
     );
@@ -346,7 +344,7 @@ const ProductPage = () => {
 
   const handleColorChange = (newColor: string) => {
     if (productOverview && detailedProduct) {
-      const { namespaceId } = parseProductIdFromUrl(detailedProduct.id ?? "");
+      const { namespaceId } = parseProductIdFromUrl(detailedProduct!.id ?? "");
       const newProductId = buildProductIdUrl(
         namespaceId,
         activeCapacity,
@@ -358,7 +356,7 @@ const ProductPage = () => {
 
   const handleCapacityChange = (newCapacity: string) => {
     if (productOverview && detailedProduct) {
-      const { namespaceId } = parseProductIdFromUrl(detailedProduct.id ?? "");
+      const { namespaceId } = parseProductIdFromUrl(detailedProduct!.id ?? "");
       const newProductId = buildProductIdUrl(
         namespaceId,
         newCapacity,
@@ -368,10 +366,12 @@ const ProductPage = () => {
     }
   };
 
-  const currentItem = items.find(
-    (item) => item.product.id === detailedProduct.id
-  );
-  const isFavorite = favorites.some((item) => item.id === detailedProduct.id);
+  const currentItem = detailedProduct
+    ? items.find((item) => item.product.id === detailedProduct.id)
+    : undefined;
+  const isFavorite = detailedProduct
+    ? favorites.some((item) => item.id === detailedProduct.id)
+    : false;
 
   const handleAddToCart = (product: Product) => {
     if (!mainImageRef.current || !cartIconRef?.current) {
@@ -512,15 +512,23 @@ const ProductPage = () => {
             </NavigationMenuItem>
             <ChevronRight className="h-4 w-4 text-gray-400" />
             <NavigationMenuItem>
-              <NavigationMenuLink asChild>
-                <Link
-                  to={`/${productOverview.category}`}
-                  className="text-gray-300 hover:text-white"
-                >
-                  {productOverview.category.charAt(0).toUpperCase() +
-                    productOverview.category.slice(1)}
-                </Link>
-              </NavigationMenuLink>
+              {productOverview?.category ? (
+                <NavigationMenuLink asChild>
+                  <Link
+                    to={`/${productOverview.category}`}
+                    className="text-gray-300 hover:text-white"
+                  >
+                    {productOverview.category.charAt(0).toUpperCase() +
+                      productOverview.category.slice(1)}
+                  </Link>
+                </NavigationMenuLink>
+              ) : (
+                <span className="text-gray-500">…</span>
+              )}
+            </NavigationMenuItem>
+            <ChevronRight className="h-4 w-4 text-gray-400" />
+            <NavigationMenuItem>
+              <span className="text-gray-400">{detailedProduct?.name ?? "…"}</span>
             </NavigationMenuItem>
           </NavigationMenuList>
         </NavigationMenu>
@@ -534,17 +542,24 @@ const ProductPage = () => {
         Back
       </button>
 
-      <h1 className="text-3xl font-bold mb-8">{detailedProduct.name}</h1>
+      <h1 className="text-3xl font-bold mb-8">{detailedProduct?.name ?? ""}</h1>
 
+      {isLoadingAny ? (
+        <div className="relative">
+          <ProductPageSkeleton />
+          <div className="absolute inset-0 backdrop-blur-sm bg-black/20 pointer-events-none" />
+        </div>
+      ) : (
+      <>
       <div className="flex flex-col md:flex-row gap-8">
         {/* зображення */}
         <div className="flex flex-col md:flex-row gap-4 w-full md:w-1/2 mb-8 md:mb-0">
           <div className="flex md:flex-col gap-2 overflow-x-auto md:overflow-x-visible p-2">
-            {detailedProduct.images.map((image: string, index: number) => (
+            {detailedProduct!.images.map((image: string, index: number) => (
               <img
                 key={index}
                 src={`${image}`}
-                alt={`${detailedProduct.name} thumbnail ${index + 1}`}
+                alt={`${detailedProduct!.name} thumbnail ${index + 1}`}
                 className={`w-20 h-20 object-contain border-2 ${
                   mainImage === `${image}`
                     ? "border-blue-500"
@@ -558,7 +573,7 @@ const ProductPage = () => {
             <ImageZoom
               ref={mainImageRef}
               src={mainImage}
-              alt={detailedProduct.name}
+              alt={detailedProduct!.name}
               className="max-h-[300px] md:max-h-full w-auto object-contain rounded-lg"
               width={1200}
               height={900}
@@ -569,15 +584,13 @@ const ProductPage = () => {
         {/* Деталі */}
         <div className="w-full md:w-1/2">
           <div className="flex items-center mb-4">
-            <span className="text-gray-500 text-sm">
-              ID: {getSimplifiedProductId(productOverview.id)}
-            </span>
+            <span className="text-gray-500 text-sm">ID: {numericIdFromIndex ?? "—"}</span>
           </div>
 
           <div className="mb-6">
             <h2 className="text-lg font-semibold mb-2">Available colors</h2>
             <div className="flex gap-2">
-              {detailedProduct.colorsAvailable?.map(
+              {detailedProduct!.colorsAvailable?.map(
                 (color: string, index: number) => (
                   <div
                     key={index}
@@ -598,7 +611,7 @@ const ProductPage = () => {
           <div className="mb-6">
             <h2 className="text-lg font-semibold mb-2">Select capacity</h2>
             <div className="flex gap-2 flex-wrap">
-              {detailedProduct.capacityAvailable?.map(
+              {detailedProduct!.capacityAvailable?.map(
                 (capacity: string, index: number) => {
                   return (
                     <button
@@ -621,10 +634,10 @@ const ProductPage = () => {
 
           <div className="flex items-baseline gap-2 mb-6">
             <span className="text-3xl font-bold">
-              ${detailedProduct.priceDiscount}
+              ${detailedProduct!.priceDiscount}
             </span>
             <span className="text-xl text-gray-500 line-through">
-              ${detailedProduct.priceRegular}
+              ${detailedProduct!.priceRegular}
             </span>
           </div>
 
@@ -690,7 +703,7 @@ const ProductPage = () => {
           </div>
 
           {renderSpecs(
-            collectTechSpecs(detailedProduct).filter((s) =>
+            collectTechSpecs(detailedProduct as DetailedProduct).filter((s) =>
               ["Screen", "Resolution", "Processor", "RAM"].includes(s.label)
             )
           )}
@@ -701,7 +714,7 @@ const ProductPage = () => {
         {/* про секція */}
         <div className="w-full md:w-1/2">
           <h2 className="text-2xl font-bold mb-4">About</h2>
-          {detailedProduct.description.map(
+          {detailedProduct!.description.map(
             (section: { title: string; text: string[] }, index: number) => (
               <div key={index} className="mb-6">
                 <h3 className="text-xl font-semibold mb-2">{section.title}</h3>
@@ -721,13 +734,15 @@ const ProductPage = () => {
         {/* Tech specs */}
         <div className="w-full md:w-1/2">
           <h2 className="text-2xl font-bold mb-4">Tech specs</h2>
-          {renderSpecs(collectTechSpecs(detailedProduct))}
+          {renderSpecs(collectTechSpecs(detailedProduct as DetailedProduct))}
         </div>
       </div>
 
       {/* вам також сподобається */}
 
       <ModelsRow product={youMayAlsoLike} title="You may also like" />
+      </>
+      )}
     </div>
   );
 };
