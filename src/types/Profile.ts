@@ -6,4 +6,5 @@ export interface Profile {
   phone_number?: string;
   shippingAddress: string,
   stripeCustomerId: string,
+  user_ava: string,
 }

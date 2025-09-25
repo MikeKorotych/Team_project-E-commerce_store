@@ -13,4 +13,5 @@ export type OrderItem = {
   product_id: string;
   quantity: number;
   price_at_purchase: number;
+  product_img: string;
 };

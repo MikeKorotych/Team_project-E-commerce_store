@@ -1,4 +1,5 @@
 import type { OrderItem } from "@/types/Order";
+import { Link } from "react-router";
 
 type Props = {
   orderItem: OrderItem;
@@ -6,22 +7,27 @@ type Props = {
 
 export const OrderItemProps = ({ orderItem }: Props) => {
   return (
-    <div className="w-full sm:max-w-[592px] xl:max-w-[752px] bg-card flex flex-col gap-3 border shadow-sm p-4">
-      <div className="flex flex-row gap-4 max-sm:flex-col justify-between">
-        <div className="flex flex-row gap-6 items-center max-sm:gap-[2vw]">
-          <img
-            src={new URL(orderItem.product_id, import.meta.url).href}
-            alt="Product"
-            className="h-20 w-20 object-contain"
-          />
-
-          <h2 className="text-[14px]/[21px] ">{orderItem.product_id}</h2>
-        </div>
-
-        <div className="flex justify-between items-center max-sm:mt-4 gap-4 xl:gap-[4vw]">
-          <span className="font-bold text-[22px]/[140%]">$4324</span>
-        </div>
-      </div>
-    </div>
+    <tr>
+      <td className="px-7 py-2 border-l align-middle">
+        <img
+          src={orderItem.product_img}
+          alt="Product"
+          className="h-32 w-32 object-contain"
+        />
+      </td>
+      <td className="px-7 py-2 border-l align-middle">
+        <h2 className="text-[20px]/[21px] ">
+          <Link to={`/product/${orderItem.product_id}`} className="hover:bg-muted">
+            {orderItem.product_id}
+          </Link>
+        </h2>
+      </td>
+      <td className="px-7 py-2 border-l align-middle">
+        <h2 className="font-bold text-[22px]/[140%]">{orderItem.quantity}</h2>
+      </td>
+      <td className="px-7 py-2 border-l align-middle">
+        <h2 className="font-bold text-[22px]/[140%]">${orderItem.price_at_purchase}</h2>
+      </td>
+    </tr>
   );
 };
