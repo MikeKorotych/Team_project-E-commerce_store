@@ -108,7 +108,7 @@ export function SearchDropdown() {
             {loading ? (
               <div className="px-3 py-2 text-sm text-gray-300">Loading...</div>
             ) : filtered.length > 0 ? (
-              <CommandGroup heading="Results">
+              <CommandGroup>
                 {filtered.map((item) => (
                   <CommandItem
                     key={item.id}
