@@ -28,7 +28,6 @@ import { useCartStore } from "@/features/cart/cartStore";
 import { useFavoritesStore } from "@/features/favourites/favoritesStore";
 import { toast } from "sonner";
 import { AnimationContext } from "../context/AnimationContext";
-//import { useTranslation } from "react-i18next";
 import { ImageZoom } from "@/components/ui/image-zoom";
 import { Magnetic } from "@/components/ui/magnetic";
 import productsIndex from "../../api/products.json";

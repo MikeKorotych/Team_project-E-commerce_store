@@ -143,39 +143,43 @@ export const ProductPageSkeleton = () => {
 
       {/* You may also like skeleton */}
       <div className="mt-16 border-t border-gray-700 pt-8">
-        <div className="flex justify-between py-[24px]">
-          <SkeletonBox width={192} height={32} />
-          <div className="flex gap-4">
-            <SkeletonBox width={40} height={40} />
-            <SkeletonBox width={40} height={40} />
-          </div>
-        </div>
-        <div className="flex gap-8">
-          {[...Array(4)].map((_, index) => (
-            <div key={index} className="w-[250px] flex-shrink-0">
-              <div className="bg-gray-800 rounded-lg p-4">
-                <SkeletonBox height={196} width="100%" className="mb-4" />
-                <SkeletonBox width="80%" height={16} className="mb-2" />
-                <SkeletonBox width="60%" height={16} className="mb-4" />
-                <div className="flex gap-2 mb-4">
-                  <SkeletonBox width={64} height={24} />
-                  <SkeletonBox width={48} height={24} />
-                </div>
-                <div className="space-y-2 mb-4">
-                  {[...Array(3)].map((_, i) => (
-                    <div key={i} className="flex justify-between">
-                      <SkeletonBox width={48} height={12} />
-                      <SkeletonBox width={64} height={12} />
-                    </div>
-                  ))}
-                </div>
-                <div className="flex gap-2">
-                  <SkeletonBox height={40} width="100%" className="flex-1" />
-                  <SkeletonBox width={40} height={40} />
-                </div>
-              </div>
+        <div className="max-w-[1136px] mx-auto">
+          <div className="flex justify-between py-[24px]">
+            <SkeletonBox width={192} height={32} />
+            <div className="flex gap-4">
+              <SkeletonBox width={40} height={40} />
+              <SkeletonBox width={40} height={40} />
             </div>
-          ))}
+          </div>
+          <div className="overflow-x-hidden">
+            <div className="flex gap-8">
+              {[...Array(4)].map((_, index) => (
+                <div key={index} className="w-[250px] flex-shrink-0">
+                  <div className="bg-gray-800 rounded-lg p-4">
+                    <SkeletonBox height={196} width="100%" className="mb-4" />
+                    <SkeletonBox width="80%" height={16} className="mb-2" />
+                    <SkeletonBox width="60%" height={16} className="mb-4" />
+                    <div className="flex gap-2 mb-4">
+                      <SkeletonBox width={64} height={24} />
+                      <SkeletonBox width={48} height={24} />
+                    </div>
+                    <div className="space-y-2 mb-4">
+                      {[...Array(3)].map((_, i) => (
+                        <div key={i} className="flex justify-between">
+                          <SkeletonBox width={48} height={12} />
+                          <SkeletonBox width={64} height={12} />
+                        </div>
+                      ))}
+                    </div>
+                    <div className="flex gap-2">
+                      <SkeletonBox height={40} width="100%" className="flex-1" />
+                      <SkeletonBox width={40} height={40} />
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </div>
